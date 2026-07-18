@@ -112,15 +112,17 @@
   .qr-n{font-weight:800;font-size:12px;color:var(--text)}
   .qr-st{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
   .qr-grade{margin-left:auto;font-size:11px;font-weight:800}
-  .qr-opt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid var(--stroke);background:var(--field);margin-top:5px}
+  .qr-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(66px,1fr));gap:6px;margin-top:7px}
+  .qr-opt{display:flex;flex-direction:column;justify-content:space-between;align-items:center;gap:5px;padding:7px 5px 6px;border-radius:9px;border:1px solid var(--stroke);background:var(--field);text-align:center;min-height:56px}
   .qr-opt.g-best{border-color:rgba(70,177,123,.45)}
   .qr-opt.g-ok{border-color:rgba(224,163,46,.35)}
   .qr-opt.g-mistake{border-color:rgba(226,80,78,.3)}
   .qr-opt.picked{box-shadow:0 0 0 2px rgba(198,161,91,.35)}
-  .qr-mark{width:16px;text-align:center;font-weight:800;flex:none}
+  .qr-top{display:flex;flex-direction:column;align-items:center;gap:2px}
+  .qr-mark{font-weight:800;font-size:13px;line-height:1;flex:none}
   .qr-opt.g-best .qr-mark{color:var(--good)}.qr-opt.g-ok .qr-mark{color:var(--edge)}.qr-opt.g-mistake .qr-mark{color:var(--bad)}
-  .qr-lbl{font-weight:700;font-size:12.5px;color:var(--text)}.qr-lbl .num{color:var(--muted);font-weight:600;margin-left:2px}
-  .qr-who{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .qr-lbl{font-weight:700;font-size:12px;color:var(--text);line-height:1.15}.qr-lbl .num{color:var(--muted);font-weight:600}
+  .qr-who{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;min-height:15px}
   .qc{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
   .qc.you{background:rgba(198,161,91,.18);color:#f0d69b;border:1px solid rgba(198,161,91,.5)}
   .qc.hero{background:rgba(38,104,196,.18);color:#9cc0f0;border:1px solid rgba(38,104,196,.5)}
@@ -659,7 +661,7 @@ function optRecapRow(o,pickId,heroId){const who=[];
   if(o.id===heroId)who.push('<span class="qc hero">Герой</span>');
   if(o.grade==='best')who.push('<span class="qc coach">Тренер</span>');
   const mark=o.grade==='best'?'✓':o.grade==='mistake'?'✕':'≈';
-  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><span class="qr-mark">${mark}</span><span class="qr-lbl">${o.label||'—'}${o.size?' <span class="num">'+o.size+'</span>':''}</span><span class="qr-who">${who.join('')}</span></div>`;}
+  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${o.label||'—'}${o.size?' <span class="num">'+o.size+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
 function videoBlockHTML(v){
   const id=ytId(v.video&&v.video.url), watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(v.vStart||0)}s`:null;
   return `<div class="video"><div class="vfacade" ${id?`data-embed="${id}" data-s="${Math.floor(v.vStart||0)}" data-e="${Math.floor(v.vEnd||0)}"`:''}>
@@ -685,7 +687,7 @@ function showSheet(v,res){
   $('sheet').innerHTML=`<div class="verdict"><div class="vbadge v-${topGrade}">${topGrade==='best'?'✓':topGrade==='ok'?'≈':'✕'}</div>
     <div class="vtext"><div class="vt g-${topGrade}">${vt}</div><div class="vs">${vs}</div></div>
     <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
-    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div>${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId)).join('')}</div>`).join('')}</div>
+    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
     ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
