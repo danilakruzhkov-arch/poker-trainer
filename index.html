@@ -353,6 +353,16 @@
   .colchip.on small{color:var(--brass)}
   .colbar .fld{flex:1}
   .colbar .newbtn{white-space:nowrap;padding:9px 11px}
+  .pubbar{margin-top:9px;padding:10px;border:1px solid var(--stroke);border-radius:12px;background:rgba(198,161,91,.05);display:flex;flex-direction:column;gap:8px}
+  .pubtop{display:flex;align-items:center;justify-content:space-between}
+  .publbl{font-size:12px;font-weight:800;color:var(--text);letter-spacing:.02em}
+  .pubstate{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);border:1px solid rgba(226,80,78,.4);background:rgba(226,80,78,.12);border-radius:6px;padding:2px 7px}
+  .pubstate.ok{color:var(--good);border-color:rgba(70,177,123,.4);background:rgba(70,177,123,.12)}
+  .pubrow{display:flex;gap:6px;flex-wrap:wrap}
+  .pubrow #gh-token{flex:1;min-width:150px;border:1px solid var(--stroke);background:var(--field);color:var(--text);border-radius:10px;padding:9px 11px;font-size:12px}
+  .pubbtn{flex:1;min-width:150px;border:0;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#20160a;border-radius:11px;padding:11px 13px;cursor:pointer;font-weight:800;font-size:13px}
+  .pubbtn:disabled{opacity:.6;cursor:default}
+  .pubhint{font-size:10.5px;color:var(--muted);line-height:1.4}
   .col-disp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
   .col-disp .fld.full{grid-column:1/-1}
   .col-intro{margin-top:10px;border-top:1px dashed var(--stroke);padding-top:10px}
@@ -850,6 +860,12 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <button class="ghost newbtn" id="col-up" title="Переместить выше" ${curCol<=0?'disabled':''}>↑ выше</button>
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
+    <div class="pubbar">
+      <div class="pubtop"><span class="publbl">☁ Облако · GitHub</span><span class="pubstate ${ghToken()?'ok':''}">${ghToken()?'токен сохранён':'токен не задан'}</span></div>
+      <div class="pubrow"><input id="gh-token" type="password" autocomplete="off" placeholder="${ghToken()?'обновить токен…':'GitHub fine‑grained токен (Contents: write)'}"><button class="ghost newbtn" id="gh-save">${ghToken()?'Заменить':'Сохранить'}</button>${ghToken()?`<button class="ghost newbtn" id="gh-clear">Удалить</button>`:''}</div>
+      <div class="pubrow"><button class="pubbtn" id="col-publish">⬆ Опубликовать подборки</button><button class="ghost newbtn" id="col-pull">⬇ Загрузить из облака</button></div>
+      <div class="pubhint">Публикует все подборки в packs.json — зрители видят их на сайте. Токен хранится только в этом браузере. Внутри артефакта не работает (CSP) — публикуй с github‑версии.</div>
+    </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
       <div class="fld"><label>Значок (эмодзи)</label><input id="col-emoji" value="${esc(c.emoji)}" placeholder="✎" maxlength="3"></div>
@@ -1116,6 +1132,10 @@ function wireForm(){
   // block 0 — collection selector / create / delete / display settings
   if($('col-chips'))$('col-chips').querySelectorAll('.colchip').forEach(b=>b.onclick=()=>{readForm();useCol(+b.dataset.col);F=blankHand();buildForm();renderSet();persist();});
   if($('col-new'))$('col-new').onclick=()=>{readForm();const name=(prompt('Название новой подборки:','Новая подборка')||'').trim();if(!name)return;COLS.push({id:'u'+Date.now(),name,emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'',intro:blankIntro(name),hands:[]});useCol(COLS.length-1);F=blankHand();buildForm();renderSet();persist();toast('Подборка создана: '+name);};
+  if($('gh-save'))$('gh-save').onclick=()=>{const v=$('gh-token').value.trim();if(!v){toast('Вставь токен',1);return;}setGhToken(v);toast('Токен сохранён в этом браузере');buildForm();};
+  if($('gh-clear'))$('gh-clear').onclick=()=>{setGhToken('');toast('Токен удалён');buildForm();};
+  if($('col-publish'))$('col-publish').onclick=async()=>{const b=$('col-publish');b.disabled=true;b.textContent='Публикую…';await publishPacks();b.disabled=false;buildForm();};
+  if($('col-pull'))$('col-pull').onclick=async()=>{const pub=await loadPublished();if(!pub){toast('В облаке пусто или недоступно',1);return;}if(!confirm('Заменить локальные подборки версией из облака? Несохранённые правки пропадут.'))return;adoptCols(pub.cols);F=blankHand();persist();buildForm();renderSet();toast('Загружено из облака');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
   if($('col-up'))$('col-up').onclick=()=>{if(curCol<=0)return;readForm();[COLS[curCol-1],COLS[curCol]]=[COLS[curCol],COLS[curCol-1]];useCol(curCol-1);buildForm();renderSet();persist();};
   if($('col-down'))$('col-down').onclick=()=>{if(curCol>=COLS.length-1)return;readForm();[COLS[curCol+1],COLS[curCol]]=[COLS[curCol],COLS[curCol+1]];useCol(curCol+1);buildForm();renderSet();persist();};
@@ -1234,6 +1254,25 @@ const LS_KEY='pokerTrainerV4';
 let _persistT;
 function persist(){try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true}));}catch(e){}}
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(persist,400);}
+// ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
+const GH_OWNER='danilakruzhkov-arch',GH_REPO='poker-trainer',GH_FILE='packs.json',GH_BRANCH='main',TOKEN_KEY='pk_gh_token';
+let PUBLISHED=null;
+function ghToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
+function setGhToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
+function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
+// take a plain cols array (from the cloud) and make it a live, migrated COLS
+function adoptCols(cols){COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});curCol=COLS.length-1;useCol(curCol);}
+async function loadPublished(){try{const r=await fetch(GH_FILE+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return null;const j=await r.json();if(j&&Array.isArray(j.cols))return j;}catch(e){}return null;}
+async function publishPacks(){const tok=ghToken();if(!tok){toast('Сначала вставь GitHub‑токен',1);return false;}
+  readForm();const body=JSON.stringify({cols:COLS,publishedAt:Date.now()},null,1);
+  const api='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
+  const H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  try{let sha;const g=await fetch(api+'?ref='+GH_BRANCH,{headers:H,cache:'no-store'});
+    if(g.status===200){sha=(await g.json()).sha;}else if(g.status===401||g.status===403){toast('Токен отклонён — нужны права Contents: write',1);return false;}
+    const put=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message:'publish packs',content:b64utf8(body),branch:GH_BRANCH,sha:sha})});
+    if(put.ok){PUBLISHED={cols:COLS,publishedAt:Date.now()};try{localStorage.setItem('pk_pub_at',String(PUBLISHED.publishedAt));}catch(e){}toast('Опубликовано — зрители увидят через ~минуту');return true;}
+    const ej=await put.json().catch(()=>({}));toast('Не вышло: '+(ej.message||put.status),1);return false;
+  }catch(e){toast('Сеть недоступна (в артефакте публикация не работает — открой github‑версию)',1);return false;}}
 function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(!s)return;
   let cols=Array.isArray(s.cols)&&s.cols.length?s.cols.slice()
     :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[]}];   // migrate old {set,mine} shape
@@ -1268,6 +1307,13 @@ $('tab-train').onclick=()=>switchView('train');$('tab-admin').onclick=openEditor
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
 initAdmin();showHome();
+// pull the published collections; a browser with no local edits (a viewer, or a fresh device) adopts them so it sees the author's packs
+(async()=>{try{const pub=await loadPublished();if(!pub)return;PUBLISHED=pub;
+  const hasLocal=(()=>{try{return !!localStorage.getItem(LS_KEY);}catch(e){return false;}})();
+  if(!hasLocal){adoptCols(pub.cols);
+    if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
+    if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}}
+}catch(e){}})();
 </script>
 </body>
 </html>
