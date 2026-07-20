@@ -1385,7 +1385,9 @@ function copyText(text){
 }
 const LS_KEY='pokerTrainerV4';
 let _persistT;
-function persist(){try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true}));}catch(e){}}
+// ids of built-in packs this browser has already been offered — lets newly-shipped packs surface once while honoring deletions
+let _seenBuiltins=defaultCols().filter(d=>d.id!=='mine').map(d=>d.id);
+function persist(){try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true,seenBuiltins:_seenBuiltins}));}catch(e){}}
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(persist,400);}
 // ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
 const GH_OWNER='danilakruzhkov-arch',GH_REPO='poker-trainer',GH_FILE='packs.json',GH_BRANCH='main',TOKEN_KEY='pk_gh_token';
@@ -1413,7 +1415,13 @@ async function publishPacks(){const tok=ghToken();if(!tok){pubSay('Нет ток
 function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(!s)return;
   let cols=Array.isArray(s.cols)&&s.cols.length?s.cols.slice()
     :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[]}];   // migrate old {set,mine} shape
-  if(!s.demosInit){const have=new Set(cols.map(c=>c&&c.id));const add=defaultCols().filter(d=>d.id!=='mine'&&!have.has(d.id));cols=add.concat(cols);}   // first run after demos-as-collections: surface the built-in packs (once; respects later deletions)
+  // surface built-in packs the author shipped in the code that this browser hasn't been offered yet.
+  // "seen" ids make it a once-per-pack catch-up: a genuinely-new pack appears, but a pack the user deleted stays gone.
+  {const builtinNow=defaultCols().filter(d=>d.id!=='mine');const have=new Set(cols.map(c=>c&&c.id));
+   const seen=Array.isArray(s.seenBuiltins)?new Set(s.seenBuiltins):new Set(builtinNow.filter(d=>have.has(d.id)).map(d=>d.id));   // old saves: treat what you already have as already seen
+   const add=builtinNow.filter(d=>!have.has(d.id)&&!seen.has(d.id));
+   if(add.length){const mi=cols.findIndex(c=>c&&c.id==='mine');if(mi>=0)cols.splice(mi,0,...add);else cols=cols.concat(add);}   // keep 'Мой набор' last
+   _seenBuiltins=builtinNow.map(d=>d.id);}
   COLS=cols;
   COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';c.hands.forEach(migrateCards);});
   curCol=(typeof s.curCol==='number'&&s.curCol>=0&&s.curCol<COLS.length)?s.curCol:COLS.length-1;useCol(curCol);
