@@ -691,6 +691,1317 @@
    ]
   },
   {
+   "id": "ft10k",
+   "name": "Финалка $10K — путь 72oooo",
+   "emoji": "♛",
+   "accent": "#7B4FC9",
+   "tag": "Реконструкция",
+   "host": "Разбор: Андрей Козленко",
+   "hero": "72oooo · с $10 сателлита в чемпионы",
+   "cover": "",
+   "sub": "Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.",
+   "intro": {
+    "title": "История одной победы",
+    "text": "72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.",
+    "video": {
+     "url": "https://youtu.be/0lh7nVLfmMo"
+    },
+    "vStart": 600,
+    "vEnd": 625,
+    "channel": "Андрей Козленко"
+   },
+   "hands": [
+    {
+     "pack": "ft10k",
+     "title": "AA против JJ: ловушка на злом ривере",
+     "players": 9,
+     "heroPos": "BTN",
+     "heroCards": [
+      "As",
+      "Ad"
+     ],
+     "stacks": {
+      "CO": 23,
+      "BTN": 23
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "7d",
+      "2h",
+      "8h",
+      "3h",
+      "9d"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.3 bb",
+       "q": {
+        "vStart": 601,
+        "vEnd": 640,
+        "depth": "подробно",
+        "explain": "<b>Тайтовый игрок открывает — с тузами хочется 3‑бет.</b> Козленко называет флэт «очень жёсткой ошибкой»: против узкого опен‑диапазона 3‑бет добирает вэлью с AK, AQ, младших пар, которые готовы выставиться. По иронии именно колл оставил банк небольшим и не дал 72 вылететь на злом ривере — но как решение это неоптимально.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "2.3 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "3‑бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "7 bb",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "9 bb",
+       "q": {
+        "vStart": 640,
+        "vEnd": 668,
+        "depth": "подробно",
+        "explain": "<b>Флоп 7‑2‑8 с двумя червями и стрит‑дро — GTO Wizard рекомендует олл‑ин.</b> Со стеками ~23 bb рейз за защиту и добор правильный, но мелкий сайзинг даёт флеш/стрит‑дро дешёвые карты. 72 сыграл хитрый мелкий рейз — сработало, но Визард хочет всё в банк.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Мелкий рейз",
+          "type": "raise",
+          "grade": "ok",
+          "size": "9 bb",
+          "hero": true
+         },
+         {
+          "id": "o4",
+          "label": "Олл‑ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "23 bb",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "9 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "40%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 730,
+        "vEnd": 754,
+        "depth": "подробно",
+        "explain": "<b>Ривер 9♦: и флеш, и стрит собрались. GTO Wizard — чек 100%.</b> К риверу колл‑диапазон соперника — это флеши и сеты: рука слабее уже не заплатит, а сильнее накажет. Ставка = «влюбиться в свою руку». 72 чекает и забирает большой банк на вскрытии. Контринтуитивно, но математически чисто.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 40%",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "40%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Ставка 75%",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "75%",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "As",
+       "Ad"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "AQ против ловушки: не заплати любителю",
+     "players": 9,
+     "heroPos": "CO",
+     "heroCards": [
+      "As",
+      "Qd"
+     ],
+     "stacks": {
+      "CO": 30,
+      "BB": 35
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Jd",
+      "Jc",
+      "3s",
+      "9d",
+      "2d"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "7 bb",
+       "q": {
+        "vStart": 856,
+        "vEnd": 900,
+        "depth": "подробно",
+        "explain": "<b>Плоский чек‑рейз от любителя на J‑J‑3 — колл нормально.</b> Он так рейзит и слабые тузы, и тройку, и случайные руки; AQ со стоппером и потенциалом продолжает. Фолд на мелкий сайзинг слишком слаб, 3‑бет превращает руку в блеф.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "7 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "20 bb",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "40%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "call",
+       "size": "40%"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "call",
+       "size": "50%",
+       "q": {
+        "vStart": 929,
+        "vEnd": 985,
+        "depth": "подробно",
+        "explain": "<b>Ривер: докрылась бубна, любитель бьёт полпота — Козленко пасует.</b> После чек‑рейза флопа и ставки тёрна его диапазон перегружен вэлью: фулхаусы, Jx, флеши. Любитель почти не блефует ривер мелким сайзингом. Туз‑бубна блокирует часть флешей, но этого мало. Герой заколил и увидел 66 — жёсткий лик.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "50%",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "2.5x",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "As",
+       "Qd"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Великий фолд: топ-пара под олл-ин",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "As",
+      "4d"
+     ],
+     "stacks": {
+      "CO": 42,
+      "BB": 20
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Ad",
+      "Kc",
+      "8s",
+      "5s",
+      "2d"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "bet",
+       "size": "40%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "40%"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "bet",
+       "size": "12 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1440,
+        "vEnd": 1500,
+        "depth": "подробно",
+        "explain": "<b>Топ‑пара со слабым кикером под олл‑ин — фолд.</b> GTO Wizard тут ~85% фолдов: против поляризованного диапазона (сеты, две пары, старшие тузы плюс блефы) туз‑четвёрка это лишь ловец блефов, а кикер бьётся. Дим сбросил топ‑пару — и был прав: Каликс блефовал 77. Красава.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "12 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "As",
+       "4d"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "KQ в позиции: рейз-дро и вэлью на паре",
+     "players": 9,
+     "heroPos": "CO",
+     "heroCards": [
+      "Kd",
+      "Qc"
+     ],
+     "stacks": {
+      "CO": 25,
+      "BB": 25
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec"
+      }
+     },
+     "board": [
+      "5c",
+      "8s",
+      "8d",
+      "Kc",
+      "4c"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "bet",
+       "size": "40%"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "9 bb",
+       "q": {
+        "vStart": 1530,
+        "vEnd": 1562,
+        "depth": "коротко",
+        "explain": "<b>Любитель лидирует в 8‑хай доску — рейз с KQ разумен.</b> Две оверкарты плюс бэкдоры: рейз забирает часть банков сразу и даёт агрессию. Колл тоже ок; фолд слишком слаб. (На практике 66 не выбросят — это уже про его лики.)",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "40%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "9 bb",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "9 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "bet",
+       "size": "60%",
+       "q": {
+        "vStart": 1570,
+        "vEnd": 1608,
+        "depth": "коротко",
+        "explain": "<b>Тёрн — король, топ‑пара. Вэлью‑бет.</b> Против липкого любителя, который не расстаётся с парой, ставим ради вэлью. Чек отдаёт улицу бесплатно.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 40%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "40%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Ставка 60%",
+          "type": "bet",
+          "grade": "best",
+          "size": "60%",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "60%"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Kd",
+       "Qc"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Комбо-дро: барль, выбивший две топ-пары",
+     "players": 9,
+     "heroPos": "CO",
+     "heroCards": [
+      "Kc",
+      "Qc"
+     ],
+     "stacks": {
+      "CO": 15,
+      "SB": 20,
+      "BB": 16
+     },
+     "profiles": {
+      "SB": {
+       "status": "reg"
+      },
+      "BB": {
+       "status": "rec"
+      }
+     },
+     "board": [
+      "8d",
+      "Jc",
+      "Th",
+      "3c",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "1 bb",
+       "q": {
+        "vStart": 1721,
+        "vEnd": 1748,
+        "depth": "коротко",
+        "explain": "<b>KQ — рука для рейза, а не лимпа.</b> Лимп впускает доминированные руки и не строит банк. Козленко критикует лимп (у 72 был ICM‑мотив с коротким Арамом сзади, но рейз плюсовее).",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Лимп",
+          "type": "call",
+          "grade": "mistake",
+          "size": "1 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2.5 bb",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "call",
+       "size": "0.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "SB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 1750,
+        "vEnd": 1792,
+        "depth": "коротко",
+        "explain": "<b>Флоп 8‑J‑10, мультипот: чек логичен.</b> У нас двусторонка и оверкарты, но 72 чувствует топ‑пары у оппонентов — не раздуваем банк без позиции против двоих. Козленко чек одобряет.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 33%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "33%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Ставка 66%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "66%",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "SB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%",
+       "q": {
+        "vStart": 1800,
+        "vEnd": 1860,
+        "depth": "подробно",
+        "explain": "<b>Тёрн добавил флеш‑дро — время барлить.</b> Комбо‑дро (стрит + флеш) плюс огромное фолд‑эквити против двух топ‑пар. Барль — и оба (Лукас с топ‑парой и флеш‑дро, Крис с топ‑парой) выбрасывают. Магическая раздача, Козленко в восторге от агрессии.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Барль 50%",
+          "type": "bet",
+          "grade": "best",
+          "size": "50%",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Барль 80%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "80%",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Kc",
+       "Qc"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "AK: как не надо — пассив и лишний олл-ин",
+     "players": 9,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ks",
+      "Ad"
+     ],
+     "stacks": {
+      "BTN": 32,
+      "CO": 20
+     },
+     "profiles": {
+      "CO": {
+       "status": "reg"
+      }
+     },
+     "board": [
+      "5d",
+      "Kh",
+      "3h",
+      "4s",
+      "Td"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "6 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "6 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 1970,
+        "vEnd": 2002,
+        "depth": "подробно",
+        "explain": "<b>Топ‑пара AK на K‑5‑3 — ставим ради вэлью и защиты.</b> Пары лучше ставить: добираем с меньших пар и дро. 72 чекнул — потерял улицу. «Так не делайте никогда».",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 33%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "33%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Ставка 60%",
+          "type": "bet",
+          "grade": "best",
+          "size": "60%",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "25 bb",
+       "q": {
+        "vStart": 2020,
+        "vEnd": 2062,
+        "depth": "подробно",
+        "explain": "<b>После двух чеков — олл‑ин это перебор.</b> Такой сайзинг колируют только руки сильнее; меньшая вэлью‑ставка добрала бы с восьмёрок и пар. Играя «открытой книгой», легко быть выброшенным — Аврора спокойно пасует. Нужно вэлью помельче.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 50%",
+          "type": "bet",
+          "grade": "best",
+          "size": "50%",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Олл‑ин",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "25 bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ks",
+       "Ad"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Хиро-колл против GTO Wizard",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Qd",
+      "7s"
+     ],
+     "stacks": {
+      "CO": 49,
+      "BB": 23
+     },
+     "profiles": {
+      "CO": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "6s",
+      "6h",
+      "Qh",
+      "8h",
+      "Ac"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "33%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "33%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "bet",
+       "size": "80%"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "call",
+       "size": "80%",
+       "q": {
+        "vStart": 2260,
+        "vEnd": 2302,
+        "depth": "подробно",
+        "explain": "<b>GTO Wizard рекомендует фолд 100% — но Аврора видит блеф.</b> Две пары (дамы и шестёрки) на страшной доске (флеш, туз) — по учебнику ловец блефов под большим сайзингом складывается. Аврора что‑то приметил в чиплидере и заколил — 72 блефовал K‑хай. Блестящая читка, вопреки машине.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "80%",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "2.5x",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Qd",
+       "7s"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Хедз-ап: блеф-3-бет Q5",
+     "players": 2,
+     "heroPos": "BB",
+     "heroCards": [
+      "Qc",
+      "5d"
+     ],
+     "stacks": {
+      "BTN": 20,
+      "BB": 44
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "8 bb",
+       "q": {
+        "vStart": 2701,
+        "vEnd": 2712,
+        "depth": "коротко",
+        "explain": "<b>Хедз-ап: 3‑бет‑блеф Q5 — «Хорош».</b> Против широкого опена баттона в игре один на один агрессия ключевая; дама‑блокер снижает вэлью соперника. Козленко одобряет 3‑бет. Колл и фолд тоже играемы.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "2.3 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "3‑бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "8 bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Qc",
+       "5d"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Финал: 44 против A10 за титул",
+     "players": 2,
+     "heroPos": "BB",
+     "heroCards": [
+      "4d",
+      "4c"
+     ],
+     "stacks": {
+      "BTN": 20,
+      "BB": 29
+     },
+     "profiles": {},
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "20 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "20 bb",
+       "q": {
+        "vStart": 2711,
+        "vEnd": 2732,
+        "depth": "коротко",
+        "explain": "<b>Решающая раздача: 44 против олл‑ина A10 — колл.</b> Хедз‑ап карманная пара впереди диапазона пуша, математически колл обязателен («Алын и Колл обязаны»). Только туз или десятка спасали соперника — не пришли. 44 держит, и 72 берёт титул, начав с $10 сателлита.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "20 bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "4d",
+       "4c"
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "mine",
    "name": "Мой набор",
    "emoji": "✎",
@@ -713,5 +2024,5 @@
    "hands": []
   }
  ],
- "publishedAt": 1784398744636
+ "publishedAt": 1784588508151
 }

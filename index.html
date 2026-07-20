@@ -775,7 +775,134 @@ function seed(){const v={url:'https://youtu.be/'+DEMO};return [
   {pack:'final',title:'ICM: шов ATo на 12 bb',players:3,heroPos:'BTN',heroCards:['As','Th'],stacks:{BTN:12,SB:20,BB:18},profiles:{},board:['','','','',''],video:v,channel:'Финалка онлайн',
    actions:[
      Q('preflop','BTN','raise','12 bb',{vStart:2210,vEnd:2242,depth:'подробно',explain:'<b>12 bb, баттон, три игрока — ATo это чистый пуш.</b> Опен‑рейз мелким сайзом оставляет себя в тяжёлых спотах, фолд слишком тайтово при таком стеке.',
-       options:[O('o1','Фолд','fold','mistake'),O('o2','Рейз','raise','ok','2 bb'),O('o3','Олл‑ин','raise','best','12 bb',true)]})]}
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Рейз','raise','ok','2 bb'),O('o3','Олл‑ин','raise','best','12 bb',true)]})]},
+  // ══ ФИНАЛКА $10K — реконструкция по видео Козленко (0lh7nVLfmMo) ══
+  {pack:'ft10k',title:'AA против JJ: ловушка на злом ривере',players:9,heroPos:'BTN',heroCards:['As','Ad'],
+   stacks:{CO:23,BTN:23},profiles:{CO:{status:'rec',style:'tight'}},board:['7d','2h','8h','3h','9d'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.3 bb'),
+     Q('preflop','BTN','call','2.3 bb',{vStart:601,vEnd:640,depth:'подробно',
+       explain:'<b>Тайтовый игрок открывает — с тузами хочется 3‑бет.</b> Козленко называет флэт «очень жёсткой ошибкой»: против узкого опен‑диапазона 3‑бет добирает вэлью с AK, AQ, младших пар, которые готовы выставиться. По иронии именно колл оставил банк небольшим и не дал 72 вылететь на злом ривере — но как решение это неоптимально.',
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Колл','call','mistake','2.3 bb',true),O('o3','3‑бет','raise','best','7 bb')]}),
+     A('flop','CO','bet','50%'),
+     Q('flop','BTN','raise','9 bb',{vStart:640,vEnd:668,depth:'подробно',
+       explain:'<b>Флоп 7‑2‑8 с двумя червями и стрит‑дро — GTO Wizard рекомендует олл‑ин.</b> Со стеками ~23 bb рейз за защиту и добор правильный, но мелкий сайзинг даёт флеш/стрит‑дро дешёвые карты. 72 сыграл хитрый мелкий рейз — сработало, но Визард хочет всё в банк.',
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Колл','call','ok'),O('o3','Мелкий рейз','raise','ok','9 bb',true),O('o4','Олл‑ин','raise','best','23 bb')]}),
+     A('flop','CO','call','9 bb'),
+     A('turn','CO','check',''),
+     A('turn','BTN','bet','40%'),
+     A('turn','CO','call',''),
+     A('river','CO','check',''),
+     Q('river','BTN','check','',{vStart:730,vEnd:754,depth:'подробно',
+       explain:'<b>Ривер 9♦: и флеш, и стрит собрались. GTO Wizard — чек 100%.</b> К риверу колл‑диапазон соперника — это флеши и сеты: рука слабее уже не заплатит, а сильнее накажет. Ставка = «влюбиться в свою руку». 72 чекает и забирает большой банк на вскрытии. Контринтуитивно, но математически чисто.',
+       options:[O('o1','Чек','check','best','',true),O('o2','Ставка 40%','bet','mistake','40%'),O('o3','Ставка 75%','bet','mistake','75%')]})]},
+  // ── #13 AQ vs Каликс 66 — ловушка «Mystery Hand» ──
+  {pack:'ft10k',title:'AQ против ловушки: не заплати любителю',players:9,heroPos:'CO',heroCards:['As','Qd'],
+   stacks:{CO:30,BB:35},profiles:{BB:{status:'rec',style:'tight'}},board:['Jd','Jc','3s','9d','2d'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+     A('flop','BB','check',''),A('flop','CO','bet','50%'),A('flop','BB','raise','7 bb'),
+     Q('flop','CO','call','7 bb',{vStart:856,vEnd:900,depth:'подробно',
+       explain:'<b>Плоский чек‑рейз от любителя на J‑J‑3 — колл нормально.</b> Он так рейзит и слабые тузы, и тройку, и случайные руки; AQ со стоппером и потенциалом продолжает. Фолд на мелкий сайзинг слишком слаб, 3‑бет превращает руку в блеф.',
+       options:[O('o1','Фолд','fold','ok'),O('o2','Колл','call','best','7 bb',true),O('o3','Рейз','raise','mistake','20 bb')]}),
+     A('turn','BB','bet','40%'),A('turn','CO','call','40%'),
+     A('river','BB','bet','50%'),
+     Q('river','CO','call','50%',{vStart:929,vEnd:985,depth:'подробно',
+       explain:'<b>Ривер: докрылась бубна, любитель бьёт полпота — Козленко пасует.</b> После чек‑рейза флопа и ставки тёрна его диапазон перегружен вэлью: фулхаусы, Jx, флеши. Любитель почти не блефует ривер мелким сайзингом. Туз‑бубна блокирует часть флешей, но этого мало. Герой заколил и увидел 66 — жёсткий лик.',
+       options:[O('o1','Фолд','fold','best'),O('o2','Колл','call','mistake','50%',true),O('o3','Рейз','raise','mistake','2.5x')]})]},
+  // ── #21 Дим фолдит топ-пару vs Каликс 77-блеф ──
+  {pack:'ft10k',title:'Великий фолд: топ-пара под олл-ин',players:9,heroPos:'BB',heroCards:['As','4d'],
+   stacks:{CO:42,BB:20},profiles:{CO:{status:'rec',style:'aggr'}},board:['Ad','Kc','8s','5s','2d'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.2 bb'),A('preflop','BB','call','2.2 bb'),
+     A('flop','BB','check',''),A('flop','CO','bet','50%'),A('flop','BB','call','50%'),
+     A('turn','BB','check',''),A('turn','CO','bet','40%'),A('turn','BB','call','40%'),
+     A('river','BB','check',''),A('river','CO','bet','12 bb'),
+     Q('river','BB','fold','',{vStart:1440,vEnd:1500,depth:'подробно',
+       explain:'<b>Топ‑пара со слабым кикером под олл‑ин — фолд.</b> GTO Wizard тут ~85% фолдов: против поляризованного диапазона (сеты, две пары, старшие тузы плюс блефы) туз‑четвёрка это лишь ловец блефов, а кикер бьётся. Дим сбросил топ‑пару — и был прав: Каликс блефовал 77. Красава.',
+       options:[O('o1','Фолд','fold','best','',true),O('o2','Колл','call','mistake','12 bb')]})]},
+  // ── #22 72 KQ vs Lucas 66 ──
+  {pack:'ft10k',title:'KQ в позиции: рейз-дро и вэлью на паре',players:9,heroPos:'CO',heroCards:['Kd','Qc'],
+   stacks:{CO:25,BB:25},profiles:{BB:{status:'rec'}},board:['5c','8s','8d','Kc','4c'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+     A('flop','BB','bet','40%'),
+     Q('flop','CO','raise','9 bb',{vStart:1530,vEnd:1562,depth:'коротко',
+       explain:'<b>Любитель лидирует в 8‑хай доску — рейз с KQ разумен.</b> Две оверкарты плюс бэкдоры: рейз забирает часть банков сразу и даёт агрессию. Колл тоже ок; фолд слишком слаб. (На практике 66 не выбросят — это уже про его лики.)',
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Колл','call','ok','40%'),O('o3','Рейз','raise','best','9 bb',true)]}),
+     A('flop','BB','call','9 bb'),
+     A('turn','BB','check',''),
+     Q('turn','CO','bet','60%',{vStart:1570,vEnd:1608,depth:'коротко',
+       explain:'<b>Тёрн — король, топ‑пара. Вэлью‑бет.</b> Против липкого любителя, который не расстаётся с парой, ставим ради вэлью. Чек отдаёт улицу бесплатно.',
+       options:[O('o1','Чек','check','mistake'),O('o2','Ставка 40%','bet','ok','40%'),O('o3','Ставка 60%','bet','best','60%',true)]}),
+     A('turn','BB','call','60%'),
+     A('river','BB','check',''),A('river','CO','check','')]},
+  // ── #27 72 KQ комбо-дро, тёрн-барль выбивает две топ-пары ──
+  {pack:'ft10k',title:'Комбо-дро: барль, выбивший две топ-пары',players:9,heroPos:'CO',heroCards:['Kc','Qc'],
+   stacks:{CO:15,SB:20,BB:16},profiles:{SB:{status:'reg'},BB:{status:'rec'}},board:['8d','Jc','Th','3c',''],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     Q('preflop','CO','call','1 bb',{vStart:1721,vEnd:1748,depth:'коротко',
+       explain:'<b>KQ — рука для рейза, а не лимпа.</b> Лимп впускает доминированные руки и не строит банк. Козленко критикует лимп (у 72 был ICM‑мотив с коротким Арамом сзади, но рейз плюсовее).',
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Лимп','call','mistake','1 bb',true),O('o3','Рейз','raise','best','2.5 bb')]}),
+     A('preflop','SB','call','0.5 bb'),A('preflop','BB','check',''),
+     A('flop','SB','check',''),A('flop','BB','check',''),
+     Q('flop','CO','check','',{vStart:1750,vEnd:1792,depth:'коротко',
+       explain:'<b>Флоп 8‑J‑10, мультипот: чек логичен.</b> У нас двусторонка и оверкарты, но 72 чувствует топ‑пары у оппонентов — не раздуваем банк без позиции против двоих. Козленко чек одобряет.',
+       options:[O('o1','Чек','check','best','',true),O('o2','Ставка 33%','bet','ok','33%'),O('o3','Ставка 66%','bet','ok','66%')]}),
+     A('turn','SB','check',''),A('turn','BB','check',''),
+     Q('turn','CO','bet','50%',{vStart:1800,vEnd:1860,depth:'подробно',
+       explain:'<b>Тёрн добавил флеш‑дро — время барлить.</b> Комбо‑дро (стрит + флеш) плюс огромное фолд‑эквити против двух топ‑пар. Барль — и оба (Лукас с топ‑парой и флеш‑дро, Крис с топ‑парой) выбрасывают. Магическая раздача, Козленко в восторге от агрессии.',
+       options:[O('o1','Чек','check','mistake'),O('o2','Барль 50%','bet','best','50%',true),O('o3','Барль 80%','bet','ok','80%')]})]},
+  // ── #31 72 AK — пассивная линия, ривер-олин (как НЕ надо) ──
+  {pack:'ft10k',title:'AK: как не надо — пассив и лишний олл-ин',players:9,heroPos:'BTN',heroCards:['Ks','Ad'],
+   stacks:{BTN:32,CO:20},profiles:{CO:{status:'reg'}},board:['5d','Kh','3h','4s','Td'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.2 bb'),A('preflop','BTN','raise','6 bb'),A('preflop','CO','call','6 bb'),
+     A('flop','CO','check',''),
+     Q('flop','BTN','check','',{vStart:1970,vEnd:2002,depth:'подробно',
+       explain:'<b>Топ‑пара AK на K‑5‑3 — ставим ради вэлью и защиты.</b> Пары лучше ставить: добираем с меньших пар и дро. 72 чекнул — потерял улицу. «Так не делайте никогда».',
+       options:[O('o1','Чек','check','mistake','',true),O('o2','Ставка 33%','bet','ok','33%'),O('o3','Ставка 60%','bet','best','60%')]}),
+     A('turn','CO','check',''),A('turn','BTN','check',''),
+     A('river','CO','check',''),
+     Q('river','BTN','bet','25 bb',{vStart:2020,vEnd:2062,depth:'подробно',
+       explain:'<b>После двух чеков — олл‑ин это перебор.</b> Такой сайзинг колируют только руки сильнее; меньшая вэлью‑ставка добрала бы с восьмёрок и пар. Играя «открытой книгой», легко быть выброшенным — Аврора спокойно пасует. Нужно вэлью помельче.',
+       options:[O('o1','Чек','check','mistake'),O('o2','Ставка 50%','bet','best','50%'),O('o3','Олл‑ин','bet','mistake','25 bb',true)]})]},
+  // ── #36 Аврора хиро-колл 2-й парой vs 72 блеф (против Визарда) ──
+  {pack:'ft10k',title:'Хиро-колл против GTO Wizard',players:9,heroPos:'BB',heroCards:['Qd','7s'],
+   stacks:{CO:49,BB:23},profiles:{CO:{status:'reg',style:'aggr'}},board:['6s','6h','Qh','8h','Ac'],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','CO','raise','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+     A('flop','BB','check',''),A('flop','CO','bet','33%'),A('flop','BB','call','33%'),
+     A('turn','BB','check',''),A('turn','CO','check',''),
+     A('river','BB','check',''),A('river','CO','bet','80%'),
+     Q('river','BB','call','80%',{vStart:2260,vEnd:2302,depth:'подробно',
+       explain:'<b>GTO Wizard рекомендует фолд 100% — но Аврора видит блеф.</b> Две пары (дамы и шестёрки) на страшной доске (флеш, туз) — по учебнику ловец блефов под большим сайзингом складывается. Аврора что‑то приметил в чиплидере и заколил — 72 блефовал K‑хай. Блестящая читка, вопреки машине.',
+       options:[O('o1','Фолд','fold','ok'),O('o2','Колл','call','best','80%',true),O('o3','Рейз','raise','mistake','2.5x')]})]},
+  // ── #53 Хедз-ап: 72 Q5 блеф-3-бет ──
+  {pack:'ft10k',title:'Хедз-ап: блеф-3-бет Q5',players:2,heroPos:'BB',heroCards:['Qc','5d'],
+   stacks:{BTN:20,BB:44},profiles:{BTN:{status:'rec'}},board:['','','','',''],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','BTN','raise','2.3 bb'),
+     Q('preflop','BB','raise','8 bb',{vStart:2701,vEnd:2712,depth:'коротко',
+       explain:'<b>Хедз-ап: 3‑бет‑блеф Q5 — «Хорош».</b> Против широкого опена баттона в игре один на один агрессия ключевая; дама‑блокер снижает вэлью соперника. Козленко одобряет 3‑бет. Колл и фолд тоже играемы.',
+       options:[O('o1','Фолд','fold','ok'),O('o2','Колл','call','ok','2.3 bb'),O('o3','3‑бет','raise','best','8 bb',true)]})]},
+  // ── #54 ФИНАЛ: 72 44 vs Каликс A10 — победа с $10 ──
+  {pack:'ft10k',title:'Финал: 44 против A10 за титул',players:2,heroPos:'BB',heroCards:['4d','4c'],
+   stacks:{BTN:20,BB:29},profiles:{},board:['','','','',''],
+   video:{url:'https://youtu.be/0lh7nVLfmMo'},channel:'Андрей Козленко',
+   actions:[
+     A('preflop','BTN','raise','20 bb'),
+     Q('preflop','BB','call','20 bb',{vStart:2711,vEnd:2732,depth:'коротко',
+       explain:'<b>Решающая раздача: 44 против олл‑ина A10 — колл.</b> Хедз‑ап карманная пара впереди диапазона пуша, математически колл обязателен («Алын и Колл обязаны»). Только туз или десятка спасали соперника — не пришли. 44 держит, и 72 берёт титул, начав с $10 сателлита.',
+       options:[O('o1','Фолд','fold','mistake'),O('o2','Колл','call','best','20 bb',true)]})]}
 ];}
 
 /* ===== COLLECTIONS / HOME ===== */
@@ -786,7 +913,9 @@ const PACKS=[
   {id:'run',  emoji:'♦', tag:'Онлайн',  accent:'#2668C4', host:'Разбор: avr0ra (A‑Game)', hero:'Регуляр · онлайн‑занос', title:'Занос известного игрока', sub:'Одна онлайн‑сессия глазами про: линии на несколько улиц, тонкие коллы.',
    intro:{title:'Онлайн‑занос: путь известного игрока',text:'Разбираем ключевые руки одной большой онлайн‑сессии: как про строит линии на несколько улиц и ловит тонкие коллы.',video:{url:DV},vStart:1740,vEnd:1770,channel:'Онлайн‑занос'}},
   {id:'final',emoji:'♣', tag:'Финалка', accent:'#2E8B57', host:'Разбор: Академия Покера', hero:'Финалист · борьба за титул', title:'Финальный стол онлайн', sub:'Короткие стеки и ICM: пуши, защита BB, борьба за титул.',
-   intro:{title:'Финальный стол онлайн‑турнира',text:'Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.',video:{url:DV},vStart:1780,vEnd:1810,channel:'Финалка онлайн'}}
+   intro:{title:'Финальный стол онлайн‑турнира',text:'Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.',video:{url:DV},vStart:1780,vEnd:1810,channel:'Финалка онлайн'}},
+  {id:'ft10k',emoji:'♛', tag:'Реконструкция', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'72oooo · с $10 сателлита в чемпионы', title:'Финалка $10K — путь 72oooo', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
+   intro:{title:'История одной победы',text:'72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.',video:{url:'https://youtu.be/0lh7nVLfmMo'},vStart:600,vEnd:625,channel:'Андрей Козленко'}}
 ];
 function blankIntro(name){return {title:'',text:'',video:{url:''},vStart:0,vEnd:0,channel:name||'Мой набор'};}
 // collections — EVERY collection is editable in the редактор (its own hands + display settings), including the
