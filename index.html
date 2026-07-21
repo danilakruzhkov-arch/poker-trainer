@@ -1708,6 +1708,71 @@ function seed(){const v={url:'https://youtu.be/'+DEMO};return [
      options:[O('f1','C-bet ~1/2 банка','bet','best','~1/2 pot'),O('f2','Чек','check','mistake','',true)]}),
    A('turn','BB','check',''),A('turn','CO','bet','50%'),A('turn','BB','raise','9 bb'),A('turn','CO','fold','')
  ]}
+,
+// Pack B r3 — «С $3 до $16 000» phased MTT (video qMW6mOd7m6Q, канал Baby Shark) — hands N1..N6
+{pack:'mtt16k',title:'Туз-король: пассивный ривер',players:7,heroPos:'UTG',heroCards:['Ac','Kh'],
+ stacks:{UTG:30,HJ:30,BB:30},profiles:{HJ:{status:'fish',style:'aggr'}},
+ board:['Ks','8d','4c','2h','7s'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','UTG','raise','2.2 bb'),A('preflop','HJ','call','2.2 bb'),A('preflop','BB','call','2.2 bb'),
+   A('flop','BB','check',''),A('flop','UTG','bet','33%'),A('flop','HJ','call','33%'),A('flop','BB','fold',''),
+   A('turn','UTG','bet','8 bb'),A('turn','HJ','call','8 bb'),
+   Q('river','UTG','check','',{vStart:944,vEnd:976,depth:'подробно',
+     explain:'<b>Пассивный чек оставляет на столе крупную велью-ставку против кэпнутого Kx.</b> Линия колл-колл вилана репрезентует слабого неуверенного короля, и по диапазонам он куда чаще держит худшего Kx, чем редкие X4 две пары, поэтому олл-ин печатает в среднем ~27bb, а чек их упускает.',
+     options:[O('r1','Олл-ин ~27bb велью','bet','best','27 bb'),O('r2','Мелкий велью-бет','bet','mistake','30%'),O('r3','Чек за шоудаун','check','mistake','',true)]}),
+   A('river','HJ','check','')
+ ]},
+{pack:'mtt16k',title:'Две пары: флэт и велью-ривер',players:7,heroPos:'HJ',heroCards:['Kd','4s'],
+ stacks:{HJ:26,UTG:30},profiles:{UTG:{status:'reg',style:'aggr'}},
+ board:['Ks','8d','4c','2h','7s'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','UTG','raise','2.2 bb'),A('preflop','HJ','call','2.2 bb'),
+   A('flop','UTG','bet','33%'),
+   Q('flop','HJ','call','33%',{vStart:958,vEnd:990,depth:'подробно',
+     explain:'<b>Флэт двумя парами на сухой доске — верная линия.</b> На сухом K84 две пары почти всегда впереди, но рейз выбивает лишь худшие руки и раздувает страшный банк, поэтому колл держит UTG на баррелях его Kx и блефах.',
+     options:[O('f1','Колл (флэт)','call','best','',true),O('f2','Рейз','raise','mistake','3x'),O('f3','Фолд','fold','mistake','')]}),
+   A('turn','UTG','bet','8 bb'),A('turn','HJ','call','8 bb'),
+   A('river','UTG','check',''),
+   Q('river','HJ','check','',{vStart:996,vEnd:1024,depth:'подробно',
+     explain:'<b>После чека UTG на ривере надо ставить велью — чек упускает целую улицу.</b> Его линия кэпнута до блеф-кэтчеров, так что велью-бет ~1/2 собирает колл от Kx/Ax, а чек двумя парами просто отдаёт сопернику деньги.',
+     options:[O('v1','Велью-бет ~1/2','bet','best','50%'),O('v2','Чек','check','mistake','',true)]})
+ ]},
+{pack:'mtt16k',title:'Дама-8: минусовый пуш',players:6,heroPos:'CO',heroCards:['Qs','8s'],
+ stacks:{CO:8},profiles:{},
+ board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','CO','raise','8 bb',{vStart:1925,vEnd:1951,depth:'подробно',
+     explain:'<b>Опен-джем Q8s на 8bb здесь минусовый по дистанции.</b> На ~8bb с пятью игроками позади самая нижняя прибыльная дама-x для шова — Q9s, а Q8s ниже порога: широкие коллирующие диапазоны делают этот олл-ин долгосрочно убыточным.',
+     options:[O('p1','Фолд','fold','best',''),O('p2','Олл-ин пуш','raise','mistake','8 bb',true)]}),
+   A('preflop','BTN','fold',''),A('preflop','SB','fold',''),A('preflop','BB','fold','')
+ ]},
+{pack:'mtt16k',title:'Король-валет: пропущенный опен',players:6,heroPos:'CO',heroCards:['Kh','Js'],
+ stacks:{CO:22},profiles:{},
+ board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','CO','fold','',{vStart:2089,vEnd:2112,depth:'подробно',
+     explain:'<b>KJ здесь — очевидный опен, фолд отдаёт прибыльный стил.</b> 6-макс, поздняя позиция, позади лишь 10-15bb стеки, которые могут только шовить или фолдить — KJ открывается на велью и плейабилити и слишком часто забирает блайнды с антешками без борьбы.',
+     options:[O('p1','Опен-рейз ~2.2bb','raise','best','2.2 bb'),O('p2','Фолд','fold','mistake','',true)]})
+ ]},
+{pack:'mtt16k',title:'Туз-10: пропущенная атака',players:7,heroPos:'CO',heroCards:['Ah','Ts'],
+ stacks:{CO:15,HJ:12},profiles:{HJ:{status:'rec',style:'aggr'}},
+ board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','HJ','raise','2.2 bb'),
+   Q('preflop','CO','fold','',{vStart:2476,vEnd:2510,depth:'подробно',
+     explain:'<b>AT надо атаковать опенера, а не фолдить — рейз ~4.5bb идеален.</b> AT уверенно впереди широкого опен-диапазона из слабых Ax, бродвеев и пар, поэтому рейз бьёт на велью и держит доминируемые руки, а на префинале с коротким стеком фолд слишком туго.',
+     options:[O('p1','Рейз ~4.5bb','raise','best','4.5 bb'),O('p2','Олл-ин','raise','ok','jam'),O('p3','Фолд','fold','mistake','',true)]})
+ ]},
+{pack:'mtt16k',title:'Туз-король: не рейзить флоп',players:6,heroPos:'CO',heroCards:['Ah','Kd'],
+ stacks:{CO:35,BTN:80},profiles:{BTN:{status:'reg',style:'aggr'}},
+ board:['Ks','9h','6h','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.2 bb'),A('preflop','BTN','raise','7 bb'),A('preflop','CO','call','7 bb'),
+   A('flop','CO','check',''),A('flop','BTN','bet','50%'),
+   Q('flop','CO','raise','120%',{vStart:3120,vEnd:3156,depth:'подробно',
+     explain:'<b>Не рейзи флоп с AK против чиплидера — просто колл, чтобы держать его блефы.</b> Рейз раскрывает руку как две пары/сет, выбивает AQ-блефы и оставляет экшен лишь от AA/сетов, которые впереди, тогда как с натсовым флешдро (~39% против сета) флэт не стекает тебя, пока коротыши ещё вылетают.',
+     options:[O('f1','Колл','call','best',''),O('f2','Рейз','raise','mistake','3x',true),O('f3','Фолд','fold','mistake','')]})
+ ]}
 ];}
 
 /* ===== COLLECTIONS / HOME ===== */
