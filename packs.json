@@ -3141,6 +3141,1191 @@
        "4c"
       ]
      }
+    },
+    {
+     "pack": "ft10k",
+     "title": "5-бет война: додавить тёрн",
+     "players": 9,
+     "heroPos": "UTG",
+     "heroCards": [
+      "Kh",
+      "Qh"
+     ],
+     "stacks": {
+      "UTG": 45,
+      "CO": 45
+     },
+     "profiles": {
+      "CO": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Ac",
+      "9h",
+      "4d",
+      "2s",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "6.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "15 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "26 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "call",
+       "size": "26 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "UTG",
+       "action": "bet",
+       "size": "~350k",
+       "q": {
+        "vStart": 262,
+        "vEnd": 300,
+        "depth": "подробно",
+        "explain": "<b>Раз с префлопа репрезентуешь тузов — на тёрне нужен олл-ин, а не мелкие 350k.</b> Джем максимизирует фолд-эквити против слабых Ax/A5 блеф-кэтчеров Мануэля, тогда как ставка 350k даёт туз-хай лёгкий колл по шансам банка.",
+        "options": [
+         {
+          "id": "t1",
+          "label": "Олл-ин",
+          "type": "bet",
+          "grade": "best",
+          "size": "олл-ин",
+          "hero": false
+         },
+         {
+          "id": "t2",
+          "label": "Мелкая ставка ~350k",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "~350k",
+          "hero": true
+         },
+         {
+          "id": "t3",
+          "label": "Чек, сдаться",
+          "type": "check",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "raise",
+       "size": "олл-ин"
+      }
+     ],
+     "cards": {
+      "UTG": [
+       "Kh",
+       "Qh"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "K9s: пуш на 16bb",
+     "players": 8,
+     "heroPos": "BB",
+     "heroCards": [
+      "Kh",
+      "9h"
+     ],
+     "stacks": {
+      "BB": 16,
+      "BTN": 25
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "16 bb",
+       "q": {
+        "vStart": 491,
+        "vEnd": 521,
+        "depth": "подробно",
+        "explain": "<b>На ~16bb K9s — плюсовый ре-джем против широкого открытия баттна.</b> Пуш забирает фолд-эквити, сохраняет стек и избегает доминированного флэта без позиции.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Джем ~16bb",
+          "type": "raise",
+          "grade": "best",
+          "size": "16 bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Kh",
+       "9h"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Сильная рука: мелкий 3-бет",
+     "players": 8,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ad",
+      "Kh"
+     ],
+     "stacks": {
+      "BB": 60,
+      "CO": 60
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "5 bb",
+       "q": {
+        "vStart": 1044,
+        "vEnd": 1074,
+        "depth": "подробно",
+        "explain": "<b>Без позиции премиум AKo хочет полноценный 3-бет ~3.5-4x, а не крохотный сайз.</b> Мелкий трибет даёт цену и позволяет флэтить в неудобный банк без позиции — сработало лишь потому, что CO спасовал.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "3-бет ~600k (3.5-4x)",
+          "type": "raise",
+          "grade": "best",
+          "size": "~4x",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Крохотный 3-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "~2.2x",
+          "hero": true
+         },
+         {
+          "id": "p3",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ad",
+       "Kh"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "T3s: колл олина по шансам",
+     "players": 7,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ts",
+      "3s"
+     ],
+     "stacks": {
+      "BB": 20,
+      "SB": 12
+     },
+     "profiles": {
+      "SB": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "raise",
+       "size": "12 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "12 bb",
+       "q": {
+        "vStart": 1163,
+        "vEnd": 1192,
+        "depth": "подробно",
+        "explain": "<b>Получая ~3:1, колл T3s против стандартного шорт-олина оправдан по шансам банка.</b> Сырого эквити достаточно против джем-рейнджа SB, даже если конкретно в этот раз проиграли J5.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ts",
+       "3s"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "TT: выставиться против AK",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Th",
+      "Ts"
+     ],
+     "stacks": {
+      "CO": 15,
+      "BTN": 15
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "15 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "15 bb",
+       "q": {
+        "vStart": 1924,
+        "vEnd": 1952,
+        "depth": "подробно",
+        "explain": "<b>TT — флип-или-лучше против джем-рейнджа с AK/AQ и младшими парами, значит это чистый стек-офф.</b> С учётом лёгких блеф-3-бетов здесь колл обязателен.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "15 bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Th",
+       "Ts"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "K7o: не украл блайнды",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Kd",
+      "7c"
+     ],
+     "stacks": {
+      "CO": 60,
+      "BTN": 30,
+      "SB": 8,
+      "BB": 30
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "tight"
+      },
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 2084,
+        "vEnd": 2110,
+        "depth": "подробно",
+        "explain": "<b>Как чиплидер с двумя любителями и беспомощным коротким SB — стил K7o явно плюсовый.</b> Фолд отдаёт почти бесплатные фишки.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Открыть/стил",
+          "type": "raise",
+          "grade": "best",
+          "size": "~2.2bb",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Kd",
+       "7c"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "78o: открытие в рега",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "7h",
+      "8c"
+     ],
+     "stacks": {
+      "CO": 60,
+      "BTN": 50
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb",
+       "q": {
+        "vStart": 2097,
+        "vEnd": 2126,
+        "depth": "подробно",
+        "explain": "<b>Открывать 78o прямо в цепкого рега (Лукас) — плохой выбор цели.</b> Прибыльные стилы идут в пассивных любителей, поэтому эту комбинацию тут лучше сбросить.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Фолд / мягкая цель",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Открыть в рега",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "~2.2bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "7h",
+       "8c"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Q6: колл ривера со стритами",
+     "players": 6,
+     "heroPos": "SB",
+     "heroCards": [
+      "Qd",
+      "6c"
+     ],
+     "stacks": {
+      "SB": 50,
+      "BB": 50
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "6s",
+      "5h",
+      "2c",
+      "7d",
+      "8s"
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "SB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "SB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "river",
+       "pos": "SB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "60%"
+      },
+      {
+       "street": "river",
+       "pos": "SB",
+       "action": "call",
+       "size": "60%",
+       "q": {
+        "vStart": 2180,
+        "vEnd": 2206,
+        "depth": "подробно",
+        "explain": "<b>После закрытых стритов (любая девятка) вторая пара Q6 — кандидат на фолд.</b> Слабые шестёрки редко бетуют, любители редко троелят блеф — дисциплинированный пас лучше, хотя этот колл и выиграл.",
+        "options": [
+         {
+          "id": "r1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "r2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "r3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "SB": [
+       "Qd",
+       "6c"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "84s: стил с баттона",
+     "players": 5,
+     "heroPos": "BTN",
+     "heroCards": [
+      "8h",
+      "4h"
+     ],
+     "stacks": {
+      "BTN": 60,
+      "SB": 20,
+      "BB": 20
+     },
+     "profiles": {
+      "SB": {
+       "status": "reg",
+       "style": "tight"
+      },
+      "BB": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.2 bb",
+       "q": {
+        "vStart": 2312,
+        "vEnd": 2331,
+        "depth": "подробно",
+        "explain": "<b>С баттона большим стеком открытие 84s на стил — явно плюсовое.</b> Забирает блайнды у коротких оппонентов, эксплойт очевиден.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Открыть/стил",
+          "type": "raise",
+          "grade": "best",
+          "size": "~2.2bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "8h",
+       "4h"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "JT: колл барля тёрна",
+     "players": 5,
+     "heroPos": "BB",
+     "heroCards": [
+      "Jc",
+      "Td"
+     ],
+     "stacks": {
+      "BB": 40,
+      "BTN": 40
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9c",
+      "6h",
+      "3d",
+      "Qs",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "33%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "33%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "66%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "66%",
+       "q": {
+        "vStart": 2390,
+        "vEnd": 2417,
+        "depth": "подробно",
+        "explain": "<b>Против широкого барля баттна на Q-тёрне JT часто впереди и держит стрит-дро с оверкартами.</b> Колл однозначно лучший — фолд сдаёт слишком много эквити.",
+        "options": [
+         {
+          "id": "t1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "t2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "t3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Jc",
+       "Td"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "Пуш пары под ICM",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "5h",
+      "5c"
+     ],
+     "stacks": {
+      "CO": 15,
+      "BB": 20,
+      "BTN": 13,
+      "SB": 8
+     },
+     "profiles": {
+      "BB": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "15 bb",
+       "q": {
+        "vStart": 2431,
+        "vEnd": 2459,
+        "depth": "подробно",
+        "explain": "<b>При трёх коротких стеках и тяжёлом ICM пуш любой карманки печатает — даже 88/99 фолдят под давлением.</b> Максимум фолд-эквити бьёт мелкий опен, который приглашает на флоп.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Джем ~15bb",
+          "type": "raise",
+          "grade": "best",
+          "size": "15 bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Мелкий опен/минрейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "~2bb",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "CO": [
+       "5h",
+       "5c"
+      ]
+     }
+    },
+    {
+     "pack": "ft10k",
+     "title": "75s: минрейз вместо олина",
+     "players": 5,
+     "heroPos": "CO",
+     "heroCards": [
+      "7h",
+      "5h"
+     ],
+     "stacks": {
+      "CO": 14,
+      "BB": 11
+     },
+     "profiles": {
+      "BB": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9c",
+      "6d",
+      "2s",
+      "Ks",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/0lh7nVLfmMo"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2 bb",
+       "q": {
+        "vStart": 2523,
+        "vEnd": 2548,
+        "depth": "подробно",
+        "explain": "<b>Против 11bb второго стека нужен олл-ин, а не минрейз.</b> Джем отнимает дешёвый флоп и максимизирует фолд-эквити, а минрейз лишь раздувает банк со слабой рукой и держит короткого в игре.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Олл-ин ~14bb",
+          "type": "raise",
+          "grade": "best",
+          "size": "~14bb",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Минрейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "~2bb",
+          "hero": true
+         },
+         {
+          "id": "p3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 2555,
+        "vEnd": 2586,
+        "depth": "подробно",
+        "explain": "<b>C-bet по флопу здесь супер плюсовый и часто забирает банк сразу.</b> Чек сдаёт и инициативу, и банк, а нелогичная ставка по королю на тёрне потом дарит раздачу Диму.",
+        "options": [
+         {
+          "id": "f1",
+          "label": "C-bet ~1/2 банка",
+          "type": "bet",
+          "grade": "best",
+          "size": "~1/2 pot",
+          "hero": false
+         },
+         {
+          "id": "f2",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "raise",
+       "size": "9 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "CO": [
+       "7h",
+       "5h"
+      ]
+     }
     }
    ]
   },
@@ -6033,6 +7218,1361 @@
       "BB": [
        "Th",
        "Ts"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Слишком большой олл-ин по риверу",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ts",
+      "5s"
+     ],
+     "stacks": {
+      "BB": 55,
+      "CO": 55
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Kc",
+      "5d",
+      "2h",
+      "Td",
+      "8c"
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "7 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "66%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "call",
+       "size": "66%"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "130%",
+       "q": {
+        "vStart": 278,
+        "vEnd": 308,
+        "depth": "подробно",
+        "explain": "<b>Джем перебарщивает с сайзингом и выбивает блеф-кэтчеры соперника.</b> AK поставил тёрн и чекнул ривер — выглядит слабо, поэтому ставка ~75% банка собирает валью с Kx/QQ/Jx, а олл-ин их только фолдит.",
+        "options": [
+         {
+          "id": "r1",
+          "label": "Ставка ~75%",
+          "type": "bet",
+          "grade": "best",
+          "size": "75%",
+          "hero": false
+         },
+         {
+          "id": "r2",
+          "label": "Олл-ин овербет",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "олл‑ин",
+          "hero": true
+         },
+         {
+          "id": "r3",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ts",
+       "5s"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Сет-майнинг тройками против Хельмута",
+     "players": 9,
+     "heroPos": "CO",
+     "heroCards": [
+      "3s",
+      "3d"
+     ],
+     "stacks": {
+      "CO": 50,
+      "HJ": 50,
+      "BTN": 60
+     },
+     "profiles": {
+      "HJ": {
+       "status": "rec",
+       "style": "aggr"
+      },
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9h",
+      "4c",
+      "5s",
+      "Kd",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "8 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "8 bb",
+       "q": {
+        "vStart": 392,
+        "vEnd": 424,
+        "depth": "подробно",
+        "explain": "<b>Колл 33 в сет-майнинг здесь допустимая, чуть лузовая линия.</b> Заплатить ~20k, чтобы разыграть ~200k банк, даёт огромные имплайд-оддсы, а против слегка переросшего сквиза Хельмута флэт оправдан, если умеешь играть постфлоп.",
+        "options": [
+         {
+          "id": "c1",
+          "label": "Колл (сет-майнинг)",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "c2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "c3",
+          "label": "4-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "60%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "CO": [
+       "3s",
+       "3d"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Давим Хельмута четвёртым бетом",
+     "players": 9,
+     "heroPos": "HJ",
+     "heroCards": [
+      "Ah",
+      "Jc"
+     ],
+     "stacks": {
+      "HJ": 50,
+      "BTN": 55
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "8 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "20 bb",
+       "q": {
+        "vStart": 1090,
+        "vEnd": 1122,
+        "depth": "подробно",
+        "explain": "<b>Лёгкий 4-бет против Хельмута — сильный эксплойт.</b> Против крепкого диапазона AJ фолдит, но Хельмут 3-бетит очень широко и сбрасывает AK/AQ на 4-бет — он выкинул именно AQ, так что давление печатает деньги, тогда как колл без позиции худший вариант.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "4-бет (эксплойт)",
+          "type": "raise",
+          "grade": "best",
+          "size": "20 bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "Ah",
+       "Jc"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Бессмысленный сквиз Король-9",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Kc",
+      "9c"
+     ],
+     "stacks": {
+      "BB": 50,
+      "UTG": 50,
+      "CO": 50
+     },
+     "profiles": {
+      "UTG": {
+       "status": "rec",
+       "style": "aggr"
+      },
+      "CO": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "6 bb",
+       "q": {
+        "vStart": 1164,
+        "vEnd": 1196,
+        "depth": "подробно",
+        "explain": "<b>Маленький сквиз K9s не решает никакой задачи и явно минусовый.</b> Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Сквиз 6bb",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "6 bb",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "50 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "50 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Kc",
+       "9c"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Олл-ин девятками на 20бб",
+     "players": 9,
+     "heroPos": "SB",
+     "heroCards": [
+      "9h",
+      "9c"
+     ],
+     "stacks": {
+      "SB": 20,
+      "UTG": 45,
+      "HJ": 40,
+      "BTN": 35
+     },
+     "profiles": {
+      "UTG": {
+       "status": "rec",
+       "style": "tight"
+      },
+      "HJ": {
+       "status": "rec",
+       "style": "aggr"
+      },
+      "BTN": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "raise",
+       "size": "20 bb",
+       "q": {
+        "vStart": 1318,
+        "vEnd": 1350,
+        "depth": "подробно",
+        "explain": "<b>Пуш 99 на 20бб в лузовое поле однозначно верен и жирно плюсовый.</b> Сильное эквити против оверкартов, отнимаем их беквдоры и растим стек без борьбы — отличная точка заехать вперёд.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Олл-ин ~20bb",
+          "type": "raise",
+          "grade": "best",
+          "size": "20 bb",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "20 bb"
+      }
+     ],
+     "cards": {
+      "SB": [
+       "9h",
+       "9c"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Тран отдаёт лучшую руку",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Jc",
+      "9s"
+     ],
+     "stacks": {
+      "BB": 60,
+      "CO": 60
+     },
+     "profiles": {
+      "CO": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9h",
+      "9c",
+      "4h",
+      "Kd",
+      "2s"
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "raise",
+       "size": "19 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "19 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "bet",
+       "size": "45 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1775,
+        "vEnd": 1808,
+        "depth": "подробно",
+        "explain": "<b>Дисциплинированный пас на ривере оправдан: линия Фоксена репрезентует сет+ и почти не содержит блефов.</b> Рейз тёрна и добивка ривера выглядят как готовая рука, поэтому сброс блеф-кэтчера защитим — хотя именно в этот раз Фоксен блефовал и Тран отдал лучшую руку.",
+        "options": [
+         {
+          "id": "r1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "r2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Jc",
+       "9s"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Валеты только коллируют баттон",
+     "players": 9,
+     "heroPos": "SB",
+     "heroCards": [
+      "Jh",
+      "Js"
+     ],
+     "stacks": {
+      "SB": 53,
+      "BTN": 55
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "call",
+       "size": "2.5 bb",
+       "q": {
+        "vStart": 1820,
+        "vEnd": 1852,
+        "depth": "подробно",
+        "explain": "<b>Флэт JJ против широкого опена Фоксена с баттона оставляет деньги на столе.</b> Фоксен открывает огромный диапазон, поэтому 3-бет заметно прибыльнее: строим банк с большим фаворитом и отнимаем эквити, тогда как колл недореализует руку.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "12 bb",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "p3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "SB": [
+       "Jh",
+       "Js"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Индуцирующий валуебет вместо олина",
+     "players": 9,
+     "heroPos": "HJ",
+     "heroCards": [
+      "7d",
+      "8d"
+     ],
+     "stacks": {
+      "HJ": 120,
+      "BTN": 120
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "8h",
+      "8c",
+      "4s",
+      "7c",
+      "2h"
+     ],
+     "video": {
+      "url": "https://youtu.be/DY2CGt5gQhk"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "8 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "8 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "HJ",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "HJ",
+       "action": "bet",
+       "size": "16 bb",
+       "q": {
+        "vStart": 910,
+        "vEnd": 945,
+        "depth": "подробно",
+        "explain": "<b>Против прямолинейного тайтового оппонента на тёрне лучший вариант — олин.</b> Оверпару JJ он тут уже не выбросит, поэтому шов собирает максимум и защищает от опасных карт ривера.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Бет ~80k",
+          "type": "bet",
+          "grade": "ok",
+          "size": "16 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Шов-олин",
+          "type": "bet",
+          "grade": "best",
+          "size": "олл-ин",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "call",
+       "size": "16 bb"
+      },
+      {
+       "street": "river",
+       "pos": "HJ",
+       "action": "bet",
+       "size": "17 bb",
+       "q": {
+        "vStart": 1010,
+        "vEnd": 1045,
+        "depth": "подробно",
+        "explain": "<b>На ривере намеренный маленький валуебет сильнее шова.</b> Шов выбьет все оверпары (никто не хочет вылетать в 3-й день), а половина банка ~85k как раз проходит колом — так EV максимален.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Валуебет ~85k",
+          "type": "bet",
+          "grade": "best",
+          "size": "17 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Шов 147k",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "олл-ин",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "7d",
+       "8d"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Пропущенный донк фулхаусом на тёрне",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Qh",
+      "Qd"
+     ],
+     "stacks": {
+      "BB": 120,
+      "UTG": 120
+     },
+     "profiles": {
+      "UTG": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Qc",
+      "9d",
+      "4s",
+      "9c",
+      "2h"
+     ],
+     "video": {
+      "url": "https://youtu.be/DY2CGt5gQhk"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.4 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.4 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 1160,
+        "vEnd": 1190,
+        "depth": "подробно",
+        "explain": "<b>С фулхаусом на спаренном тёрне надо было донкать.</b> Тёрн-9 усиливает диапазон ББ стритами и агрессор часто чекнет за собой — донк добирает с туз-икс, пар и стрит-дро, а чек упускает целую улицу валуе.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Донк-бет",
+          "type": "bet",
+          "grade": "best",
+          "size": "50%",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "UTG",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "2.6 bb"
+      },
+      {
+       "street": "river",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "9 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "raise",
+       "size": "38 bb"
+      },
+      {
+       "street": "river",
+       "pos": "UTG",
+       "action": "call",
+       "size": "38 bb"
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Qh",
+       "Qd"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Чек роял-дро вместо контбета",
+     "players": 9,
+     "heroPos": "UTG",
+     "heroCards": [
+      "Ks",
+      "Ts"
+     ],
+     "stacks": {
+      "UTG": 120,
+      "HJ": 120
+     },
+     "profiles": {
+      "HJ": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Js",
+      "9s",
+      "4d",
+      "Qs",
+      "2c"
+     ],
+     "video": {
+      "url": "https://youtu.be/DY2CGt5gQhk"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.8 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "2.8 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 1410,
+        "vEnd": 1440,
+        "depth": "подробно",
+        "explain": "<b>С гигантским роял/стрит-флеш-дро выгоднее самому давить контбетом.</b> Ставка выбивает туз-икс бубновые и мелкие пары, а с ~38% эквити даже против трипса агрессия в среднем прибыльнее пассивного чек-колла.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Контбет",
+          "type": "bet",
+          "grade": "best",
+          "size": "50%",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "HJ",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "call",
+       "size": "50%"
+      },
+      {
+       "street": "turn",
+       "pos": "UTG",
+       "action": "bet",
+       "size": "66%"
+      },
+      {
+       "street": "turn",
+       "pos": "HJ",
+       "action": "call",
+       "size": "66%"
+      },
+      {
+       "street": "river",
+       "pos": "UTG",
+       "action": "bet",
+       "size": "75%"
+      },
+      {
+       "street": "river",
+       "pos": "HJ",
+       "action": "call",
+       "size": "75%"
+      }
+     ],
+     "cards": {
+      "UTG": [
+       "Ks",
+       "Ts"
+      ]
+     }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Флоат и отложенный блеф валетом",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Jd",
+      "7c"
+     ],
+     "stacks": {
+      "CO": 90,
+      "BB": 90
+     },
+     "profiles": {
+      "BB": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "9h",
+      "6c",
+      "2d",
+      "8s",
+      "Qc"
+     ],
+     "video": {
+      "url": "https://youtu.be/DY2CGt5gQhk"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "7 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "bet",
+       "size": "50%"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "50%",
+       "q": {
+        "vStart": 1708,
+        "vEnd": 1735,
+        "depth": "подробно",
+        "explain": "<b>Мелкий 3бет без позиции окупается флоатом в позиции.</b> Кэппнутый широкий диапазон ББ позволяет коллировать флоп с воздухом и забирать банк поздними блефами или добежавшим дро.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл-флоат",
+          "type": "call",
+          "grade": "best",
+          "size": "50%",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "bet",
+       "size": "5 bb",
+       "q": {
+        "vStart": 1736,
+        "vEnd": 1764,
+        "depth": "подробно",
+        "explain": "<b>После чек-чека ривер — идеальный спот для отложенного блефа.</b> Ставка репрезентует слабый туз-икс или добежавшее дро, оверпаре TT некомфортно на любой сайзинг, и часть таких рук выбросит.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Блеф ~25k",
+          "type": "bet",
+          "grade": "best",
+          "size": "5 bb",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Чек-гив-ап",
+          "type": "check",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Jd",
+       "7c"
       ]
      }
     }
@@ -9060,5 +11600,5 @@
    "hands": []
   }
  ],
- "publishedAt": 1784597781411
+ "publishedAt": 1784617584625
 }
