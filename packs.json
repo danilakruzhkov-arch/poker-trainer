@@ -4671,7 +4671,7 @@
        "size": "7 bb",
        "q": {
         "vStart": 80,
-        "vEnd": 250,
+        "vEnd": 345,
         "depth": "подробно",
         "explain": "Со стеком 55бб в поздней позиции против 3-бета выгоднее 4-бет или пуш. Колл отдаёт сопернику реализацию эквити без позиции — не лучшая линия.",
         "options": [
@@ -4870,7 +4870,7 @@
           "label": "Пас",
           "size": "",
           "type": "fold",
-          "grade": "best",
+          "grade": "mistake",
           "hero": true
          },
          {
@@ -4878,7 +4878,7 @@
           "label": "Колл",
           "size": "",
           "type": "call",
-          "grade": "mistake",
+          "grade": "best",
           "hero": false
          },
          {
@@ -4886,7 +4886,7 @@
           "label": "Рейз",
           "size": "3x",
           "type": "raise",
-          "grade": "mistake",
+          "grade": "ok",
           "hero": false
          }
         ],
@@ -4923,9 +4923,15 @@
       "4s"
      ],
      "stacks": {
-      "BB": 75,
-      "HJ": 80,
-      "SB": 60
+      "BB": 96.7,
+      "HJ": 200,
+      "SB": 57.3,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "CO": null,
+      "BTN": null
      },
      "profiles": {
       "HJ": {
@@ -4935,6 +4941,34 @@
       "SB": {
        "status": "rec",
        "style": "tight"
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -4953,59 +4987,96 @@
        "street": "preflop",
        "pos": "HJ",
        "action": "raise",
-       "size": "2.5 bb"
+       "size": "2.7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
       },
       {
        "street": "preflop",
        "pos": "SB",
        "action": "call",
-       "size": "2.5 bb"
+       "size": ""
       },
       {
        "street": "preflop",
        "pos": "BB",
        "action": "raise",
-       "size": "11 bb",
+       "size": "14.7 bb",
        "q": {
-        "vStart": 350,
-        "vEnd": 380,
-        "depth": "подробно",
-        "explain": "<b>Опенер широкий, малый блайнд коллит слабо — на ТВ-столе сквизом можно забрать банк любыми двумя.</b> Математически рука не подходит, но как эксплойт против широких диапазонов сквиз оправдан.",
         "options": [
          {
-          "id": "p1",
-          "label": "3-бет",
+          "id": "o3",
+          "label": "Рейз",
+          "size": "14.7 bb",
           "type": "raise",
-          "grade": "best",
-          "size": "11 bb",
+          "grade": "mistake",
           "hero": true
          },
          {
-          "id": "p2",
+          "id": "o1",
           "label": "Пас",
-          "type": "fold",
-          "grade": "ok",
           "size": "",
+          "type": "fold",
+          "grade": "best",
           "hero": false
          },
          {
-          "id": "p3",
+          "id": "o2",
           "label": "Колл",
+          "size": "2.5 bb",
           "type": "call",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "vStart": 344,
+        "vEnd": 385,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
        }
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
       }
      ],
      "cards": {
       "BB": [
        "7d",
        "4s"
+      ],
+      "HJ": [
+       "Qd",
+       "Ts"
+      ],
+      "SB": [
+       "6s",
+       "6c"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "1500",
+     "_addStreet": null
     },
     {
      "pack": "wsopme",
@@ -12191,5 +12262,5 @@
    ]
   }
  ],
- "publishedAt": 1784674115420
+ "publishedAt": 1784675030605
 }
