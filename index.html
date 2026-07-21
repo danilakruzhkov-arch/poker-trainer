@@ -163,6 +163,13 @@
   .fs>.h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px;margin-bottom:11px}
   .fs>.h .n{width:19px;height:19px;border-radius:6px;background:var(--brass);color:#1b1200;display:grid;place-items:center;font-size:11px;font-weight:900;flex:none}
   .fs>.h .r{margin-left:auto;font-size:10px;color:var(--muted);font-weight:600;text-transform:none;letter-spacing:0}
+  /* collapsible sections — click header to fold. Chevron points down when open, right when collapsed */
+  .fs>.h,.pvhead,.sethdr{cursor:pointer;user-select:none}
+  .fs>.h::after,.pvhead::after,.sethdr::after{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-left:10px;flex:none;transition:transform .15s;opacity:.65}
+  .fs.collapsed>.h::after,.previewwrap>.fs.collapsed>.pvhead::after,.setlist.collapsed .sethdr::after{transform:rotate(-45deg)}
+  #adForm .fs.collapsed>*:not(.h){display:none}
+  .previewwrap>.fs.collapsed>.app,.previewwrap>.fs.collapsed>.pv-note{display:none}
+  .setlist.collapsed .setrows{display:none}
   .row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
   .fld{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
   .fld label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
@@ -242,7 +249,9 @@
   .grade-seg button.on.gb{background:var(--good);color:#04150c;border-color:transparent}
   .grade-seg button.on.go{background:var(--edge);color:#1c1403;border-color:transparent}
   .grade-seg button.on.gm{background:var(--bad);color:#1f0605;border-color:transparent}
-  /* option size: preset dropdown + free input + auto bb↔% hint */
+  /* option action dropdown + size (size only shows for bet/raise) */
+  .optline .op-act{align-self:center;font-size:12px;padding:8px 22px 8px 8px}
+  .optline.noSize{grid-template-columns:1fr 1.15fr}                 /* no size field → action + grade only */
   .op-sizewrap{display:flex;flex-direction:column;gap:3px;min-width:0}
   .op-sizewrap .op-size-sel{padding:5px 5px;font-size:11px;border-radius:7px}
   .op-sizewrap .op-size{padding:6px 6px;font-size:12px}
@@ -272,9 +281,14 @@
   .savebar{display:flex;gap:8px;margin-top:11px}
   .primary{flex:1;border:none;cursor:pointer;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#1c1300;font-weight:800;font-size:14px;padding:12px;border-radius:12px}
   .ghost{border:1px solid var(--stroke);background:var(--field);color:var(--text);border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:700;font-size:13px}
-  .setlist{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+  .setlist{display:flex;flex-direction:column;gap:7px;margin-top:9px}
+  .sethdr{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:12px;padding:1px 2px}
+  .sethdr small{color:var(--muted);font-weight:600;font-size:10px}
+  .setrows{display:flex;flex-direction:column;gap:6px}
   .setrow{display:flex;align-items:center;gap:9px;background:var(--field);border:1px solid var(--stroke);border-radius:10px;padding:8px 10px;font-size:12px}
   .setrow.editing{border-color:var(--brass)}
+  .setrow.hidden-h{opacity:.42}
+  .setflag.hf{color:var(--muted);background:rgba(150,158,152,.12);border-color:rgba(150,158,152,.34)}
   .setrow .i{width:20px;height:20px;border-radius:6px;background:var(--chip);display:grid;place-items:center;font-size:10px;font-weight:800;color:var(--brass);flex:none}
   .setrow .d{color:var(--muted);font-size:10.5px}
   .setflag{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--edge);background:rgba(224,163,46,.14);border:1px solid rgba(224,163,46,.4);border-radius:5px;padding:1px 5px;vertical-align:middle}
@@ -306,7 +320,7 @@
   .backbtn:hover{border-color:var(--brass)}
   .backrow .bt{font-weight:800;font-size:13px}.backrow .bt small{color:var(--muted);font-weight:500;margin-left:6px}
   .setrow .acts2{margin-left:auto;display:flex;gap:4px}
-  .setrow .ic{border:none;background:none;cursor:pointer;font-size:14px;padding:3px}.setrow .ed{color:var(--brass)}.setrow .cp{color:var(--muted)}.setrow .del{color:var(--bad)}
+  .setrow .ic{border:none;background:none;cursor:pointer;font-size:14px;padding:3px}.setrow .ed{color:var(--brass)}.setrow .cp{color:var(--muted)}.setrow .del{color:var(--bad)}.setrow .hd{filter:grayscale(1) opacity(.75)}.setrow.hidden-h .hd{filter:none}
   .io{display:flex;gap:8px;margin-top:8px}
   textarea{min-height:78px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;resize:vertical}
   .pv-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45;text-align:center}
@@ -407,7 +421,7 @@
   <div id="view-admin" style="display:none">
     <div class="admin">
       <div class="adcol" id="adForm"></div>
-      <div class="adcol"><div class="previewwrap"><div class="fs">
+      <div class="adcol"><div class="previewwrap"><div class="fs" data-sec="pv">
         <div class="pvhead"><div class="t">Живое превью</div><div class="mini" id="pvStreet"></div></div>
         <div class="app" style="border-radius:20px">
           <div class="stepband" id="pvBand" style="padding-top:8px"></div>
@@ -417,7 +431,7 @@
         </div>
         <div class="pv-note">Так активный вопрос выглядит в тренажёре. Видео здесь — заглушка (внешний YouTube блокируется CSP артефакта; локально по http встроится).</div>
         <div class="savebar"><button class="primary" id="saveHand">Добавить в набор</button><button class="ghost" id="playSet">В тренажёр →</button></div>
-        <div class="setlist" id="setList"></div>
+        <div class="setlist" id="setList" data-sec="set"></div>
         <div class="io"><button class="ghost" id="exportBtn" style="flex:1">Скопировать JSON</button><button class="ghost" id="importToggle">Импорт</button><button class="ghost" id="clearBtn" title="Очистить подборку и черновик">Очистить</button></div>
         <div class="pv-note" style="text-align:left">Название, теги, заставка и вступление подборки настраиваются в блоке 0 слева. Раздачи и черновик автосохраняются в этом браузере (localStorage). «Скопировать JSON» — бэкап и перенос: делай периодически, localStorage слетит при чистке кэша или смене браузера.</div>
         <div id="importBox" style="display:none"><div class="mini" style="margin-bottom:6px">Вставь <b>историю раздач</b> (PokerStars / GGPoker / ПокерОК — текстовый экспорт) или <b>JSON</b> набора. История добавится к набору со стеками и полным порядком ходов — потом открываешь раздачу и отмечаешь шаги‑вопросы.</div><textarea id="importArea" placeholder="PokerStars Hand #… (или GGPoker) — можно несколько раздач подряд. Либо JSON набора."></textarea><button class="ghost" id="importBtn" style="width:100%;margin-top:6px">Импортировать</button></div>
@@ -478,6 +492,18 @@ function normSize(s){s=String(s==null?'':s).trim().replace(',','.');if(!s)return
   if(isMultSize(s))return s.replace(/\s+/g,'').replace(/х/gi,'x');
   const n=numOf(s);if(n==null)return '';
   return (chipsMode()?Math.round(n/bbChips()*10)/10:n)+' bb';}
+// answer-option sizes live in bb / % / × ONLY (independent of the block-1 chips toggle). A bare number is always bb,
+// so typing "10" gives "10 bb" even while the rest of the editor is in chips mode (fixes size reading to 0 bb).
+function normSizeBB(s){s=String(s==null?'':s).trim().replace(',','.');if(!s)return '';
+  if(isAllinSize(s))return ALLIN;
+  if(isPctSize(s))return s.replace(/\s+/g,'');
+  if(isMultSize(s))return s.replace(/\s+/g,'').replace(/х/gi,'x');
+  const n=numOf(s);if(n==null)return '';return n+' bb';}
+function dispOptSize(s){return String(s==null?'':s).trim();}   // show an option size exactly as stored (bb / % / ×) — no chips conversion
+// answer-option action picker: label + engine type. bet/raise/N-бет carry a size; олл-ин fixes the size; пас/чек/колл don't.
+const OPT_ACT=[{v:'fold',t:'fold',l:'Пас'},{v:'check',t:'check',l:'Чек'},{v:'call',t:'call',l:'Колл'},{v:'bet',t:'bet',l:'Бет',sized:true},{v:'raise',t:'raise',l:'Рейз',sized:true},{v:'3bet',t:'raise',l:'3-бет',sized:true},{v:'4bet',t:'raise',l:'4-бет',sized:true},{v:'5bet',t:'raise',l:'5-бет',sized:true},{v:'allin',t:'raise',l:'Олл-ин',allin:true}];
+function optActMeta(v){return OPT_ACT.find(a=>a.v===v)||OPT_ACT.find(a=>a.v==='raise');}
+function optActVal(o){if(o.allin||isAllinSize(o.size)||/олл/i.test(o.label||''))return 'allin';const byL=OPT_ACT.find(a=>a.l===(o.label||''));if(byL)return byL.v;const byT=OPT_ACT.find(a=>a.t===o.type);return byT?byT.v:'raise';}   // label wins; else fall back to the first action of this engine-type
 
 /* ===== hand model (v5): hand.actions[] = user-authored decisions in order.
    resolve() replays the hand — auto-filling passive folds/checks, tracking the betting round,
@@ -884,11 +910,16 @@ function defaultCols(){const hs=seed().map(migrateCards);
   return cols;}
 let COLS=defaultCols();
 let curCol=COLS.length-1;   // open the editor on "Мой набор" by default
+// editor UI prefs (collapsed sections) — persisted separately from data so they survive hand switches & reloads
+let _ui=(()=>{try{return JSON.parse(localStorage.getItem('pk_ui')||'{}')||{};}catch(e){return {};}})();
+if(!_ui.collapsed)_ui.collapsed={};
+function saveUI(){try{localStorage.setItem('pk_ui',JSON.stringify(_ui));}catch(e){}}
+function secClass(key){return _ui.collapsed[key]?' collapsed':'';}
 function activeCol(){if(curCol<0)curCol=0;if(curCol>=COLS.length)curCol=COLS.length-1;return COLS[curCol]||COLS[0];}
 function findCol(id){return COLS.find(c=>c.id===id);}
 // unified list for the home screen: demo packs (library) + user collections
 function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,isUser:true}));}
-function packHands(id){const c=findCol(id);return c?c.hands.map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}
+function packHands(id){const c=findCol(id);return c?c.hands.filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill
 function packStats(id){const c=findCol(id),hs=c?c.hands:[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}
 function renderHome(){
   const cards=allPacks().map(p=>{const st=packStats(p.id),empty=st.questions===0;
@@ -942,7 +973,7 @@ function useCol(idx){curCol=Math.max(0,Math.min(idx|0,COLS.length-1));SET=active
 const esc=s=>String(s==null?'':s).replace(/"/g,'&quot;').replace(/</g,'&lt;');
 // block 0 — pick / create / configure the collection being edited (name, cover, tags, intro)
 function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name);
-  return `<div class="fs"><div class="h"><span class="n">0</span>Подборка<span class="r">что редактируем</span></div>
+  return `<div class="fs${secClass('col')}" data-sec="col"><div class="h"><span class="n">0</span>Подборка<span class="r">что редактируем</span></div>
     <div class="fld"><label>Подборки — нажми, чтобы редактировать · порядок меняется стрелками ↑↓</label>
       <div class="colchips" id="col-chips">${COLS.map((x,i)=>`<button class="colchip ${i===curCol?'on':''}" data-col="${i}">${x.emoji||'✎'} ${esc(x.name||'Без названия')}<small>${(x.hands||[]).length}</small></button>`).join('')}</div></div>
     <div class="colbar" style="margin-top:8px;align-items:center">
@@ -999,8 +1030,8 @@ function markQuestion(a){const facing=rowFacing(a);
   a.q={options:opts,vStart:0,vEnd:0,depth:'подробно',explain:'',joinPrev:false,contPrev:false};}
 function defaultOptions(street,facing){
   let opts;
-  if(street==='preflop')opts=facing?[{l:'Фолд',t:'fold'},{l:'Колл',t:'call',s:'2.5 bb'},{l:'Рейз',t:'raise',s:'8 bb'}]:[{l:'Фолд',t:'fold'},{l:'Колл',t:'call',s:'1 bb'},{l:'Рейз',t:'raise',s:'2 bb'}];
-  else opts=facing?[{l:'Фолд',t:'fold'},{l:'Колл',t:'call',s:''},{l:'Рейз',t:'raise',s:'3x'}]:[{l:'Чек',t:'check'},{l:'Рейз',t:'bet',s:'33%'},{l:'Рейз',t:'bet',s:'50%'},{l:'Рейз',t:'bet',s:'75%'}];
+  if(street==='preflop')opts=facing?[{l:'Пас',t:'fold'},{l:'Колл',t:'call',s:'2.5 bb'},{l:'Рейз',t:'raise',s:'8 bb'}]:[{l:'Пас',t:'fold'},{l:'Колл',t:'call',s:'1 bb'},{l:'Рейз',t:'raise',s:'2 bb'}];
+  else opts=facing?[{l:'Пас',t:'fold'},{l:'Колл',t:'call',s:''},{l:'Рейз',t:'raise',s:'3x'}]:[{l:'Чек',t:'check'},{l:'Бет',t:'bet',s:'33%'},{l:'Бет',t:'bet',s:'50%'},{l:'Бет',t:'bet',s:'75%'}];
   return opts.map((o,k)=>O('o'+(k+1),o.l,o.t,k===0?'mistake':k===opts.length-1?'best':'ok',o.s,false));
 }
 function suitSelCol(s){return s?(s==='s'?'var(--spade-sel)':SUIT[s].col):'var(--muted)';}   // spade: light on dark theme so it doesn't vanish on the dark-green field
@@ -1084,7 +1115,7 @@ function buildForm(){
   const qs=questionEntries(),hdo=dispOrder(F.players);
   const html=`
   ${collectionBlockHTML()}
-  <div class="fs"><div class="h"><span class="n">1</span>Стол и герой<span class="r">${F.editIndex!=null?'редактирую #'+(F.editIndex+1):''}</span></div>
+  <div class="fs${secClass('s1')}" data-sec="s1"><div class="h"><span class="n">1</span>Стол и герой<span class="r">${F.editIndex!=null?'редактирую #'+(F.editIndex+1):''}</span></div>
     <div class="row" style="gap:9px;align-items:flex-end;flex-wrap:wrap">
       <div class="fld" style="max-width:104px"><label>Игроков</label><select id="f-players">${[9,8,7,6,5,4,3,2].map(n=>`<option ${n===F.players?'selected':''}>${n}</option>`).join('')}</select></div>
       <div class="fld" style="max-width:158px"><label>Ввод данных</label><div class="seg" id="f-unit"><button data-u="bb" class="${unitMode()!=='chips'?'on':''}">ББ</button><button data-u="chips" class="${unitMode()==='chips'?'on':''}">Фишки</button></div></div>
@@ -1095,13 +1126,13 @@ function buildForm(){
     <div class="fld" style="margin-top:11px"><label>Борд (5 карт — флоп · тёрн · ривер)</label><div class="row" style="gap:6px">${Array.from({length:5},(_,k)=>cardSelectHTML(F.board[k],'bd'+k)).join('')}</div><div class="mini">Все пять слотов всегда на месте — заполняй по мере улиц. Введённые карты сохраняются, даже когда добавляешь ходы на тёрн/ривер.</div></div>
   </div>
 
-  <div class="fs"><div class="h"><span class="n">2</span>Ход раздачи<span class="r">от префлопа до вскрытия</span></div>
+  <div class="fs${secClass('s2')}" data-sec="s2"><div class="h"><span class="n">2</span>Ход раздачи<span class="r">от префлопа до вскрытия</span></div>
     <div class="mini" style="margin-bottom:9px">Движок сам достраивает пропущенные ходы: до первого входа — фолд, пропущенные улицы — чек (свёрнуто, «✎» раскрывает и правит). Новые ходы добавляются только в конец. У своих ходов жми «＋ вопрос».</div>
     ${timelineHTML(res)}
     ${addActionHTML(res)}
   </div>
 
-  <div class="fs"><div class="h"><span class="n">3</span>Вопросы<span class="r">${qs.length?('решение '+(F.curQ+1)+' из '+qs.length):'нет решений'}</span></div>
+  <div class="fs${secClass('s3')}" data-sec="s3"><div class="h"><span class="n">3</span>Вопросы<span class="r">${qs.length?('решение '+(F.curQ+1)+' из '+qs.length):'нет решений'}</span></div>
     ${qs.length?questionsBlockHTML(qs):'<div class="mini">Пока нет вопросов. В блоке 2 отметь одно из своих действий кнопкой «＋ вопрос» — здесь появятся варианты ответа и видео к нему.</div>'}
   </div>`;
   $('adForm').innerHTML=html;wireForm();syncPreview();
@@ -1165,7 +1196,7 @@ function questionsBlockHTML(qs){const entry=qs[F.curQ],q=entry.q,street=entry.st
   let pot=0;try{const pv=qView(previewHand(),Math.min(F.curQ,qs.length-1));if(pv)pot=potNum(pv);}catch(e){}
   return `<div class="qchips">${qs.map((a,k)=>`<button class="qchip ${k===F.curQ?'on':''}" data-q="${k}">Вопрос ${k+1}<small>${STREET_RU[a.street]}</small></button>`).join('')}</div>
   <div class="qsub"><div class="qsub-h"><span style="color:var(--text);font-weight:800">Варианты ответа</span><span>${STREET_RU[street]} · ты сыграл ${ACT_RU[entry.action]||''}${entry.size?' '+entry.size:''}</span></div>
-    <div class="row" style="justify-content:space-between;margin-bottom:9px"><div class="seg" style="flex:0 0 auto" id="f-optcount"><button data-c="3" class="${q.options.length===3?'on':''}">3</button><button data-c="4" class="${q.options.length===4?'on':''}">4</button></div><button class="ghost" id="f-stdopts" style="padding:8px 12px;font-size:12px">Стандартные</button></div>
+    <div class="row" style="justify-content:space-between;margin-bottom:9px"><div class="seg" style="flex:0 0 auto" id="f-optcount"><button data-c="2" class="${q.options.length===2?'on':''}">2</button><button data-c="3" class="${q.options.length===3?'on':''}">3</button><button data-c="4" class="${q.options.length===4?'on':''}">4</button></div><button class="ghost" id="f-stdopts" style="padding:8px 12px;font-size:12px">Стандартные</button></div>
     <div class="mini" style="margin-bottom:8px">«Твой ход» — что герой реально сделал (зафиксировано в блоке 2, здесь меняется только оценка). Размеры и действие правишь у остальных вариантов, которые герой не выбрал.</div>
     <div id="f-options">${q.options.map((o,k)=>optRow(k,o,street,pot)).join('')}</div></div>
   <div class="qsub"><div class="qsub-h"><span style="color:var(--text);font-weight:800">Видео‑разбор</span>${q.joinPrev?`<span style="color:var(--edge)">часть общего разбора · отрезок в Вопросе ${anchorK+1}</span>`:nextJoins?'<span style="color:var(--edge)">первый вопрос группы · один отрезок на всех</span>':q.contPrev?'<span style="color:var(--edge)">продолжение предыдущего</span>':''}</div>
@@ -1187,15 +1218,12 @@ function optRow(k,o,street,pot){
     const sz=o.size?` <span class="num">${o.size}</span>`:'';
     return `<div class="optline hero-opt" data-k="${k}"><div class="op-static"><span class="herobadge">твой ход</span><span class="osval">${o.label||ACT_RU[o.type]||'—'}${sz}</span></div>${gradeSeg}</div>`;
   }
-  const sized=(o.type==='bet'||o.type==='raise');
+  const av=optActVal(o),meta=optActMeta(av),sized=!!meta.sized;
+  const actSel=`<select class="op-act" data-k="${k}">${OPT_ACT.map(a=>`<option value="${a.v}" ${a.v===av?'selected':''}>${a.l}</option>`).join('')}</select>`;
   const presets=street==='preflop'?SIZE_PRE:SIZE_POST;
   const inList=presets.includes(o.size);
-  const sel=sized?`<select class="op-size-sel" data-k="${k}"><option value="">размер…</option>${presets.map(p=>`<option ${p===o.size?'selected':''}>${p}</option>`).join('')}${(!inList&&o.size)?`<option selected value="${o.size}">${o.size} (своё)</option>`:''}</select>`:'';
-  const hint=(sized&&street!=='preflop')?(()=>{const c=bbPct(o.size,pot);return c?`<span class="op-hint">${c}</span>`:'';})():'';
-  return `<div class="optline" data-k="${k}">
-  <input class="op-label" value="${o.label||''}" placeholder="Рейз">
-  <div class="op-sizewrap">${sel}<input class="op-size" value="${dispSize(o.size)}" placeholder="${street==='preflop'?(chipsMode()?'фишки / 3x':'2 bb / 3x'):(chipsMode()?'50% / фишки':'50% / 9 bb')}">${hint}</div>
-  ${gradeSeg}</div>`;}
+  const sizeCtl=sized?`<div class="op-sizewrap"><select class="op-size-sel" data-k="${k}"><option value="">размер…</option>${presets.filter(p=>p!==ALLIN).map(p=>`<option ${p===o.size?'selected':''}>${p}</option>`).join('')}${(!inList&&o.size)?`<option selected value="${o.size}">${o.size} (своё)</option>`:''}</select><input class="op-size" value="${dispOptSize(o.size)}" placeholder="${street==='preflop'?'3x / 8 bb':'50% / 9 bb'}" inputmode="decimal"></div>`:'';
+  return `<div class="optline${sized?'':' noSize'}" data-k="${k}">${actSel}${sizeCtl}${gradeSeg}</div>`;}
 
 function readForm(){
   readCol();
@@ -1211,7 +1239,12 @@ function readForm(){
   $('adForm').querySelectorAll('.tlrow').forEach(r=>{const a=F.actions[+r.dataset.ai];if(a&&choiceOf(a.action)==='raise'){const el=r.querySelector('.ta-size');if(el)a.size=normSize(el.value);}});
   // current question options + video
   const entry=curQEntry();
-  if(entry&&$('f-options')){const q=entry.q;q.options=[...$('f-options').querySelectorAll('.optline')].map((r,k)=>{const cur=q.options[k]||{};const lblEl=r.querySelector('.op-label'),szEl=r.querySelector('.op-size');return {id:cur.id||('o'+(k+1)),label:lblEl?lblEl.value:(cur.label||''),size:szEl?normSize(szEl.value):(cur.size||''),type:cur.type||'raise',grade:cur.grade||'ok',hero:cur.hero||false};});
+  if(entry&&$('f-options')){const q=entry.q;q.options=[...$('f-options').querySelectorAll('.optline')].map((r,k)=>{const cur=q.options[k]||{};
+      if(cur.hero)return {...cur,id:cur.id||('o'+(k+1)),grade:cur.grade||'ok',hero:true};   // hero option is fixed by the timeline
+      const actEl=r.querySelector('.op-act'),szEl=r.querySelector('.op-size');
+      let type=cur.type||'raise',label=cur.label||'',size=cur.size||'';
+      if(actEl){const m=optActMeta(actEl.value);type=m.t;label=m.l;size=m.allin?ALLIN:(!m.sized?'':(szEl?normSizeBB(szEl.value):size));}
+      return {id:cur.id||('o'+(k+1)),label,size,type,grade:cur.grade||'ok',hero:false};});
     F.video.url=$('f-vurl').value.trim();
     if($('f-vstart')&&!$('f-vstart').readOnly)q.vStart=mmss2sec($('f-vstart').value);
     if($('f-vend'))q.vEnd=mmss2sec($('f-vend').value);
@@ -1268,11 +1301,15 @@ function wireForm(){
   // questions
   $('adForm').querySelectorAll('.qchip').forEach(c=>c.onclick=()=>{readForm();F.curQ=+c.dataset.q;buildForm();});
   if($('f-options')){
-    $('f-optcount').querySelectorAll('button').forEach(b=>b.onclick=()=>{readForm();const c=+b.dataset.c,q=curQEntry().q;if(c>q.options.length)q.options.push(O('o'+(q.options.length+1),'Рейз','bet','ok',''));else q.options=q.options.slice(0,c);buildForm();});
+    $('f-optcount').querySelectorAll('button').forEach(b=>b.onclick=()=>{readForm();const c=+b.dataset.c,q=curQEntry().q;
+      if(c>q.options.length)q.options.push(O('o'+(q.options.length+1),'Рейз','raise','ok',''));
+      else if(c<q.options.length){const keep=q.options.slice(0,c);if(!keep.some(o=>o.hero)){const h=q.options.find(o=>o.hero);if(h)keep[keep.length-1]=h;}q.options=keep;}   // never drop the hero's own option when shrinking
+      buildForm();});
     $('f-stdopts').onclick=()=>{readForm();const a=curQEntry();a.q.options=defaultOptions(a.street,rowFacing(a));buildForm();};
     $('f-options').querySelectorAll('.grade-seg').forEach(seg=>seg.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{readForm();curQEntry().q.options[+seg.dataset.k].grade=btn.dataset.g;buildForm();}));
     $('f-options').querySelectorAll('.op-size-sel').forEach(sel=>sel.onchange=()=>{const w=sel.closest('.op-sizewrap'),inp=w&&w.querySelector('.op-size');if(inp&&sel.value)inp.value=sel.value;readForm();buildForm();});
-    $('f-options').querySelectorAll('.op-label,.op-size').forEach(el=>el.addEventListener('input',()=>{readForm();syncPreview();}));
+    $('f-options').querySelectorAll('.op-act').forEach(sel=>sel.onchange=()=>{readForm();buildForm();});   // action change may show/hide the size field
+    $('f-options').querySelectorAll('.op-size').forEach(el=>el.addEventListener('input',()=>{readForm();syncPreview();}));
     if($('f-join'))$('f-join').onchange=()=>{readForm();const qs=questionEntries(),cur=qs[F.curQ];
       if(cur&&cur.q.joinPrev){cur.q.contPrev=false;cur.q.vStart=0;cur.q.vEnd=0;}   // участник группы таймкоды не держит — отрезок редактируется в первом вопросе
       buildForm();};
@@ -1299,10 +1336,7 @@ function syncPreview(){
   $('pvActs').innerHTML=(v.options||[]).map(o=>`<button class="btn ${o.type}" disabled><span class="t">${o.label||'—'}</span>${optSizeHTML(o,v)}</button>`).join('');
 }
 // answer-option size, with postflop bb↔% cross-display ("9 bb · 75%"). Preflop stays as-is (bb or multiplier).
-function optSizeHTML(o,v){if(!o||!o.size)return '';
-  let extra='';
-  if(v&&v.street&&v.street!=='preflop'&&(o.type==='bet'||o.type==='raise')){const c=bbPct(o.size,potNum(v));if(c)extra=`<span class="conv">· ${c}</span>`;}
-  return `<span class="u num">${o.size}</span>${extra}`;}
+function optSizeHTML(o,v){if(!o||!o.size)return '';return `<span class="u num">${o.size}</span>`;}   // show the size exactly as authored (bb or %); no auto bb↔% cross-display
 function toast(msg,err){const t=$('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.classList.remove('show'),2000);}
 function showModal(issues){$('modalList').innerHTML=issues.map(x=>`<li>${x}</li>`).join('');$('modal').classList.add('show');}
 $('modalOk').onclick=()=>$('modal').classList.remove('show');
@@ -1325,11 +1359,15 @@ function duplicateHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;const clone=migra
   F=migrateCards(JSON.parse(JSON.stringify(clone)));F.curQ=0;F.editIndex=idx+1;if(pu){F.unit=pu;F.bbChips=pb;}
   buildForm();renderSet();window.scrollTo({top:0,behavior:'smooth'});toast('Раздача скопирована — правь копию и жми «Обновить»');}
 function renderSet(){
-  $('setList').innerHTML=SET.length?SET.map((h,k)=>{const nq=questionsOf(h).length,series=nq>1?` · ${nq} вопроса`:nq===1?' · 1 вопрос':'';
+  const vis=SET.filter(h=>!h.hidden).length,hid=SET.length-vis;
+  const rows=SET.length?SET.map((h,k)=>{const nq=questionsOf(h).length,series=nq>1?` · ${nq} вопроса`:nq===1?' · 1 вопрос':'';
     const flag=nq===0?'<span class="setflag">нет вопросов</span>':'';
     const src=h.source==='import'?`<span class="setsrc">импорт${h.title?' · '+h.title:''}</span>`:'';
-    return `<div class="setrow ${F&&F.editIndex===k?'editing':''}"><span class="i">${k+1}</span><div><div>${h.heroPos} · ${handText(heroCardsOf(h))||'—'} ${flag}</div><div class="d">${h.players}‑max · ${STREET_RU[(questionsOf(h)[0]||{street:'preflop'}).street]}${series} ${src}</div></div>
-      <div class="acts2"><button class="ic ed" data-ed="${k}" title="Редактировать">✎</button><button class="ic cp" data-cp="${k}" title="Скопировать раздачу">⧉</button><button class="ic del" data-del="${k}" title="Удалить">🗑</button></div></div>`;}).join(''):'<div class="mini">Набор пуст — добавь раздачи кнопкой выше или импортируй историю раздач.</div>';
+    return `<div class="setrow ${F&&F.editIndex===k?'editing':''} ${h.hidden?'hidden-h':''}"><span class="i">${k+1}</span><div><div>${h.heroPos} · ${handText(heroCardsOf(h))||'—'} ${flag}${h.hidden?'<span class="setflag hf">скрыта</span>':''}</div><div class="d">${h.players}‑max · ${STREET_RU[(questionsOf(h)[0]||{street:'preflop'}).street]}${series} ${src}</div></div>
+      <div class="acts2"><button class="ic hd" data-hide="${k}" title="${h.hidden?'Вернуть в набор':'Скрыть из набора'}">${h.hidden?'🙈':'👁'}</button><button class="ic ed" data-ed="${k}" title="Редактировать">✎</button><button class="ic cp" data-cp="${k}" title="Скопировать раздачу">⧉</button><button class="ic del" data-del="${k}" title="Удалить">🗑</button></div></div>`;}).join(''):'<div class="mini">Набор пуст — добавь раздачи кнопкой выше или импортируй историю раздач.</div>';
+  $('setList').className='setlist'+secClass('set');
+  $('setList').innerHTML=`<div class="sethdr"><span>Набор раздач</span><small>${vis} в наборе${hid?(' · '+hid+' скрыто'):''}</small></div><div class="setrows">${rows}</div>`;
+  $('setList').querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{const k=+b.dataset.hide;SET[k].hidden=!SET[k].hidden;renderSet();persist();});
   $('setList').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>editHand(+b.dataset.ed));
   $('setList').querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>duplicateHand(+b.dataset.cp));
   $('setList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const k=+b.dataset.del;SET.splice(k,1);if(F&&F.editIndex===k)F.editIndex=null;else if(F&&F.editIndex>k)F.editIndex--;renderSet();persist();});
@@ -1417,6 +1455,12 @@ function initAdmin(){
     if(!hands.length){toast('Не распознал раздачи — это формат PokerStars/GG?',1);return;}
     hands.forEach(h=>SET.push(migrateCards(h)));renderSet();persist();$('importArea').value='';toast('Импортировано в «'+activeCol().name+'»: '+hands.length);};
   $('clearBtn').onclick=()=>{if(!SET.length||confirm('Очистить подборку «'+activeCol().name+'» и черновик? Сделай бэкап через «Скопировать JSON», если нужно.')){activeCol().hands=[];useCol(curCol);F=blankHand();persist();buildForm();renderSet();toast('Очищено');}};
+  // collapsible sections — click a section header (.h / .pvhead / .sethdr) to fold it; state persists per-key across hand switches and reloads
+  if(!initAdmin._collapseWired){initAdmin._collapseWired=true;
+    document.addEventListener('click',e=>{const hdr=e.target.closest('.h,.pvhead,.sethdr');if(!hdr)return;
+      const sec=hdr.closest('[data-sec]');if(!sec)return;const key=sec.getAttribute('data-sec');
+      _ui.collapsed[key]=!_ui.collapsed[key];sec.classList.toggle('collapsed',!!_ui.collapsed[key]);saveUI();});}
+  document.querySelectorAll('#view-admin [data-sec]').forEach(sec=>sec.classList.toggle('collapsed',!!_ui.collapsed[sec.getAttribute('data-sec')]));
 }
 function switchView(v){const train=v==='train';stopVideos();$('view-train').style.display=train?'block':'none';$('view-admin').style.display=train?'none':'block';$('tab-train').classList.toggle('on',train);$('tab-admin').classList.toggle('on',!train);$('wrap').classList.toggle('wide',!train);}
 // editor password gate — a soft lock for sharing (client-side; NOT real security: the password lives in the page source)
