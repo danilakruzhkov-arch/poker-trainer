@@ -1276,6 +1276,156 @@ function seed(){const v={url:'https://youtu.be/'+DEMO};return [
      Q('preflop','BB','raise','6 bb',{vStart:1660,vEnd:1690,depth:'подробно',
        explain:'<b>3-бет меньше 3x без позиции даёт CO отличные шансы банка.</b> Соперник в позиции легко флэтит и переигрывает тебя на поздних улицах — именно так J7 заходит и потом забирает банк блефом.',
        options:[O('o1','3-бет ~4.5x','raise','best','11 bb'),O('o2','Мелкий 3-бет <3x','raise','mistake','6 bb',true),O('o3','Колл','call','ok','2.5 bb')]})]}
+,
+{pack:'mtt16k',title:'Олл-ин вместо блок-бета на тёрне',players:6,heroPos:'CO',heroCards:['Kh','Qs'],stacks:{CO:35,BB:35},profiles:{BB:{status:'fish',style:'aggr'}},board:['Jh','Ts','9d','8d',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.3 bb'),A('preflop','BB','raise','7 bb'),A('preflop','CO','call','7 bb'),
+   A('flop','BB','check',''),A('flop','CO','bet','5 bb'),A('flop','BB','call','5 bb'),
+   A('turn','BB','check',''),
+   Q('turn','CO','bet','1/3',{vStart:70,vEnd:100,depth:'подробно',explain:'<b>SPR ≈ 1 и ты бьёшь весь Jx/десятки/девятки — на тёрне нужно джемить.</b> Мелкий бет даёт флеш-дро дешёвые 23% и выигрывает лишь +13, тогда как шов забирает максимум и не дарит эквити.',
+     options:[O('o1','Олл-ин','bet','best','pot'),O('o2','Мелкий бет ~1/3','bet','mistake','1/3',true),O('o3','Чек','check','mistake','')]})]},
+{pack:'mtt16k',title:'Слабый туз: колл рейза — ошибка',players:4,heroPos:'CO',heroCards:['As','5h'],stacks:{CO:30,BTN:30},profiles:{BTN:{status:'rec',style:'tight'}},board:['Ah','4c','8s','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.3 bb'),A('preflop','BTN','call','2.3 bb'),
+   Q('flop','CO','bet','33%',{vStart:222,vEnd:250,depth:'подробно',explain:'<b>Радужный туз-борд — лучше чек.</b> Куча плохих тёрнов и возможных рейзов; чек держит банк маленьким и даёт голому тузу блефовать.',
+     options:[O('o1','Чек','check','best','',),O('o2','Ставка','bet','mistake','33%',true)]}),
+   A('flop','BTN','raise','8 bb'),
+   Q('flop','CO','call','8 bb',{joinPrev:true,vStart:222,vEnd:280,depth:'подробно',explain:'<b>Против рейза у тебя 0–4% (лишь бэкдор-флеш) — это чистый фолд.</b> Колл ради 4% при вложении ~1/6 стека — математическая безграмотность.',
+     options:[O('o1','Фолд','fold','best','',),O('o2','Колл','call','mistake','8 bb',true),O('o3','Рейз','raise','mistake','')]})]},
+{pack:'mtt16k',title:'Большое дро: полублеф до конца',players:6,heroPos:'BB',heroCards:['Qh','Th'],stacks:{BB:30,CO:30},profiles:{CO:{status:'fish',style:'tight'}},board:['Ah','7h','2c','Td','3s'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+   Q('flop','BB','check','',{vStart:400,vEnd:430,depth:'подробно',explain:'<b>55% даже против тузов — чек оставляет чек-шов против обязательного контбета.</b> Здесь пролилось чеком, так что продолжаешь баррелить дальше.',
+     options:[O('o1','Чек','check','best','',true),O('o2','Ставка','bet','ok','33%')]}),
+   A('flop','CO','check',''),
+   A('turn','BB','bet','60%'),A('turn','CO','call',''),
+   Q('river','BB','bet','pot',{vStart:462,vEnd:492,depth:'подробно',explain:'<b>Чек-флоп диапазон соперника полон Ax, которые фолдят — против любителя шов лучше всего.</b> Он боится вылета, а против рега 65-75% репрезентят шире вэлью.',
+     options:[O('o1','Олл-ин','bet','best','pot',true),O('o2','Ставка 65-75%','bet','ok','2/3'),O('o3','Чек','check','mistake','')]})]},
+{pack:'mtt16k',title:'Туз-дама: ненужный бет ривера',players:7,heroPos:'HJ',heroCards:['Ac','Qd'],stacks:{HJ:20,CO:20},profiles:{CO:{status:'rec',style:'tight'}},board:['Ah','Kc','4d','8s','Td'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','HJ','raise','2.5 bb'),A('preflop','CO','call','2.5 bb'),
+   A('flop','HJ','check',''),A('flop','CO','check',''),
+   A('turn','HJ','check',''),A('turn','CO','check',''),
+   Q('river','HJ','bet','40%',{vStart:540,vEnd:570,depth:'подробно',explain:'<b>Ривер добивает 16 комбо стрита, а ты чопаешь с любым тузом — хуже никто не заплатит, лучше уже бьёт.</b> У ставки нет цели, чек-даун правильнее.',
+     options:[O('o1','Чек','check','best',''),O('o2','Ставка','bet','mistake','40%',true)]})]},
+{pack:'mtt16k',title:'Фолд на флоп-рейз в три игрока',players:6,heroPos:'CO',heroCards:['Kc','Qh'],stacks:{CO:40,BTN:40,BB:40},profiles:{BB:{status:'rec',style:'tight'}},board:['Jh','9h','6c','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.3 bb'),A('preflop','BTN','call','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+   A('flop','BB','check',''),A('flop','CO','bet','5 bb'),A('flop','BTN','raise','17 bb'),
+   Q('flop','CO','call','17 bb',{vStart:700,vEnd:730,depth:'подробно',explain:'<b>В банк на троих с увеличенным сайзингом рейз 3.5x репрезентит сеты (9 комбо) и J9s.</b> В лучшем случае 50/50, в худшем тянешь тонко против сета — фолд.',
+     options:[O('o1','Фолд','fold','best','',),O('o2','Колл','call','mistake','17 bb',true),O('o3','Рейз','raise','mistake','')]})]},
+{pack:'mtt16k',title:'Лузовый колл слабым тузом без позиции',players:5,heroPos:'BB',heroCards:['Ad','6s'],stacks:{BB:30,UTG:30},profiles:{UTG:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','UTG','raise','2.2 bb'),
+   Q('preflop','BB','call','2.2 bb',{vStart:840,vEnd:860,depth:'коротко',explain:'<b>Голый туз хорошо коллит/3-бетит против BTN/CO, но флэт без позиции против ранней позиции — слишком лузово.</b> Его тайтовый диапазон доминирует тебя.',
+     options:[O('o1','Фолд','fold','best','',),O('o2','Колл','call','mistake','2.2 bb',true),O('o3','3-бет','raise','ok','7 bb')]})]},
+{pack:'mtt16k',title:'Туз-король: олл-ин на донк тёрна',players:6,heroPos:'MP',heroCards:['Ah','Kd'],stacks:{MP:30,BB:30},profiles:{BB:{status:'fish',style:'aggr'}},board:['Kc','8s','3d','2h',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','MP','raise','2.2 bb'),A('preflop','BB','call','2.2 bb'),
+   A('flop','BB','check',''),A('flop','MP','bet','2 bb'),A('flop','BB','call','2 bb'),
+   A('turn','BB','bet','3 bb'),
+   Q('turn','MP','call','3 bb',{vStart:900,vEnd:930,depth:'подробно',explain:'<b>Крошечный донк обычно значит худшего короля, который не сфолдит — в среднем шов выше по EV.</b> Именно в этот раз у него две пары, но линия джема прибыльнее.',
+     options:[O('o1','Олл-ин','raise','best','all-in'),O('o2','Колл','call','ok','3 bb',true),O('o3','Фолд','fold','mistake','')]})]},
+{pack:'mtt16k',title:'Туз-7: блеф-3-бет вместо паса',players:6,heroPos:'CO',heroCards:['Ac','7c'],stacks:{CO:18,MP:18},profiles:{MP:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','MP','raise','2.2 bb'),
+   Q('preflop','CO','fold','',{vStart:1309,vEnd:1339,depth:'коротко',explain:'<b>A7s — отличный блокер для блеф-3-бета, а с коротким стеком линия 3-бет-колл-джем чистая.</b> Зажиматься тут не надо.',
+     options:[O('o1','3-бет','raise','best','3bb'),O('o2','Колл','call','ok','',),O('o3','Фолд','fold','mistake','',true)]})]},
+{pack:'mtt16k',title:'Защита слабого туза на большом блайнде',players:3,heroPos:'BB',heroCards:['Ad','4s'],stacks:{BB:22,BTN:22},profiles:{BTN:{status:'rec',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','BTN','raise','2.3 bb'),
+   Q('preflop','BB','fold','',{vStart:1390,vEnd:1420,depth:'коротко',explain:'<b>Добавляешь один блайнд, чтобы выиграть банк ~5x с отличными шансами против широкого позднего диапазона.</b> Надо защищаться и играть эквити постфлопом.',
+     options:[O('o1','Колл','call','best','',),O('o2','Фолд','fold','mistake','',true),O('o3','3-бет','raise','ok','7 bb')]})]},
+{pack:'mtt16k',title:'Т8: пуш блайнд-на-блайнд',players:2,heroPos:'BTN',heroCards:['Th','8s'],stacks:{BTN:15,BB:15},profiles:{BB:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','BTN','raise','15 bb',{vStart:1570,vEnd:1600,depth:'коротко',explain:'<b>По чарту Нэша T8o — плюсовый джем на 15bb из SB.</b> В поздней стадии люди оверфолдят, так что шов только лучше.',
+     options:[O('o1','Олл-ин','raise','best','all-in',true),O('o2','Фолд','fold','mistake',''),O('o3','Лимп','call','ok','')]})]},
+{pack:'mtt16k',title:'4-2: фолд на минрейз — ошибка',players:2,heroPos:'BB',heroCards:['4d','2d'],stacks:{BB:20,BTN:20},profiles:{BTN:{status:'rec',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','BTN','raise','2 bb'),
+   Q('preflop','BB','fold','',{vStart:1690,vEnd:1720,depth:'коротко',explain:'<b>Добавляешь один блайнд в банк ~5x, нужно ~20% эквити — даже 42s имеет ~40% против AK.</b> Любая suited/коннектор защищается от минрейза.',
+     options:[O('o1','Колл','call','best',''),O('o2','Фолд','fold','mistake','',true),O('o3','3-бет','raise','ok','6 bb')]})]},
+{pack:'mtt16k',title:'Дама-10: плохой пуш со стола',players:8,heroPos:'HJ',heroCards:['Qs','Th'],stacks:{HJ:11,BB:11},profiles:{BB:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','HJ','raise','11 bb',{vStart:2021,vEnd:2032,depth:'коротко',explain:'<b>С полным столом впереди QTo слишком широк для опен-джема.</b> Тебя вытащил лишь плохой колл соперника, а не сам шов.',
+     options:[O('o1','Фолд','fold','best',''),O('o2','Олл-ин','raise','mistake','all-in',true)]})]},
+{pack:'mtt16k',title:'Шестёрки: колл широкого пуша',players:4,heroPos:'BTN',heroCards:['6c','6d'],stacks:{BTN:20,CO:20},profiles:{CO:{status:'rec',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','20 bb'),
+   Q('preflop','BTN','call','20 bb',{vStart:2113,vEnd:2130,depth:'коротко',explain:'<b>Против джема на половину стека диапазон полон A2/Ax и рандомного спьюва.</b> 66 коллит комфортно — рука слишком сильна, чтобы пасовать.',
+     options:[O('o1','Колл','call','best','',true),O('o2','Фолд','fold','mistake','')]})]},
+{pack:'mtt16k',title:'10-2: лимп блайнд-на-блайнд',players:2,heroPos:'BTN',heroCards:['Ts','2h'],stacks:{BTN:9,BB:9},profiles:{BB:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','BTN','call','1 bb',{vStart:2620,vEnd:2650,depth:'коротко',explain:'<b>Добавляешь полблайнда, чтобы выиграть банк 4x — нужно лишь ~19%, и даже против сильного диапазона наскребаешь.</b> Лимп хорошо реализуется против слабых, которые чаще чекают.',
+     options:[O('o1','Лимп','call','best','0.5bb',true),O('o2','Шов','raise','ok','all-in'),O('o3','Фолд','fold','mistake','')]})]},
+{pack:'mtt16k',title:'Тройки: минрейз в большой стек',players:6,heroPos:'MP',heroCards:['3s','3d'],stacks:{MP:14,BB:60},profiles:{BB:{status:'rec',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','MP','raise','3 bb',{vStart:2710,vEnd:2740,depth:'подробно',explain:'<b>14bb на минрейз в большой стек — плохо: J10s просто коллит, а когда джемит, ты много теряешь.</b> Чистые опции — фолд или (хуже) джем, но не мелкий опен.',
+     options:[O('o1','Фолд','fold','best',''),O('o2','Шов','raise','ok','all-in'),O('o3','Опен 3bb','raise','mistake','3 bb',true)]})]},
+{pack:'mtt16k',title:'Тузы: мелкий рейз-ловушка',players:6,heroPos:'CO',heroCards:['Ad','Ac'],stacks:{CO:9,BB:9},profiles:{BB:{status:'rec',style:'tight'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   Q('preflop','CO','raise','3 bb',{vStart:2750,vEnd:2780,depth:'подробно',explain:'<b>Под 10bb джем стандартен, но мелкий рейз тут хитёр: после недавнего минопена 33 образ сверхширокий, и крошечный рейз затаскивает стеки легко.</b>',
+     options:[O('o1','Шов','raise','best','all-in'),O('o2','Мелкий рейз-ловушка','raise','ok','3 bb',true)]})]},
+{pack:'mtt16k',title:'Король-валет: колл против чиплидера',players:6,heroPos:'BTN',heroCards:['Ks','Jd'],stacks:{BTN:24,CO:60},profiles:{CO:{status:'rec',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.2 bb'),
+   Q('preflop','BTN','call','2.2 bb',{vStart:2810,vEnd:2840,depth:'коротко',explain:'<b>Нет смысла раздувать банк против самого большого стека с рукой, которая хорошо флопается.</b> Флэт в позиции и переигрывай постфлопом.',
+     options:[O('o1','Колл','call','best','',true),O('o2','3-бет','raise','mistake','7 bb'),O('o3','Фолд','fold','ok','')]})]},
+{pack:'mtt16k',title:'Туз-9: блеф-3-бет против регуляра',players:6,heroPos:'CO',heroCards:['Ah','9c'],stacks:{CO:35,MP:35},profiles:{MP:{status:'reg',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','MP','raise','2.5 bb'),
+   Q('preflop','CO','fold','',{vStart:2880,vEnd:2910,depth:'коротко',explain:'<b>Читая его как рега, который открывает широко, A9 — хороший блеф-3-бет до ~6.5-7bb.</b> Флэт худший вариант; на финалке 3-бет-или-фолд лучше колла.',
+     options:[O('o1','3-бет','raise','best','6.5 bb'),O('o2','Фолд','fold','ok','',true),O('o3','Колл','call','mistake','')]})]},
+{pack:'mtt16k',title:'Туз-король против 3-бета чиплидера',players:6,heroPos:'CO',heroCards:['Ah','Kh'],stacks:{CO:40,BTN:60},profiles:{BTN:{status:'rec',style:'aggr'}},board:['Qh','7h','3c','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.3 bb'),A('preflop','BTN','raise','7 bb'),
+   Q('preflop','CO','call','7 bb',{vStart:3060,vEnd:3090,depth:'подробно',explain:'<b>Чиплидер 3-бетит очень широко — джем забирает 11bb сейчас и избегает раздутого банка без позиции.</b> Флэт — лик: банк стал больше 1/3 стека.',
+     options:[O('o1','Олл-ин','raise','best','all-in'),O('o2','Колл','call','mistake','7 bb',true),O('o3','Фолд','fold','mistake','')]}),
+   A('flop','CO','check',''),A('flop','BTN','bet','4 bb'),
+   Q('flop','CO','raise','12 bb',{joinPrev:true,vStart:3060,vEnd:3130,depth:'подробно',explain:'<b>Рейз кричит «сет/две пары» и выбивает его блефы, а вэлью тебя бьёт.</b> С ~39% и лишь флеш-редроу — колл, дай ему продолжать блефовать.',
+     options:[O('o1','Колл','call','best','',),O('o2','Рейз','raise','mistake','12 bb',true),O('o3','Фолд','fold','mistake','')]})]},
+{pack:'mtt16k',title:'Туз-3: фолд на ББ против фиша',players:6,heroPos:'BB',heroCards:['As','3h'],stacks:{BB:25,SB:25},profiles:{SB:{status:'fish',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','SB','raise','2 bb'),
+   Q('preflop','BB','fold','',{vStart:3380,vEnd:3393,depth:'коротко',explain:'<b>Против фиша, раздающего фишки, за один лишний блайнд A3 — отличная защита.</b> Фолд тут явный лик — ты же защищал T8 и прочий мусор.',
+     options:[O('o1','Колл','call','best',''),O('o2','Фолд','fold','mistake','',true)]})]},
+{pack:'mtt16k',title:'Донк-блеф в стейшена — спьюв',players:6,heroPos:'BB',heroCards:['Jh','Tc'],stacks:{BB:62,BTN:62},profiles:{BTN:{status:'fish',style:'aggr'}},board:['Kd','9h','4c','8s','5d'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','BTN','raise','2.3 bb'),A('preflop','BB','call','2.3 bb'),
+   A('flop','BB','check',''),A('flop','BTN','check',''),
+   A('turn','BB','bet','60%'),A('turn','BTN','call',''),
+   Q('river','BB','bet','pot',{vStart:3500,vEnd:3530,depth:'подробно',explain:'<b>Пятёрка ничего не изменила, а ты бьёшь почти в банк в стейшена, который не фолдит свой колдаун.</b> Тебя ловят слишком часто — просто повезло.',
+     options:[O('o1','Чек','check','best',''),O('o2','Ставка','bet','mistake','pot',true)]})]},
+{pack:'mtt16k',title:'Чек сильной руки на дро-доске',players:6,heroPos:'BTN',heroCards:['Ts','Tc'],stacks:{BTN:40,CO:40},profiles:{CO:{status:'fish',style:'aggr'}},board:['9h','8h','6c','2d','3s'],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','3 bb'),A('preflop','BTN','call','3 bb'),
+   A('flop','CO','check',''),
+   Q('flop','BTN','check','',{vStart:3580,vEnd:3605,depth:'подробно',explain:'<b>На доске из сплошных дро он платит 75% с Jx, K2-K9, пара+дро, флеш/стрит-дро.</b> Чек сильной руки оставляет тонну вэлью и дарит бесплатное эквити.',
+     options:[O('o1','Ставка 75%','bet','best','2/3'),O('o2','Чек','check','mistake','',true)]}),
+   A('turn','CO','check',''),A('turn','BTN','check',''),
+   A('river','CO','check',''),
+   Q('river','BTN','bet','1/2',{vStart:3600,vEnd:3628,depth:'подробно',explain:'<b>Бей 75-100% — он либо платит, думая, что ты блефуешь, либо нет.</b> Полубанковая «безопасная» ставка оставляет деньги на столе.',
+     options:[O('o1','Ставка 75-100%','bet','best','3/4'),O('o2','Ставка 1/2','bet','mistake','1/2',true)]})]},
+{pack:'mtt16k',title:'Мелкий 3-бет и колл 4-бета',players:5,heroPos:'BB',heroCards:['Ah','Jc'],stacks:{BB:26,BTN:50},profiles:{BTN:{status:'fish',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','BTN','raise','2.2 bb'),
+   Q('preflop','BB','raise','6 bb',{vStart:3650,vEnd:3680,depth:'подробно',explain:'<b>Не раздувай большой банк без позиции против неуступчивого чиплидера в 7bb от прыжка по пэйауту.</b> Флэт и линия рейз-колл флоп / чек-фолд тёрн лучше.',
+     options:[O('o1','Колл','call','best','',),O('o2','Фолд','fold','ok',''),O('o3','3-бет','raise','mistake','6 bb',true)]}),
+   A('preflop','BTN','raise','14 bb'),
+   Q('preflop','BB','call','14 bb',{joinPrev:true,vStart:3650,vEnd:3710,depth:'подробно',explain:'<b>У $3-любителя нет 4-бет блефов — его 4-бет натовый, и колл просто дарит фишки.</b> Повезло не флопнуть топ-пару и не выставиться.',
+     options:[O('o1','Фолд','fold','best',''),O('o2','Колл','call','mistake','14 bb',true),O('o3','5-бет','raise','mistake','all-in')]})]},
+{pack:'mtt16k',title:'Кинг-хай: бет десятки на JJ7',players:6,heroPos:'BTN',heroCards:['Kh','6h'],stacks:{BTN:40,CO:40},profiles:{CO:{status:'fish',style:'tight'}},board:['Jc','Js','7d','Th',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','CO','raise','2.2 bb'),A('preflop','BTN','call','2.2 bb'),
+   A('flop','CO','check',''),A('flop','BTN','check',''),
+   A('turn','CO','check',''),
+   Q('turn','BTN','bet','50%',{vStart:3955,vEnd:3982,depth:'подробно',explain:'<b>На J-J-7 не бьющий флоп соперник почти всегда имеет AK/AQ/Jx, боящийся валета.</b> Десятка усиливает именно этот диапазон — бет собирает лишь лучшее, чек-даун правильнее.',
+     options:[O('o1','Чек','check','best',''),O('o2','Ставка','bet','mistake','50%',true)]})]},
+{pack:'mtt16k',title:'Туз-2: 3-бет без позиции снова',players:5,heroPos:'BB',heroCards:['Ah','2c'],stacks:{BB:18,BTN:50},profiles:{BTN:{status:'fish',style:'aggr'}},board:['','','','',''],video:{url:'https://youtu.be/qMW6mOd7m6Q'},channel:'Baby Shark',
+ actions:[
+   A('preflop','BTN','raise','2.2 bb'),
+   Q('preflop','BB','raise','6 bb',{vStart:4045,vEnd:4075,depth:'подробно',explain:'<b>Сразу после показанного 4-бета+сета 3-бет A2 без позиции коротким стеком — нулевая логика.</b> Чиплидер чекает флопы и даёт бесплатную реализацию — просто флэть.',
+     options:[O('o1','Колл','call','best','',),O('o2','3-бет','raise','mistake','6 bb',true),O('o3','Фолд','fold','ok','')]})]}
 ];}
 
 /* ===== COLLECTIONS / HOME ===== */
@@ -1290,7 +1440,9 @@ const PACKS=[
   {id:'ft10k',emoji:'♛', tag:'Реконструкция', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'72oooo · с $10 сателлита в чемпионы', title:'Финалка $10K — путь 72oooo', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
    intro:{title:'История одной победы',text:'72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.',video:{url:'https://youtu.be/0lh7nVLfmMo'},vStart:600,vEnd:625,channel:'Андрей Козленко'}},
   {id:'wsopme',emoji:'★', tag:'Мейн Ивент', accent:'#C79A2E', host:'Разбор: Андрей Козленко', hero:'Мейн Ивент WSOP · дни 2–3', title:'WSOP Main Event $10K', sub:'Живые раздачи главного турнира мира: Хельмут, Фоксон и другие. Дисциплина, чтения, великие фолды.',
-   intro:{title:'WSOP Main Event — 10 000$',text:'Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.',video:{url:'https://youtu.be/yATrt1addik'},vStart:0,vEnd:30,channel:'Андрей Козленко'}}
+   intro:{title:'WSOP Main Event — 10 000$',text:'Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.',video:{url:'https://youtu.be/yATrt1addik'},vStart:0,vEnd:30,channel:'Андрей Козленко'}},
+  {id:'mtt16k',emoji:'◆', tag:'Онлайн MTT', accent:'#1C8FA8', host:'Разбор: Baby Shark', hero:'Бай‑ин $3 · занос $16 000', title:'С $3 до $16 000', sub:'Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.',
+   intro:{title:'С $3 до $16 000',text:'Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.',video:{url:'https://youtu.be/qMW6mOd7m6Q'},vStart:48,vEnd:80,channel:'Baby Shark'}}
 ];
 function blankIntro(name){return {title:'',text:'',video:{url:''},vStart:0,vEnd:0,channel:name||'Мой набор'};}
 // collections — EVERY collection is editable in the редактор (its own hands + display settings), including the

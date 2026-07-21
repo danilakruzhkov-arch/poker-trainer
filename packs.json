@@ -6039,6 +6039,2450 @@
    ]
   },
   {
+   "id": "mtt16k",
+   "name": "С $3 до $16 000",
+   "emoji": "◆",
+   "accent": "#1C8FA8",
+   "tag": "Онлайн MTT",
+   "host": "Разбор: Baby Shark",
+   "hero": "Бай‑ин $3 · занос $16 000",
+   "cover": "",
+   "sub": "Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.",
+   "intro": {
+    "title": "С $3 до $16 000",
+    "text": "Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.",
+    "video": {
+     "url": "https://youtu.be/qMW6mOd7m6Q"
+    },
+    "vStart": 48,
+    "vEnd": 80,
+    "channel": "Baby Shark"
+   },
+   "hands": [
+    {
+     "pack": "mtt16k",
+     "title": "Олл-ин вместо блок-бета на тёрне",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Kh",
+      "Qs"
+     ],
+     "stacks": {
+      "CO": 35,
+      "BB": 35
+     },
+     "profiles": {
+      "BB": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Jh",
+      "Ts",
+      "9d",
+      "8d",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "7 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "5 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "5 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "bet",
+       "size": "1/3",
+       "q": {
+        "vStart": 70,
+        "vEnd": 100,
+        "depth": "подробно",
+        "explain": "<b>SPR ≈ 1 и ты бьёшь весь Jx/десятки/девятки — на тёрне нужно джемить.</b> Мелкий бет даёт флеш-дро дешёвые 23% и выигрывает лишь +13, тогда как шов забирает максимум и не дарит эквити.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "bet",
+          "grade": "best",
+          "size": "pot",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Мелкий бет ~1/3",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "1/3",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Kh",
+       "Qs"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Слабый туз: колл рейза — ошибка",
+     "players": 4,
+     "heroPos": "CO",
+     "heroCards": [
+      "As",
+      "5h"
+     ],
+     "stacks": {
+      "CO": 30,
+      "BTN": 30
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Ah",
+      "4c",
+      "8s",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "33%",
+       "q": {
+        "vStart": 222,
+        "vEnd": 250,
+        "depth": "подробно",
+        "explain": "<b>Радужный туз-борд — лучше чек.</b> Куча плохих тёрнов и возможных рейзов; чек держит банк маленьким и даёт голому тузу блефовать.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "33%",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "8 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "8 bb",
+       "q": {
+        "joinPrev": true,
+        "vStart": 222,
+        "vEnd": 280,
+        "depth": "подробно",
+        "explain": "<b>Против рейза у тебя 0–4% (лишь бэкдор-флеш) — это чистый фолд.</b> Колл ради 4% при вложении ~1/6 стека — математическая безграмотность.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "8 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "As",
+       "5h"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Большое дро: полублеф до конца",
+     "players": 6,
+     "heroPos": "BB",
+     "heroCards": [
+      "Qh",
+      "Th"
+     ],
+     "stacks": {
+      "BB": 30,
+      "CO": 30
+     },
+     "profiles": {
+      "CO": {
+       "status": "fish",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Ah",
+      "7h",
+      "2c",
+      "Td",
+      "3s"
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 400,
+        "vEnd": 430,
+        "depth": "подробно",
+        "explain": "<b>55% даже против тузов — чек оставляет чек-шов против обязательного контбета.</b> Здесь пролилось чеком, так что продолжаешь баррелить дальше.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Ставка",
+          "type": "bet",
+          "grade": "ok",
+          "size": "33%",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "60%"
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "pot",
+       "q": {
+        "vStart": 462,
+        "vEnd": 492,
+        "depth": "подробно",
+        "explain": "<b>Чек-флоп диапазон соперника полон Ax, которые фолдят — против любителя шов лучше всего.</b> Он боится вылета, а против рега 65-75% репрезентят шире вэлью.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "bet",
+          "grade": "best",
+          "size": "pot",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 65-75%",
+          "type": "bet",
+          "grade": "ok",
+          "size": "2/3",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Qh",
+       "Th"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-дама: ненужный бет ривера",
+     "players": 7,
+     "heroPos": "HJ",
+     "heroCards": [
+      "Ac",
+      "Qd"
+     ],
+     "stacks": {
+      "HJ": 20,
+      "CO": 20
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Ah",
+      "Kc",
+      "4d",
+      "8s",
+      "Td"
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "HJ",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "HJ",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "HJ",
+       "action": "bet",
+       "size": "40%",
+       "q": {
+        "vStart": 540,
+        "vEnd": 570,
+        "depth": "подробно",
+        "explain": "<b>Ривер добивает 16 комбо стрита, а ты чопаешь с любым тузом — хуже никто не заплатит, лучше уже бьёт.</b> У ставки нет цели, чек-даун правильнее.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "40%",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "Ac",
+       "Qd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Фолд на флоп-рейз в три игрока",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Kc",
+      "Qh"
+     ],
+     "stacks": {
+      "CO": 40,
+      "BTN": 40,
+      "BB": 40
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Jh",
+      "9h",
+      "6c",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "bet",
+       "size": "5 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "17 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "call",
+       "size": "17 bb",
+       "q": {
+        "vStart": 700,
+        "vEnd": 730,
+        "depth": "подробно",
+        "explain": "<b>В банк на троих с увеличенным сайзингом рейз 3.5x репрезентит сеты (9 комбо) и J9s.</b> В лучшем случае 50/50, в худшем тянешь тонко против сета — фолд.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "17 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Kc",
+       "Qh"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Лузовый колл слабым тузом без позиции",
+     "players": 5,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ad",
+      "6s"
+     ],
+     "stacks": {
+      "BB": 30,
+      "UTG": 30
+     },
+     "profiles": {
+      "UTG": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.2 bb",
+       "q": {
+        "vStart": 840,
+        "vEnd": 860,
+        "depth": "коротко",
+        "explain": "<b>Голый туз хорошо коллит/3-бетит против BTN/CO, но флэт без позиции против ранней позиции — слишком лузово.</b> Его тайтовый диапазон доминирует тебя.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "2.2 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "ok",
+          "size": "7 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ad",
+       "6s"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-король: олл-ин на донк тёрна",
+     "players": 6,
+     "heroPos": "MP",
+     "heroCards": [
+      "Ah",
+      "Kd"
+     ],
+     "stacks": {
+      "MP": 30,
+      "BB": 30
+     },
+     "profiles": {
+      "BB": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Kc",
+      "8s",
+      "3d",
+      "2h",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "MP",
+       "action": "bet",
+       "size": "2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "3 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "MP",
+       "action": "call",
+       "size": "3 bb",
+       "q": {
+        "vStart": 900,
+        "vEnd": 930,
+        "depth": "подробно",
+        "explain": "<b>Крошечный донк обычно значит худшего короля, который не сфолдит — в среднем шов выше по EV.</b> Именно в этот раз у него две пары, но линия джема прибыльнее.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "3 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "MP": [
+       "Ah",
+       "Kd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-7: блеф-3-бет вместо паса",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ac",
+      "7c"
+     ],
+     "stacks": {
+      "CO": 18,
+      "MP": 18
+     },
+     "profiles": {
+      "MP": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1309,
+        "vEnd": 1339,
+        "depth": "коротко",
+        "explain": "<b>A7s — отличный блокер для блеф-3-бета, а с коротким стеком линия 3-бет-колл-джем чистая.</b> Зажиматься тут не надо.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "3bb",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ac",
+       "7c"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Защита слабого туза на большом блайнде",
+     "players": 3,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ad",
+      "4s"
+     ],
+     "stacks": {
+      "BB": 22,
+      "BTN": 22
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1390,
+        "vEnd": 1420,
+        "depth": "коротко",
+        "explain": "<b>Добавляешь один блайнд, чтобы выиграть банк ~5x с отличными шансами против широкого позднего диапазона.</b> Надо защищаться и играть эквити постфлопом.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "ok",
+          "size": "7 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ad",
+       "4s"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Т8: пуш блайнд-на-блайнд",
+     "players": 2,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Th",
+      "8s"
+     ],
+     "stacks": {
+      "BTN": 15,
+      "BB": 15
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "15 bb",
+       "q": {
+        "vStart": 1570,
+        "vEnd": 1600,
+        "depth": "коротко",
+        "explain": "<b>По чарту Нэша T8o — плюсовый джем на 15bb из SB.</b> В поздней стадии люди оверфолдят, так что шов только лучше.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Лимп",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Th",
+       "8s"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "4-2: фолд на минрейз — ошибка",
+     "players": 2,
+     "heroPos": "BB",
+     "heroCards": [
+      "4d",
+      "2d"
+     ],
+     "stacks": {
+      "BB": 20,
+      "BTN": 20
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1690,
+        "vEnd": 1720,
+        "depth": "коротко",
+        "explain": "<b>Добавляешь один блайнд в банк ~5x, нужно ~20% эквити — даже 42s имеет ~40% против AK.</b> Любая suited/коннектор защищается от минрейза.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "ok",
+          "size": "6 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "4d",
+       "2d"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Дама-10: плохой пуш со стола",
+     "players": 8,
+     "heroPos": "HJ",
+     "heroCards": [
+      "Qs",
+      "Th"
+     ],
+     "stacks": {
+      "HJ": 11,
+      "BB": 11
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "11 bb",
+       "q": {
+        "vStart": 2021,
+        "vEnd": 2032,
+        "depth": "коротко",
+        "explain": "<b>С полным столом впереди QTo слишком широк для опен-джема.</b> Тебя вытащил лишь плохой колл соперника, а не сам шов.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "all-in",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "Qs",
+       "Th"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Шестёрки: колл широкого пуша",
+     "players": 4,
+     "heroPos": "BTN",
+     "heroCards": [
+      "6c",
+      "6d"
+     ],
+     "stacks": {
+      "BTN": 20,
+      "CO": 20
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "20 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "20 bb",
+       "q": {
+        "vStart": 2113,
+        "vEnd": 2130,
+        "depth": "коротко",
+        "explain": "<b>Против джема на половину стека диапазон полон A2/Ax и рандомного спьюва.</b> 66 коллит комфортно — рука слишком сильна, чтобы пасовать.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "6c",
+       "6d"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "10-2: лимп блайнд-на-блайнд",
+     "players": 2,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ts",
+      "2h"
+     ],
+     "stacks": {
+      "BTN": 9,
+      "BB": 9
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "1 bb",
+       "q": {
+        "vStart": 2620,
+        "vEnd": 2650,
+        "depth": "коротко",
+        "explain": "<b>Добавляешь полблайнда, чтобы выиграть банк 4x — нужно лишь ~19%, и даже против сильного диапазона наскребаешь.</b> Лимп хорошо реализуется против слабых, которые чаще чекают.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Лимп",
+          "type": "call",
+          "grade": "best",
+          "size": "0.5bb",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Шов",
+          "type": "raise",
+          "grade": "ok",
+          "size": "all-in",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ts",
+       "2h"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Тройки: минрейз в большой стек",
+     "players": 6,
+     "heroPos": "MP",
+     "heroCards": [
+      "3s",
+      "3d"
+     ],
+     "stacks": {
+      "MP": 14,
+      "BB": 60
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "raise",
+       "size": "3 bb",
+       "q": {
+        "vStart": 2710,
+        "vEnd": 2740,
+        "depth": "подробно",
+        "explain": "<b>14bb на минрейз в большой стек — плохо: J10s просто коллит, а когда джемит, ты много теряешь.</b> Чистые опции — фолд или (хуже) джем, но не мелкий опен.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Шов",
+          "type": "raise",
+          "grade": "ok",
+          "size": "all-in",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Опен 3bb",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "3 bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "MP": [
+       "3s",
+       "3d"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Тузы: мелкий рейз-ловушка",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ad",
+      "Ac"
+     ],
+     "stacks": {
+      "CO": 9,
+      "BB": 9
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "3 bb",
+       "q": {
+        "vStart": 2750,
+        "vEnd": 2780,
+        "depth": "подробно",
+        "explain": "<b>Под 10bb джем стандартен, но мелкий рейз тут хитёр: после недавнего минопена 33 образ сверхширокий, и крошечный рейз затаскивает стеки легко.</b>",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Шов",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Мелкий рейз-ловушка",
+          "type": "raise",
+          "grade": "ok",
+          "size": "3 bb",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ad",
+       "Ac"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Король-валет: колл против чиплидера",
+     "players": 6,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ks",
+      "Jd"
+     ],
+     "stacks": {
+      "BTN": 24,
+      "CO": 60
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.2 bb",
+       "q": {
+        "vStart": 2810,
+        "vEnd": 2840,
+        "depth": "коротко",
+        "explain": "<b>Нет смысла раздувать банк против самого большого стека с рукой, которая хорошо флопается.</b> Флэт в позиции и переигрывай постфлопом.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "7 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ks",
+       "Jd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-9: блеф-3-бет против регуляра",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ah",
+      "9c"
+     ],
+     "stacks": {
+      "CO": 35,
+      "MP": 35
+     },
+     "profiles": {
+      "MP": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 2880,
+        "vEnd": 2910,
+        "depth": "коротко",
+        "explain": "<b>Читая его как рега, который открывает широко, A9 — хороший блеф-3-бет до ~6.5-7bb.</b> Флэт худший вариант; на финалке 3-бет-или-фолд лучше колла.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "6.5 bb",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ah",
+       "9c"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-король против 3-бета чиплидера",
+     "players": 6,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ah",
+      "Kh"
+     ],
+     "stacks": {
+      "CO": 40,
+      "BTN": 60
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Qh",
+      "7h",
+      "3c",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": "7 bb",
+       "q": {
+        "vStart": 3060,
+        "vEnd": 3090,
+        "depth": "подробно",
+        "explain": "<b>Чиплидер 3-бетит очень широко — джем забирает 11bb сейчас и избегает раздутого банка без позиции.</b> Флэт — лик: банк стал больше 1/3 стека.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "7 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "4 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "12 bb",
+       "q": {
+        "joinPrev": true,
+        "vStart": 3060,
+        "vEnd": 3130,
+        "depth": "подробно",
+        "explain": "<b>Рейз кричит «сет/две пары» и выбивает его блефы, а вэлью тебя бьёт.</b> С ~39% и лишь флеш-редроу — колл, дай ему продолжать блефовать.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "12 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ah",
+       "Kh"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-3: фолд на ББ против фиша",
+     "players": 6,
+     "heroPos": "BB",
+     "heroCards": [
+      "As",
+      "3h"
+     ],
+     "stacks": {
+      "BB": 25,
+      "SB": 25
+     },
+     "profiles": {
+      "SB": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "raise",
+       "size": "2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 3380,
+        "vEnd": 3393,
+        "depth": "коротко",
+        "explain": "<b>Против фиша, раздающего фишки, за один лишний блайнд A3 — отличная защита.</b> Фолд тут явный лик — ты же защищал T8 и прочий мусор.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "As",
+       "3h"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Донк-блеф в стейшена — спьюв",
+     "players": 6,
+     "heroPos": "BB",
+     "heroCards": [
+      "Jh",
+      "Tc"
+     ],
+     "stacks": {
+      "BB": 62,
+      "BTN": 62
+     },
+     "profiles": {
+      "BTN": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Kd",
+      "9h",
+      "4c",
+      "8s",
+      "5d"
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "60%"
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "bet",
+       "size": "pot",
+       "q": {
+        "vStart": 3500,
+        "vEnd": 3530,
+        "depth": "подробно",
+        "explain": "<b>Пятёрка ничего не изменила, а ты бьёшь почти в банк в стейшена, который не фолдит свой колдаун.</b> Тебя ловят слишком часто — просто повезло.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "pot",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Jh",
+       "Tc"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Чек сильной руки на дро-доске",
+     "players": 6,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ts",
+      "Tc"
+     ],
+     "stacks": {
+      "BTN": 40,
+      "CO": 40
+     },
+     "profiles": {
+      "CO": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9h",
+      "8h",
+      "6c",
+      "2d",
+      "3s"
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": "",
+       "q": {
+        "vStart": 3580,
+        "vEnd": 3605,
+        "depth": "подробно",
+        "explain": "<b>На доске из сплошных дро он платит 75% с Jx, K2-K9, пара+дро, флеш/стрит-дро.</b> Чек сильной руки оставляет тонну вэлью и дарит бесплатное эквити.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Ставка 75%",
+          "type": "bet",
+          "grade": "best",
+          "size": "2/3",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "1/2",
+       "q": {
+        "vStart": 3600,
+        "vEnd": 3628,
+        "depth": "подробно",
+        "explain": "<b>Бей 75-100% — он либо платит, думая, что ты блефуешь, либо нет.</b> Полубанковая «безопасная» ставка оставляет деньги на столе.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Ставка 75-100%",
+          "type": "bet",
+          "grade": "best",
+          "size": "3/4",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка 1/2",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "1/2",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ts",
+       "Tc"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Мелкий 3-бет и колл 4-бета",
+     "players": 5,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ah",
+      "Jc"
+     ],
+     "stacks": {
+      "BB": 26,
+      "BTN": 50
+     },
+     "profiles": {
+      "BTN": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "6 bb",
+       "q": {
+        "vStart": 3650,
+        "vEnd": 3680,
+        "depth": "подробно",
+        "explain": "<b>Не раздувай большой банк без позиции против неуступчивого чиплидера в 7bb от прыжка по пэйауту.</b> Флэт и линия рейз-колл флоп / чек-фолд тёрн лучше.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "6 bb",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "14 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "14 bb",
+       "q": {
+        "joinPrev": true,
+        "vStart": 3650,
+        "vEnd": 3710,
+        "depth": "подробно",
+        "explain": "<b>У $3-любителя нет 4-бет блефов — его 4-бет натовый, и колл просто дарит фишки.</b> Повезло не флопнуть топ-пару и не выставиться.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "14 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "5-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "all-in",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ah",
+       "Jc"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Кинг-хай: бет десятки на JJ7",
+     "players": 6,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Kh",
+      "6h"
+     ],
+     "stacks": {
+      "BTN": 40,
+      "CO": 40
+     },
+     "profiles": {
+      "CO": {
+       "status": "fish",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Jc",
+      "Js",
+      "7d",
+      "Th",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "50%",
+       "q": {
+        "vStart": 3955,
+        "vEnd": 3982,
+        "depth": "подробно",
+        "explain": "<b>На J-J-7 не бьющий флоп соперник почти всегда имеет AK/AQ/Jx, боящийся валета.</b> Десятка усиливает именно этот диапазон — бет собирает лишь лучшее, чек-даун правильнее.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Ставка",
+          "type": "bet",
+          "grade": "mistake",
+          "size": "50%",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Kh",
+       "6h"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-2: 3-бет без позиции снова",
+     "players": 5,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ah",
+      "2c"
+     ],
+     "stacks": {
+      "BB": 18,
+      "BTN": 50
+     },
+     "profiles": {
+      "BTN": {
+       "status": "fish",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "6 bb",
+       "q": {
+        "vStart": 4045,
+        "vEnd": 4075,
+        "depth": "подробно",
+        "explain": "<b>Сразу после показанного 4-бета+сета 3-бет A2 без позиции коротким стеком — нулевая логика.</b> Чиплидер чекает флопы и даёт бесплатную реализацию — просто флэть.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "6 bb",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ah",
+       "2c"
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "mine",
    "name": "Мой набор",
    "emoji": "✎",
@@ -6061,5 +8505,5 @@
    "hands": []
   }
  ],
- "publishedAt": 1784594705622
+ "publishedAt": 1784595205947
 }
