@@ -8479,6 +8479,561 @@
        "2c"
       ]
      }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Туз-дама: открытый пуш на 14bb",
+     "players": 7,
+     "heroPos": "HJ",
+     "heroCards": [
+      "Ac",
+      "Qd"
+     ],
+     "stacks": {
+      "HJ": 14,
+      "BB": 14
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "14 bb",
+       "q": {
+        "vStart": 1285,
+        "vEnd": 1301,
+        "depth": "подробно",
+        "explain": "<b>На ~14bb открытый джем с AQ — явный плюс, а соперники коллят даже JT, что только добавляет EV.</b> Мелкий рейз лучше лишь против слабого поля или в нокауте, а фолд тут слишком туго.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Мелкий рейз",
+          "type": "raise",
+          "grade": "ok",
+          "size": "2.5 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "Ac",
+       "Qd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Валет-8: фолд на 3-бет",
+     "players": 6,
+     "heroPos": "MP",
+     "heroCards": [
+      "Jd",
+      "8s"
+     ],
+     "stacks": {
+      "MP": 20,
+      "BB": 20
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "7 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "MP",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1805,
+        "vEnd": 1816,
+        "depth": "коротко",
+        "explain": "<b>На этих лимитах BB почти никогда не 3-бетит блефом — это натовое вэлью.</b> J8 нечего продолжать против такого 3-бета, фолд очевиден.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "7 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "4-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "all-in",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "MP": [
+       "Jd",
+       "8s"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Двойки: открытие вместо паса",
+     "players": 4,
+     "heroPos": "CO",
+     "heroCards": [
+      "2c",
+      "2d"
+     ],
+     "stacks": {
+      "CO": 25,
+      "BTN": 25
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1816,
+        "vEnd": 1846,
+        "depth": "подробно",
+        "explain": "<b>Открытие 22 отбирает эквити у 9x и одномастных коннекторов, а BTN за спиной не настолько короткий, чтобы джемить сверху.</b> Пасовать готовую пару из поздней позиции слишком слабо.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Опен-рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2.5 bb",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Лимп",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "2c",
+       "2d"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Одномастный туз: пропущенный опен",
+     "players": 4,
+     "heroPos": "CO",
+     "heroCards": [
+      "As",
+      "6s"
+     ],
+     "stacks": {
+      "CO": 20,
+      "BB": 20
+     },
+     "profiles": {
+      "BB": {
+       "status": "rec",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 2130,
+        "vEnd": 2153,
+        "depth": "коротко",
+        "explain": "<b>4-макс одномастный туз — сверхприбыльный опен: глубоко в турнире все зажимаются, и ты просто собираешь блайнды.</b> Фолд здесь — упущенная раздача, к тому же ты хорошо флопаешь при коллах.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Опен-рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2.5 bb",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "As",
+       "6s"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Король-валет: пуш вместо паса",
+     "players": 7,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ks",
+      "Jd"
+     ],
+     "stacks": {
+      "CO": 10,
+      "HJ": 20
+     },
+     "profiles": {
+      "HJ": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "10 bb",
+       "q": {
+        "vStart": 2247,
+        "vEnd": 2277,
+        "depth": "подробно",
+        "explain": "<b>Ты добавляешь ~1.4bb в банк ~4bb с сильной KJ, которая доминирует широкий диапазон рейза.</b> Фолд тут слишком туго — джем (или колл) и реализуй эквити.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ks",
+       "Jd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Короли: пуш вместо флэта",
+     "players": 4,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ks",
+      "Kd"
+     ],
+     "stacks": {
+      "BTN": 12,
+      "CO": 20
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "12 bb",
+       "q": {
+        "vStart": 2332,
+        "vEnd": 2362,
+        "depth": "подробно",
+        "explain": "<b>Флэт KK оправдан лишь против агрессора, который баррелит широкий диапазон; когда сомневаешься — просто джемь.</b> Шов забирает стек TT/99/JJ и отбирает эквити у AQ/AK.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "all-in",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ks",
+       "Kd"
+      ]
+     }
+    },
+    {
+     "pack": "mtt16k",
+     "title": "Тройки: пас из-за пуша за спиной",
+     "players": 7,
+     "heroPos": "HJ",
+     "heroCards": [
+      "3s",
+      "3d"
+     ],
+     "stacks": {
+      "HJ": 20,
+      "BTN": 22
+     },
+     "profiles": {
+      "BTN": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/qMW6mOd7m6Q"
+     },
+     "channel": "Baby Shark",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1174,
+        "vEnd": 1203,
+        "depth": "подробно",
+        "explain": "<b>За спиной стек, который может зашипнуть поверх опена, а 33 плохо реализуется без позиции — фолд нормальный.</b> Открывался бы тут только против совсем слабого игрока.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Фолд",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Опен-рейз",
+          "type": "raise",
+          "grade": "ok",
+          "size": "2.5 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Шов",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "all-in",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "HJ": [
+       "3s",
+       "3d"
+      ]
+     }
     }
    ]
   },
@@ -8505,5 +9060,5 @@
    "hands": []
   }
  ],
- "publishedAt": 1784595205947
+ "publishedAt": 1784597142762
 }
