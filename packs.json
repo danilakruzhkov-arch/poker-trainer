@@ -4362,32 +4362,66 @@
      "pack": "wsopme",
      "title": "Блеф шестёрками выбивает лучшую руку",
      "players": 9,
-     "heroPos": "BB",
+     "heroPos": "CO",
      "heroCards": [
-      "6h",
-      "6s"
+      "6c",
+      "6h"
      ],
      "stacks": {
-      "BB": 40,
-      "CO": 45,
-      "BTN": 45
+      "BB": null,
+      "CO": 72,
+      "BTN": null,
+      "SB": null,
+      "UTG": 51,
+      "UTG+1": 71.3,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null
      },
      "profiles": {
       "CO": {
-       "status": "rec",
-       "style": "tight"
+       "status": "",
+       "style": ""
       },
       "BTN": {
        "status": "rec",
        "style": "tight"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "9d",
-      "7c",
-      "2h",
-      "Ts",
-      "4h"
+      "Ad",
+      "Kc",
+      "Qh",
+      "3s",
+      "Kh"
      ],
      "video": {
       "url": "https://youtu.be/yATrt1addik"
@@ -4395,32 +4429,8 @@
      "channel": "Андрей Козленко",
      "actions": [
       {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "raise",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "call",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "call",
-       "size": "2.5 bb"
-      },
-      {
        "street": "flop",
        "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "flop",
-       "pos": "CO",
        "action": "check",
        "size": ""
       },
@@ -4433,12 +4443,6 @@
       {
        "street": "turn",
        "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "CO",
        "action": "check",
        "size": ""
       },
@@ -4452,39 +4456,131 @@
        "street": "river",
        "pos": "BB",
        "action": "bet",
-       "size": "5.4 bb",
+       "size": "5.4 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "3.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+1",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+2",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "LJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "UTG",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "UTG+1",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "CO",
+       "action": "raise",
+       "size": "10 bb",
        "q": {
-        "vStart": 45,
-        "vEnd": 75,
-        "depth": "подробно",
-        "explain": "<b>Все улицы прочеканы — силу никто не показал.</b> Правдоподобная ставка под короля выбивает более старшие руки: изобразил короля после чек-дауна и забрал банк, большой молодец.",
         "options": [
          {
-          "id": "r1",
-          "label": "Бет",
-          "type": "bet",
+          "id": "o4",
+          "label": "Рейз",
+          "size": "10 bb",
+          "type": "raise",
           "grade": "best",
-          "size": "5.4 bb",
           "hero": true
          },
          {
-          "id": "r2",
+          "id": "o1",
           "label": "Чек",
-          "type": "check",
-          "grade": "ok",
           "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Рейз",
+          "size": "25%",
+          "type": "bet",
+          "grade": "mistake",
           "hero": false
          }
-        ]
+        ],
+        "vStart": 20,
+        "vEnd": 77,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
        }
       }
      ],
      "cards": {
-      "BB": [
-       "6h",
-       "6s"
+      "CO": [
+       "6c",
+       "6h"
+      ],
+      "UTG": [
+       "9h",
+       "9d"
+      ],
+      "UTG+1": [
+       "7c",
+       "7s"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "1500"
     },
     {
      "pack": "wsopme",
@@ -4492,24 +4588,63 @@
      "players": 9,
      "heroPos": "CO",
      "heroCards": [
-      "Ac",
+      "Ad",
       "Kh"
      ],
      "stacks": {
       "CO": 55,
-      "BTN": 55
+      "BTN": 55,
+      "SB": null,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null
      },
      "profiles": {
       "BTN": {
        "status": "rec",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Ks",
-      "5s",
+      "Kc",
+      "5d",
       "2h",
-      "Td",
+      "Js",
       "8c"
      ],
      "video": {
@@ -4535,36 +4670,86 @@
        "action": "call",
        "size": "7 bb",
        "q": {
-        "vStart": 78,
+        "vStart": 80,
         "vEnd": 250,
         "depth": "подробно",
-        "explain": "<b>Со стеком 55бб в поздней позиции против 3-бета выгоднее 4-бет или пуш.</b> Колл отдаёт сопернику реализацию эквити без позиции — не лучшая линия.",
+        "explain": "Со стеком 55бб в поздней позиции против 3-бета выгоднее 4-бет или пуш. Колл отдаёт сопернику реализацию эквити без позиции — не лучшая линия.",
         "options": [
          {
           "id": "p1",
           "label": "Олл-ин",
+          "size": "",
           "type": "raise",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
           "id": "p2",
           "label": "Колл",
+          "size": "7 bb",
           "type": "call",
           "grade": "mistake",
-          "size": "",
           "hero": true
          },
          {
           "id": "p3",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "4-Бет",
           "size": "",
+          "type": "bet",
+          "grade": "best",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "CO",
+       "action": "raise",
+       "size": "8 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o4",
+          "label": "Рейз",
+          "size": "8 bb",
+          "type": "raise",
+          "grade": "best",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Рейз",
+          "size": "25%",
+          "type": "bet",
+          "grade": "ok",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
        }
       },
       {
@@ -4576,38 +4761,102 @@
       {
        "street": "flop",
        "pos": "BTN",
-       "action": "bet",
-       "size": "8.9 bb"
+       "action": "check",
+       "size": ""
       },
       {
-       "street": "flop",
-       "pos": "CO",
+       "street": "preflop",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+1",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+2",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "LJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "fold",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
        "action": "call",
-       "size": "13.4 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "CO",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "BTN",
-       "action": "check",
        "size": ""
       },
       {
        "street": "river",
        "pos": "CO",
        "action": "check",
-       "size": ""
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Рейз",
+          "size": "33%",
+          "type": "bet",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "66%",
+          "type": "bet",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "river",
        "pos": "BTN",
-       "action": "bet",
-       "size": "45 bb"
+       "action": "raise",
+       "size": "40 bb"
       },
       {
        "street": "river",
@@ -4615,318 +4864,54 @@
        "action": "fold",
        "size": "",
        "q": {
-        "vStart": 305,
-        "vEnd": 335,
-        "joinPrev": true,
-        "depth": "подробно",
-        "explain": "<b>По такой линии у соперника много пропущенных флеш/стрит-дро — блефов больше, чем валью.</b> На дистанции Туз-Король тут надо коллить; пас сохранил игрока в турнире, но это лик.",
         "options": [
          {
-          "id": "r1",
-          "label": "Колл",
-          "type": "call",
-          "grade": "best",
+          "id": "o1",
+          "label": "Пас",
           "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
           "hero": false
          },
          {
-          "id": "r2",
-          "label": "Пас",
-          "type": "fold",
+          "id": "o3",
+          "label": "Рейз",
+          "size": "3x",
+          "type": "raise",
           "grade": "mistake",
-          "size": "",
-          "hero": true
+          "hero": false
          }
-        ]
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
        }
       }
      ],
      "cards": {
       "CO": [
-       "Ac",
+       "Ad",
        "Kh"
-      ]
-     }
-    },
-    {
-     "pack": "wsopme",
-     "title": "Слишком большой олл-ин по риверу",
-     "players": 9,
-     "heroPos": "BB",
-     "heroCards": [
-      "Ts",
-      "5s"
-     ],
-     "stacks": {
-      "BB": 55,
-      "CO": 55
-     },
-     "profiles": {
-      "CO": {
-       "status": "rec",
-       "style": "tight"
-      }
-     },
-     "board": [
-      "Kc",
-      "5d",
-      "2h",
-      "Td",
-      "8c"
-     ],
-     "video": {
-      "url": "https://youtu.be/yATrt1addik"
-     },
-     "channel": "Андрей Козленко",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "raise",
-       "size": "2.3 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "raise",
-       "size": "7 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "call",
-       "size": "7 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "BB",
-       "action": "bet",
-       "size": "8.9 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "CO",
-       "action": "call",
-       "size": "13.4 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "BB",
-       "action": "bet",
-       "size": "26.5 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "CO",
-       "action": "call",
-       "size": "44 bb"
-      },
-      {
-       "street": "river",
-       "pos": "BB",
-       "action": "bet",
-       "size": "143.8 bb",
-       "q": {
-        "vStart": 278,
-        "vEnd": 308,
-        "depth": "подробно",
-        "explain": "<b>Джем перебарщивает с сайзингом и выбивает блеф-кэтчеры соперника.</b> AK поставил тёрн и чекнул ривер — выглядит слабо, поэтому ставка ~75% банка собирает валью с Kx/QQ/Jx, а олл-ин их только фолдит.",
-        "options": [
-         {
-          "id": "r1",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "best",
-          "size": "66.5 bb",
-          "hero": false
-         },
-         {
-          "id": "r2",
-          "label": "Олл-ин",
-          "type": "bet",
-          "grade": "mistake",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "r3",
-          "label": "Чек",
-          "type": "check",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         }
-        ]
-       }
-      },
-      {
-       "street": "river",
-       "pos": "CO",
-       "action": "fold",
-       "size": ""
-      }
-     ],
-     "cards": {
-      "BB": [
-       "Ts",
-       "5s"
-      ]
-     }
-    },
-    {
-     "pack": "wsopme",
-     "title": "Второй сквиз Хельмута: Туз-Дама",
-     "players": 9,
-     "heroPos": "BTN",
-     "heroCards": [
-      "Ac",
-      "Qs"
-     ],
-     "stacks": {
-      "BTN": 60,
-      "HJ": 55,
-      "CO": 50
-     },
-     "profiles": {
-      "HJ": {
-       "status": "rec",
-       "style": "aggr"
-      },
-      "CO": {
-       "status": "rec",
-       "style": "tight"
-      }
-     },
-     "board": [
-      "9h",
-      "4c",
-      "5s",
-      "Ks",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/yATrt1addik"
-     },
-     "channel": "Андрей Козленко",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "raise",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "call",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "raise",
-       "size": "8 bb",
-       "q": {
-        "vStart": 345,
-        "vEnd": 490,
-        "depth": "подробно",
-        "explain": "<b>Расширенный сквиз до Туз-Дамы ок против широких коллеров.</b> Сайзинг стоило взять чуть поменьше, но давление правильное.",
-        "options": [
-         {
-          "id": "p1",
-          "label": "3-бет",
-          "type": "raise",
-          "grade": "best",
-          "size": "8 bb",
-          "hero": true
-         },
-         {
-          "id": "p2",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "ok",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "p3",
-          "label": "Колл",
-          "type": "call",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         }
-        ]
-       }
-      },
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "fold",
-       "size": ""
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "call",
-       "size": "8 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "CO",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "flop",
-       "pos": "BTN",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "CO",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "BTN",
-       "action": "bet",
-       "size": "13.5 bb",
-       "q": {
-        "vStart": 455,
-        "vEnd": 485,
-        "joinPrev": true,
-        "depth": "подробно",
-        "explain": "<b>Король сильнее попадает в наш диапазон Туз-Королей, чем в диапазон соперника.</b> Баррель по королю давит и выбивает его руку — молодец.",
-        "options": [
-         {
-          "id": "t1",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "best",
-          "size": "13.5 bb",
-          "hero": true
-         },
-         {
-          "id": "t2",
-          "label": "Чек",
-          "type": "check",
-          "grade": "ok",
-          "size": "",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
+      ],
       "BTN": [
-       "Ac",
-       "Qs"
+       "Ks",
+       "Jh"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "1500",
+     "_addStreet": null
     },
     {
      "pack": "wsopme",
@@ -12204,29 +12189,7 @@
      }
     }
    ]
-  },
-  {
-   "id": "mine",
-   "name": "Мой набор",
-   "emoji": "✎",
-   "accent": "#C9A227",
-   "tag": "",
-   "host": "",
-   "hero": "",
-   "cover": "",
-   "sub": "Раздачи, которые ты создал в редакторе или импортировал из истории.",
-   "intro": {
-    "title": "",
-    "text": "",
-    "video": {
-     "url": ""
-    },
-    "vStart": 0,
-    "vEnd": 0,
-    "channel": "Мой набор"
-   },
-   "hands": []
   }
  ],
- "publishedAt": 1784622822255
+ "publishedAt": 1784674115420
 }
