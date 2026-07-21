@@ -1976,8 +1976,10 @@ function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');
     :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[]}];   // migrate old {set,mine} shape
   // surface built-in packs the author shipped in the code that this browser hasn't been offered yet.
   // "seen" ids make it a once-per-pack catch-up: a genuinely-new pack appears, but a pack the user deleted stays gone.
-  {const builtinNow=defaultCols().filter(d=>d.id!=='mine');const have=new Set(cols.map(c=>c&&c.id));
+  {const builtinNow=defaultCols().filter(d=>d.id!=='mine');const byId=new Map(builtinNow.map(d=>[d.id,d]));const have=new Set(cols.map(c=>c&&c.id));
    const seen=Array.isArray(s.seenBuiltins)?new Set(s.seenBuiltins):new Set(builtinNow.filter(d=>have.has(d.id)).map(d=>d.id));   // old saves: treat what you already have as already seen
+   // re-sync built-in packs to the shipped code so returning visitors get updated/expanded content (e.g. a pack grown from 9→22 hands). hands aren't user data — progress isn't persisted in them — and 'Мой набор' plus any user-created packs pass through untouched.
+   cols=cols.map(c=>c&&byId.has(c.id)?Object.assign({},c,byId.get(c.id)):c);
    const add=builtinNow.filter(d=>!have.has(d.id)&&!seen.has(d.id));
    if(add.length){const mi=cols.findIndex(c=>c&&c.id==='mine');if(mi>=0)cols.splice(mi,0,...add);else cols=cols.concat(add);}   // keep 'Мой набор' last
    _seenBuiltins=builtinNow.map(d=>d.id);}
