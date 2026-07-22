@@ -3413,7 +3413,8 @@
        "Kh",
        "Ks"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3496,7 +3497,8 @@
        "Ah",
        "4d"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3654,7 +3656,8 @@
        "7d",
        "8d"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3921,7 +3924,8 @@
        "Qh",
        "Qd"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4058,7 +4062,8 @@
        "Qs",
        "5s"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4175,7 +4180,8 @@
        "Ks",
        "Ts"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4325,7 +4331,8 @@
        "Jc",
        "Jh"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4408,7 +4415,8 @@
        "6h",
        "5c"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4491,7 +4499,8 @@
        "Th",
        "Ts"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4641,7 +4650,8 @@
        "Jd",
        "7c"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -4770,7 +4780,7 @@
        "Qh"
       ]
      },
-     "hidden": false,
+     "hidden": true,
      "unit": "chips",
      "bbChips": "2000"
     }
@@ -12738,5 +12748,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784755305501
+ "publishedAt": 1784755352474
 }
