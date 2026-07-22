@@ -2599,7 +2599,8 @@
        "Jh",
        "Th"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -2812,7 +2813,8 @@
        "Jh",
        "Js"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -2919,7 +2921,8 @@
        "Kh",
        "7d"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3012,7 +3015,8 @@
        "Kh",
        "Jd"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3149,7 +3153,8 @@
        "As",
        "Jc"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -3261,7 +3266,8 @@
        "Qs",
        "Qh"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -12748,5 +12754,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784755352474
+ "publishedAt": 1784755573733
 }
