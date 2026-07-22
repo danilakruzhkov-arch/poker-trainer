@@ -158,6 +158,20 @@
   .note{padding:11px 12px;font-size:12.5px;line-height:1.5;color:#d6e0da}.note b{color:#fff}
   .next{margin-top:13px;width:100%;border:none;cursor:pointer;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#1c1300;font-weight:800;font-size:15px;padding:13px;border-radius:13px}
   .hint{text-align:center;color:#6f8178;font-size:10.5px;margin-top:8px;line-height:1.4}
+  .fbwrap{margin-top:10px;padding-top:10px;border-top:1px solid var(--stroke)}
+  .fbtoggle{width:100%;background:none;border:1px dashed var(--stroke);color:var(--muted);border-radius:11px;padding:9px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+  .fbtoggle:hover{color:var(--text);border-color:var(--muted)}
+  .fbform{margin-top:8px;background:var(--field);border:1px solid var(--stroke);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:8px}
+  .fblbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .fbcats{display:flex;flex-wrap:wrap;gap:6px}
+  .fbcat{font:inherit;font-size:11.5px;padding:5px 10px;border-radius:999px;border:1px solid var(--stroke);background:transparent;color:var(--muted);cursor:pointer}
+  .fbcat:hover{color:var(--text)}
+  .fbcat.on{background:var(--brass);border-color:var(--brass);color:#12140f;font-weight:700}
+  .fbtext{width:100%;resize:vertical;min-height:44px;font:inherit;font-size:12.5px}
+  .fbrow{display:flex;gap:8px}
+  .fbsend{flex:1;border:none;cursor:pointer;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#1c1300;font-weight:800;font-size:13px;padding:9px;border-radius:10px}
+  .fbcancel{border:1px solid var(--stroke);background:transparent;color:var(--muted);cursor:pointer;border-radius:10px;padding:9px 14px;font:inherit;font-size:12px}
+  .fbnote{font-size:11.5px;color:var(--good);min-height:14px}
   .end{position:absolute;inset:0;z-index:30;background:radial-gradient(120% 80% at 50% 0%,#12241c,#0a0f0d 60%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:26px;text-align:center;transform:translateY(100%);transition:transform .4s}
   .end.up{transform:translateY(0)}
   .end .cap{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:700}
@@ -179,8 +193,13 @@
   .fs>.h::after,.pvhead::after,.sethdr::after{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-left:10px;flex:none;transition:transform .15s;opacity:.65}
   .fs.collapsed>.h::after,.previewwrap>.fs.collapsed>.pvhead::after,.setlist.collapsed .sethdr::after{transform:rotate(-45deg)}
   #adForm .fs.collapsed>*:not(.h){display:none}
-  .previewwrap>.fs.collapsed>.app,.previewwrap>.fs.collapsed>.pv-note{display:none}
+  .previewwrap>.fs.collapsed>.app,.previewwrap>.fs.collapsed>.pv-note,.previewwrap>.fs.collapsed>.ansbody{display:none}
   .setlist.collapsed .setrows{display:none}
+  .previewwrap>.fs{margin-bottom:13px}
+  .savebar-top{margin-top:0;margin-bottom:13px}
+  .ansbody{margin-top:2px}
+  .ansbody .qr{margin:0}.ansbody .video{margin-top:9px}
+  .ans-empty{font-size:11.5px;color:var(--muted);line-height:1.45;padding:6px 2px}
   .row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
   .fld{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
   .fld label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
@@ -310,6 +329,16 @@
   .home-hero .cap{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:700}
   .home-hero h2{font-size:22px;margin-top:4px;text-wrap:balance}
   .home-hero p{color:var(--muted);font-size:12.5px;margin-top:5px;line-height:1.45}
+  .homefilter{display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;padding:11px 13px;margin:2px 0 4px;background:var(--chip);border:1px solid var(--stroke);border-radius:13px}
+  .fgroup{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .flbl{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:1px}
+  .fchip{font:inherit;font-size:12px;line-height:1;padding:6px 11px;border-radius:999px;border:1px solid var(--stroke);background:transparent;color:var(--muted);cursor:pointer;transition:color .12s,border-color .12s,background .12s;white-space:nowrap}
+  .fchip:hover{color:var(--text);border-color:var(--muted)}
+  .fchip.on{background:var(--brass);border-color:var(--brass);color:#12140f;font-weight:700}
+  .fclear{margin-left:auto;font:inherit;font-size:11.5px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 2px}
+  .fclear:hover{color:var(--edge)}
+  .fnote{font-size:11.5px;color:var(--muted);margin:1px 2px 2px}
+  .nomatch{text-align:center;color:var(--muted);padding:34px 10px;border:1px dashed var(--stroke);border-radius:14px}
   .packs{display:flex;flex-direction:column;gap:11px}
   .pack{position:relative;text-align:left;border:1px solid var(--stroke);background:linear-gradient(160deg,var(--chip),rgba(0,0,0,.12));border-radius:16px;padding:0;cursor:pointer;display:flex;flex-direction:row;align-items:stretch;min-height:108px;transition:transform .1s,border-color .15s;overflow:hidden}
   .pack:hover{transform:translateY(-2px);border-color:var(--pa,var(--brass))}
@@ -330,7 +359,7 @@
   .pack .pmeta .cnt{color:var(--brass)}
   .pack.locked{opacity:.55;cursor:default}.pack.locked:hover{transform:none;border-color:var(--stroke)}
   .pack .plock{font-size:10px;color:var(--muted);font-weight:600}
-  .backrow{display:flex;align-items:center;gap:9px;padding:0 2px 2px}
+  .backrow{display:flex;align-items:center;flex-wrap:wrap;gap:7px 9px;padding:0 2px 2px}
   .backbtn{border:1px solid var(--stroke);background:var(--chip);color:var(--text);border-radius:9px;padding:6px 11px;cursor:pointer;font-weight:700;font-size:12px}
   .backbtn:hover{border-color:var(--brass)}
   .backrow .bt{font-weight:800;font-size:13px}.backrow .bt small{color:var(--muted);font-weight:500;margin-left:6px}
@@ -392,7 +421,7 @@
   .pubstate{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);border:1px solid rgba(226,80,78,.4);background:rgba(226,80,78,.12);border-radius:6px;padding:2px 7px}
   .pubstate.ok{color:var(--good);border-color:rgba(70,177,123,.4);background:rgba(70,177,123,.12)}
   .pubrow{display:flex;gap:6px;flex-wrap:wrap}
-  .pubrow #gh-token{flex:1;min-width:150px;border:1px solid var(--stroke);background:var(--field);color:var(--text);border-radius:10px;padding:9px 11px;font-size:12px}
+  .pubrow #gh-token,.pubrow #supa-url,.pubrow #supa-key{flex:1;min-width:150px;border:1px solid var(--stroke);background:var(--field);color:var(--text);border-radius:10px;padding:9px 11px;font-size:12px}
   .pubbtn{flex:1;min-width:150px;border:0;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#20160a;border-radius:11px;padding:11px 13px;cursor:pointer;font-weight:800;font-size:13px}
   .pubbtn:disabled{opacity:.6;cursor:default}
   .pubhint{font-size:10.5px;color:var(--muted);line-height:1.4}
@@ -423,7 +452,7 @@
   <div id="view-train">
     <div id="homeScreen"></div>
     <div id="drillWrap" style="display:none">
-    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div><button class="backbtn auto" id="autoToggle" style="margin-left:auto">Автовидео: вкл</button></div>
+    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div><button class="backbtn auto" id="replayToggle" style="margin-left:auto">Анимация: вкл</button><button class="backbtn auto" id="autoToggle">Автовидео: вкл</button></div>
     <div id="introScreen" style="display:none"></div>
     <div class="app" id="trainApp">
       <header><div class="mark">♠</div><div class="brand">Покер<span>·</span>Разбор</div>
@@ -440,21 +469,27 @@
   <div id="view-admin" style="display:none">
     <div class="admin">
       <div class="adcol" id="adForm"></div>
-      <div class="adcol"><div class="previewwrap"><div class="fs" data-sec="pv">
-        <div class="pvhead"><div class="t">Живое превью</div><div class="mini" id="pvStreet"></div></div>
-        <div class="app" style="border-radius:20px">
-          <div class="stepband" id="pvBand" style="padding-top:8px"></div>
-          <div class="alog" id="pvLog" style="display:none"></div>
-          <div class="stage" style="aspect-ratio:5/5.2"><div class="table" id="pvTable"></div></div>
-          <div class="bar"><div class="ask"><div class="who" id="pvWho"></div><div class="ctx" id="pvCtx"></div></div><div class="acts" id="pvActs"></div></div>
+      <div class="adcol"><div class="previewwrap">
+        <div class="savebar savebar-top"><button class="primary" id="saveHand">Добавить в набор</button><button class="ghost" id="playSet">В тренажёр →</button></div>
+        <div class="fs" data-sec="pv">
+          <div class="pvhead"><div class="t">Живое превью</div><div class="mini" id="pvStreet"></div></div>
+          <div class="app" style="border-radius:20px">
+            <div class="stepband" id="pvBand" style="padding-top:8px"></div>
+            <div class="alog" id="pvLog" style="display:none"></div>
+            <div class="stage" style="aspect-ratio:5/5.2"><div class="table" id="pvTable"></div></div>
+            <div class="bar"><div class="ask"><div class="who" id="pvWho"></div><div class="ctx" id="pvCtx"></div></div><div class="acts" id="pvActs"></div></div>
+          </div>
+          <div class="pv-note">Так активный вопрос выглядит в тренажёре. Видео здесь — заглушка (внешний YouTube блокируется CSP артефакта; локально по http встроится).</div>
         </div>
-        <div class="pv-note">Так активный вопрос выглядит в тренажёре. Видео здесь — заглушка (внешний YouTube блокируется CSP артефакта; локально по http встроится).</div>
-        <div class="savebar"><button class="primary" id="saveHand">Добавить в набор</button><button class="ghost" id="playSet">В тренажёр →</button></div>
+        <div class="fs" data-sec="ans">
+          <div class="pvhead"><div class="t">Превью ответа</div><div class="mini">как выглядит разбор · видео с таймкодов</div></div>
+          <div class="ansbody" id="ansBody"></div>
+        </div>
         <div class="setlist" id="setList" data-sec="set"></div>
         <div class="io"><button class="ghost" id="exportBtn" style="flex:1">Скопировать JSON</button><button class="ghost" id="importToggle">Импорт</button><button class="ghost" id="clearBtn" title="Очистить подборку и черновик">Очистить</button></div>
         <div class="pv-note" style="text-align:left">Название, теги, заставка и вступление подборки настраиваются в блоке 0 слева. Раздачи и черновик автосохраняются в этом браузере (localStorage). «Скопировать JSON» — бэкап и перенос: делай периодически, localStorage слетит при чистке кэша или смене браузера.</div>
         <div id="importBox" style="display:none"><div class="mini" style="margin-bottom:6px">Вставь <b>историю раздач</b> (PokerStars / GGPoker / ПокерОК — текстовый экспорт) или <b>JSON</b> набора. История добавится к набору со стеками и полным порядком ходов — потом открываешь раздачу и отмечаешь шаги‑вопросы.</div><textarea id="importArea" placeholder="PokerStars Hand #… (или GGPoker) — можно несколько раздач подряд. Либо JSON набора."></textarea><button class="ghost" id="importBtn" style="width:100%;margin-top:6px">Импортировать</button></div>
-      </div></div></div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -686,6 +721,27 @@ let HANDS=[], PLAY=[], i=0, score=0, streak=0, answered=[], picks=[];   // picks
 let AUTOPLAY=(()=>{try{return localStorage.getItem('pk_autoplay')!=='0';}catch(e){return true;}})();
 function setAutoplay(on){AUTOPLAY=!!on;try{localStorage.setItem('pk_autoplay',on?'1':'0');}catch(e){}updateAutoBtn();}
 function updateAutoBtn(){const b=$('autoToggle');if(b)b.innerHTML=`Автовидео: <b>${AUTOPLAY?'вкл':'выкл'}</b>`;}
+// #10 fast replay: on each question, quickly deal through the prior actions (from hand start) before the decision.
+// v1 — kept deliberately simple; toggleable, off-switch persists. If a player answers mid-replay, timers are cleared.
+let REPLAY=(()=>{try{return localStorage.getItem('pk_replay')!=='0';}catch(e){return true;}})();
+function setReplay(on){REPLAY=!!on;try{localStorage.setItem('pk_replay',on?'1':'0');}catch(e){}updateReplayBtn();}
+function updateReplayBtn(){const b=$('replayToggle');if(b)b.innerHTML=`Анимация: <b>${REPLAY?'вкл':'выкл'}</b>`;}
+let _replayTimers=[];
+function clearReplay(){_replayTimers.forEach(clearTimeout);_replayTimers=[];}
+// pot/stacks use the app's additive size model (see potNum); recompute per frame so the pot grows & stacks shrink in step
+function frameContrib(hist){const c={};STREETS.forEach(st=>(hist[st]||[]).forEach(a=>{if(!a.pos)return;const s=(a.size||'').trim();
+  if(a.action==='fold'||a.action==='check'||!s||isMultSize(s)||s.includes('%'))return;const m=s.match(/-?\d+(?:\.\d+)?/);if(!m)return;
+  c[a.pos]=(c[a.pos]||0)+parseFloat(m[0]);}));return c;}
+function frameView(v,upto){const hist={preflop:[],flop:[],turn:[],river:[]};let count=0,last='preflop';
+  for(const st of STREETS){const arr=v.history[st]||[];for(const a of arr){if(count>=upto)break;hist[st].push(a);count++;last=st;}if(count>=upto)break;}
+  return Object.assign({},v,{history:hist,street:last,board:(v.board||[]).slice(0,BOARDN[last]),contrib:frameContrib(hist)});}
+function replayInto(container,v,onDone){clearReplay();
+  const seq=[];STREETS.forEach(st=>(v.history[st]||[]).forEach(a=>seq.push(a)));
+  if(!REPLAY||seq.length<2){renderTable(container,v);if(onDone)onDone();return;}
+  const STEP=Math.max(110,Math.min(280,Math.round(1800/seq.length)));      // adaptive: whole replay stays ~1.8s no matter how many actions
+  renderTable(container,frameView(v,0));                                   // clean start: seats + hole cards, no actions yet
+  for(let k=1;k<=seq.length;k++)_replayTimers.push(setTimeout(()=>renderTable(container,frameView(v,k)),STEP*k));
+  _replayTimers.push(setTimeout(()=>{renderTable(container,v);if(onDone)onDone();},STEP*(seq.length+1)));}   // settle on the real decision view
 // clip countdown: YouTube's scrubber shows the whole source video, so we overlay a timer that counts down to the
 // segment's end (where &end auto-pauses). It's a wall-clock estimate from press-play — may drift a second on buffering.
 let TIMERON=(()=>{try{return localStorage.getItem('pk_timer')!=='0';}catch(e){return true;}})();
@@ -711,10 +767,11 @@ function renderBand(){const p=PLAY[i];if(!p||p.stepCount<2){$('stepband').innerH
 function renderHand(){
   if(!PLAY.length){$('trainTable').innerHTML='';$('who').textContent='Нет раздач';$('ctx').textContent='Добавь раздачи в редакторе.';$('acts').innerHTML='';$('pips').innerHTML='';$('stepband').innerHTML='';return;}
   const p=PLAY[i], v=qView(HANDS[p.hi],p.k);
-  renderTable($('trainTable'),v);renderBand();renderActionLog(v);
+  replayInto($('trainTable'),v);renderBand();renderActionLog(v);   // #10 quick replay of prior streets, then settle on the decision
+
   $('who').innerHTML=whoText(v);$('ctx').innerHTML=ctxText(v);
   const ord=(p.order&&p.order.length===v.options.length)?p.order:v.options.map((_,k)=>k);   // shuffled display order (hero/best not always first)
-  $('acts').innerHTML=ord.map(oi=>{const o=v.options[oi];return `<button class="btn ${o.type}" data-id="${o.id}" data-grade="${o.grade}"><span class="t">${o.label}</span>${optSizeHTML(o,v)}</button>`;}).join('');
+  $('acts').innerHTML=ord.map(oi=>{const o=v.options[oi];return `<button class="btn ${o.type}" data-id="${o.id}" data-grade="${o.grade}"><span class="t">${optLabelDisp(o,v.street,v.history&&v.history.preflop)}</span>${optSizeHTML(o,v)}</button>`;}).join('');
   $('acts').querySelectorAll('.btn').forEach(b=>b.onclick=()=>choose(b,v));renderPips();
 }
 // prior-street action history so a mid-hand question shows who bet/called before (feature: context on later streets)
@@ -728,6 +785,7 @@ function renderActionLog(v,elId){const el=$(elId||'alog');if(!el)return;
   if(!parts.length||(v.street==='preflop'&&total<=1)){el.style.display='none';el.innerHTML='';return;}
   el.style.display='';el.innerHTML=`<div class="alh">Ход розыгрыша</div>${parts.join('')}`;}
 function choose(btn,v){
+  clearReplay();   // answering mid-replay: cancel pending frames so the table doesn't jump back
   const grade=btn.dataset.grade,id=btn.dataset.id,pts=PTS[grade];
   score+=pts;answered[i]=grade;picks[i]=id;streak=grade==='mistake'?0:streak+1;$('score').textContent=score;$('streak').textContent=streak;
   $('acts').querySelectorAll('.btn').forEach(b=>{b.disabled=true;const g=b.dataset.grade;
@@ -737,12 +795,12 @@ function choose(btn,v){
 function opt(opts,id){return opts.find(o=>o.id===id);}
 // one answer option as a recap row: the option itself, its verdict colour, and chips for who chose it (ты / герой).
 // The "correct" answer is conveyed by the green colour + ✓ mark, so no separate «Тренер» chip is needed.
-function optRecapRow(o,pickId,heroId,potBB,street){const who=[];
+function optRecapRow(o,pickId,heroId,potBB,street,preflopHist){const who=[];
   if(o.id===pickId)who.push('<span class="qc you">Ты</span>');
   if(o.id===heroId)who.push('<span class="qc hero">Герой</span>');
   const mark=o.grade==='best'?'✓':o.grade==='mistake'?'✕':'≈';
   const szT=o.size?sizeBBpct(o.size,potBB||0,street!=='preflop'):'';
-  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${o.label||'—'}${szT?' <span class="num">'+szT+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
+  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${optLabelDisp(o,street,preflopHist)}${szT?' <span class="num">'+szT+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
 function videoBlockHTML(v){
   const id=ytId(v.video&&v.video.url), watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(v.vStart||0)}s`:null;
   return `<div class="video"><div class="vfacade" ${id?`data-embed="${id}" data-s="${Math.floor(v.vStart||0)}" data-e="${Math.floor(v.vEnd||0)}"`:''}>
@@ -756,7 +814,7 @@ function showSheet(v,res){
   const hq=questionsOf(HANDS[p.hi]);let gs=p.k;while(gs>0&&hq[gs]&&hq[gs].q.joinPrev)gs--;
   const recapKs=[];if(v.deferred)recapKs.push(p.k);else for(let kk=gs;kk<=p.k;kk++)recapKs.push(kk);
   const recap=recapKs.map(kk=>{const pidx=i-(p.k-kk),vv=(kk===p.k)?v:qView(HANDS[p.hi],kk);
-    return {n:kk+1,street:vv.street,options:vv.options,heroId:vv.heroPick,pickId:picks[pidx],grade:answered[pidx],pot:potNum(vv)};});
+    return {n:kk+1,street:vv.street,options:vv.options,heroId:vv.heroPick,pickId:picks[pidx],grade:answered[pidx],pot:potNum(vv),pf:(vv.history&&vv.history.preflop)||[]};});
   const isGroup=recap.length>1;
   const worst=recap.reduce((w,r)=>GRADE_RANK[r.grade]>GRADE_RANK[w]?r.grade:w,'best');
   const grpPts=recap.reduce((s,r)=>s+(PTS[r.grade]||0),0);
@@ -768,22 +826,31 @@ function showSheet(v,res){
   $('sheet').innerHTML=`<div class="verdict"><div class="vbadge v-${topGrade}">${topGrade==='best'?'✓':topGrade==='ok'?'≈':'✕'}</div>
     <div class="vtext"><div class="vt g-${topGrade}">${vt}</div><div class="vs">${vs}</div></div>
     <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
-    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street)).join('')}</div></div>`).join('')}</div>
+    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street,r.pf)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
-    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${TIMERON?'on':''}" id="sheetTimer" aria-pressed="${TIMERON}">Таймер отреза: ${TIMERON?'вкл':'выкл'}</button><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
+    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${TIMERON?'on':''}" id="sheetTimer" aria-pressed="${TIMERON}">Таймер отрезка: ${TIMERON?'вкл':'выкл'}</button><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
-    <div class="hint">${v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'Видео стартует автоматически. В артефакте embed режет CSP — открой по ссылке ↗.':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.'}</div>`;
+    <div class="hint">${v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'Видео стартует автоматически. В артефакте embed режет CSP — открой по ссылке ↗.':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.'}</div>
+    <div class="fbwrap"><button class="fbtoggle" id="fbToggle">⚑ Сообщить об ошибке</button>
+      <div class="fbform" id="fbForm" hidden>
+        <div class="fblbl">Что не так?</div>
+        <div class="fbcats">${FB_CATS.map((c,ix)=>`<button class="fbcat${ix===0?' on':''}" data-cat="${c.k}">${c.t}</button>`).join('')}</div>
+        <textarea id="fbText" class="fbtext" rows="2" placeholder="Напр.: верный ответ — колл, а не фолд. Или: доска на ривере другая / таймкод не туда."></textarea>
+        <div class="fbrow"><button class="fbsend" id="fbSend">Отправить</button><button class="fbcancel" id="fbCancel">Отмена</button></div>
+        <div class="fbnote" id="fbNote"></div>
+      </div></div>`;
   const sh=$('sheet');sh.scrollTop=0;void sh.offsetHeight;sh.classList.add('up');
-  renderTable($('trainTable'),v,true);   // reveal known villain cards now that the hand is being explained
+  renderTable($('trainTable'),v,p.k===hq.length-1);   // reveal villains' cards only on the hand's LAST question — earlier reveals would spoil later questions
   const fac=sh.querySelector('.vfacade[data-embed]');
   if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
     // basic autoplay of the review clip; disabled where YouTube embeds are blocked (sandboxed artifact) so the facade stays clean
     if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac);},420);}
   const sa=$('sheetAuto');if(sa)sa.onclick=()=>{setAutoplay(!AUTOPLAY);sa.className='vauto '+(AUTOPLAY?'on':'');sa.setAttribute('aria-pressed',AUTOPLAY);sa.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
-  const stg=$('sheetTimer');if(stg)stg.onclick=()=>{setTimerOn(!TIMERON);stg.className='vauto '+(TIMERON?'on':'');stg.setAttribute('aria-pressed',TIMERON);stg.textContent='Таймер отреза: '+(TIMERON?'вкл':'выкл');
+  const stg=$('sheetTimer');if(stg)stg.onclick=()=>{setTimerOn(!TIMERON);stg.className='vauto '+(TIMERON?'on':'');stg.setAttribute('aria-pressed',TIMERON);stg.textContent='Таймер отрезка: '+(TIMERON?'вкл':'выкл');
     const wrap=$('sheet').querySelector('.video');
     if(!TIMERON)clearClipTimers();else if(wrap&&wrap.querySelector('iframe')&&+wrap.dataset.dur>0){clearClipTimers();startClipTimer(wrap,+wrap.dataset.dur);}};
   $('next').onclick=next;
+  wireFeedback();
 }
 function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
   // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT and can't be removed via params
@@ -795,6 +862,55 @@ function canAutoEmbed(){try{return window.self===window.top;}catch(e){return fal
 // kill any playing YouTube iframe (sheet review clip or intro clip) so audio stops the moment we move on
 function stopVideos(){clearClipTimers();document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
 function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-1)setTimeout(()=>{i++;renderHand();},300);else setTimeout(showEnd,300);}
+
+/* ===== FEEDBACK («Сообщить об ошибке») + optional Supabase sink =====
+   Works with zero config: reports are queued in localStorage and can be exported from the editor.
+   When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
+   POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
+   Nothing here touches any other project — it only talks to the URL the user pastes. */
+const APP_VER='2026-07-22';
+const FB_CATS=[
+  {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
+  {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
+  {k:'video',  t:'Видео / таймкод'},            // clip doesn't match the hand or is off
+  {k:'unclear',t:'Вопрос непонятный'},          // wording/setup confusing
+  {k:'other',  t:'Другое'},
+];
+let CURPACK={id:'',title:''};
+// --- Supabase (feature-flagged; disabled until the user pastes a URL + anon key) ---
+function supaCfg(){try{return JSON.parse(localStorage.getItem('pk_supa')||'null')||null;}catch(e){return null;}}
+function supaSet(url,key){try{if(url&&key)localStorage.setItem('pk_supa',JSON.stringify({url:url.trim().replace(/\/+$/,''),key:key.trim()}));else localStorage.removeItem('pk_supa');}catch(e){}}
+function supaEnabled(){const c=supaCfg();return !!(c&&c.url&&c.key);}
+async function supaInsert(table,rows){const c=supaCfg();if(!c||!c.url||!c.key)return {ok:false,status:0};
+  try{const r=await fetch(c.url+'/rest/v1/'+table,{method:'POST',headers:{'Content-Type':'application/json','apikey':c.key,'Authorization':'Bearer '+c.key,'Prefer':'return=minimal'},body:JSON.stringify(rows)});
+    return {ok:r.ok,status:r.status};}catch(e){return {ok:false,status:0,err:String(e)};}}
+// --- local durable queue ---
+function fbQueueGet(){try{return JSON.parse(localStorage.getItem('pk_feedback')||'[]')||[];}catch(e){return [];}}
+function fbQueueSet(q){try{localStorage.setItem('pk_feedback',JSON.stringify(q));}catch(e){}}
+function fbRow(r){return {pack:r.pack,pack_title:r.pack_title,hand:r.hand,street:r.street,q_index:r.q_index,q_total:r.q_total,pick_label:r.pick_label,pick_grade:r.pick_grade,hero_label:r.hero_label,category:r.category,comment:r.comment,ua:r.ua,app_ver:r.ver,client_ts:r.ts};}
+async function flushFbQueue(){if(!supaEnabled())return false;const q=fbQueueGet();if(!q.length)return false;
+  const res=await supaInsert('feedback',q.map(fbRow));if(res.ok){fbQueueSet([]);return true;}return false;}
+// --- context of the report: which pack/hand/question + what the player picked ---
+function fbContext(){const p=PLAY[i],h=HANDS[p.hi],v=qView(h,p.k);const pk=opt(v.options,picks[i])||{};
+  return {pack:CURPACK.id,pack_title:CURPACK.title,hand:h.title||('#'+(p.hi+1)),street:v.street,q_index:p.k+1,q_total:p.stepCount||questionsOf(h).length,
+    pick_label:optLabelDisp(pk,v.street,v.history&&v.history.preflop)||pk.label||'',pick_grade:answered[i]||'',
+    hero_label:(opt(v.options,v.heroPick)||{}).label||''};}
+async function sendFeedback(rec){const note=$('fbNote');if(note)note.textContent='Отправляю…';
+  let stored='local';
+  if(supaEnabled()){const r=await supaInsert('feedback',[fbRow(rec)]);if(r.ok)stored='cloud';}
+  if(stored==='local'){const q=fbQueueGet();q.push(rec);fbQueueSet(q);}
+  if(note)note.textContent=stored==='cloud'?'Спасибо! Отзыв записан в базу ✓':'Спасибо! Отзыв сохранён локально — попадёт в базу после её подключения.';
+  toast('Отзыв отправлен ✓');
+  setTimeout(closeFbForm,1600);}
+function closeFbForm(){const f=$('fbForm'),t=$('fbToggle');if(f)f.hidden=true;if(t)t.style.display='';const tx=$('fbText');if(tx)tx.value='';}
+function wireFeedback(){const tog=$('fbToggle'),form=$('fbForm');if(!tog||!form)return;
+  tog.onclick=()=>{form.hidden=false;tog.style.display='none';const tx=$('fbText');if(tx)try{tx.focus();}catch(e){}};
+  const cats=$('sheet').querySelectorAll('.fbcat');cats.forEach(b=>b.onclick=()=>{cats.forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+  const cancel=$('fbCancel');if(cancel)cancel.onclick=closeFbForm;
+  const send=$('fbSend');if(send)send.onclick=()=>{const on=$('sheet').querySelector('.fbcat.on');const category=on?on.dataset.cat:'other';
+    const comment=($('fbText').value||'').trim();const note=$('fbNote');
+    if(!comment){if(note)note.textContent='Опиши, что не так — пары слов достаточно.';return;}
+    sendFeedback(Object.assign({ts:new Date().toISOString(),category,comment,ua:(navigator.userAgent||'').slice(0,180),ver:APP_VER},fbContext()));};}
 function showEnd(){
   const best=answered.filter(g=>g==='best').length,ok=answered.filter(g=>g==='ok').length,bad=answered.filter(g=>g==='mistake').length;
   const beat=PLAY.reduce((n,p,k)=>{const v=qView(HANDS[p.hi],p.k);const yr=GRADE_RANK[answered[k]],hr=GRADE_RANK[opt(v.options,v.heroPick)?.grade];return n+(yr<hr?1:0);},0);
@@ -931,24 +1047,24 @@ function seed(){const v={url:'https://youtu.be/'+DEMO};return [
 /* ===== COLLECTIONS / HOME ===== */
 const DV='https://youtu.be/'+DEMO;
 const PACKS=[
-  {id:'wsop', emoji:'♠', tag:'Оффлайн', accent:'#C8322F', host:'Разбор: Андрей Козленко', hero:'Хелмут · профи · 17 браслетов', title:'WSOP — топ‑моменты', sub:'Ключевые решения с мирового живого турнира: дисциплина, вэлью, чтения.',
+  {id:'wsop', emoji:'♠', tag:'Оффлайн', format:'offline', accent:'#C8322F', host:'Разбор: Андрей Козленко', hero:'Хелмут · профи · 17 браслетов', title:'WSOP — топ‑моменты', sub:'Ключевые решения с мирового живого турнира: дисциплина, вэлью, чтения.',
    intro:{title:'WSOP Main Event — топ‑моменты',text:'Подборка ключевых решений с одного из главных живых турниров мира. Сначала спот — принимаешь решение как за столом, потом разбор от автора.',video:{url:DV},vStart:1700,vEnd:1730,channel:'Разбор WSOP'}},
-  {id:'run',  emoji:'♦', tag:'Онлайн',  accent:'#2668C4', host:'Разбор: avr0ra (A‑Game)', hero:'Регуляр · онлайн‑занос', title:'Занос известного игрока', sub:'Одна онлайн‑сессия глазами про: линии на несколько улиц, тонкие коллы.',
+  {id:'run',  emoji:'♦', tag:'Онлайн',  format:'online', accent:'#2668C4', host:'Разбор: avr0ra (A‑Game)', hero:'Регуляр · онлайн‑занос', title:'Занос известного игрока', sub:'Одна онлайн‑сессия глазами про: линии на несколько улиц, тонкие коллы.',
    intro:{title:'Онлайн‑занос: путь известного игрока',text:'Разбираем ключевые руки одной большой онлайн‑сессии: как про строит линии на несколько улиц и ловит тонкие коллы.',video:{url:DV},vStart:1740,vEnd:1770,channel:'Онлайн‑занос'}},
-  {id:'final',emoji:'♣', tag:'Финалка', accent:'#2E8B57', host:'Разбор: Академия Покера', hero:'Финалист · борьба за титул', title:'Финальный стол онлайн', sub:'Короткие стеки и ICM: пуши, защита BB, борьба за титул.',
+  {id:'final',emoji:'♣', tag:'Финалка', format:'online', accent:'#2E8B57', host:'Разбор: Академия Покера', hero:'Финалист · борьба за титул', title:'Финальный стол онлайн', sub:'Короткие стеки и ICM: пуши, защита BB, борьба за титул.',
    intro:{title:'Финальный стол онлайн‑турнира',text:'Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.',video:{url:DV},vStart:1780,vEnd:1810,channel:'Финалка онлайн'}},
-  {id:'ft10k',emoji:'♛', tag:'Реконструкция', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'72oooo · с $10 сателлита в чемпионы', title:'Финалка $10K — путь 72oooo', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
+  {id:'ft10k',emoji:'♛', tag:'Реконструкция', format:'online', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'72oooo · с $10 сателлита в чемпионы', title:'Финалка $10K — путь 72oooo', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
    intro:{title:'История одной победы',text:'72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.',video:{url:'https://youtu.be/0lh7nVLfmMo'},vStart:600,vEnd:625,channel:'Андрей Козленко'}},
-  {id:'wsopme',emoji:'★', tag:'Мейн Ивент', accent:'#C79A2E', host:'Разбор: Андрей Козленко', hero:'Мейн Ивент WSOP · дни 2–3', title:'WSOP Main Event $10K', sub:'Живые раздачи главного турнира мира: Хельмут, Фоксон и другие. Дисциплина, чтения, великие фолды.',
+  {id:'wsopme',emoji:'★', tag:'Мейн Ивент', format:'offline', accent:'#C79A2E', host:'Разбор: Андрей Козленко', hero:'Мейн Ивент WSOP · дни 2–3', title:'WSOP Main Event $10K', sub:'Живые раздачи главного турнира мира: Хельмут, Фоксон и другие. Дисциплина, чтения, великие фолды.',
    intro:{title:'WSOP Main Event — 10 000$',text:'Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.',video:{url:'https://youtu.be/yATrt1addik'},vStart:0,vEnd:30,channel:'Андрей Козленко'}},
-  {id:'mtt16k',emoji:'◆', tag:'Онлайн MTT', accent:'#1C8FA8', host:'Разбор: Baby Shark', hero:'Бай‑ин $3 · занос $16 000', title:'С $3 до $16 000', sub:'Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.',
+  {id:'mtt16k',emoji:'◆', tag:'Онлайн MTT', format:'online', accent:'#1C8FA8', host:'Разбор: Baby Shark', hero:'Бай‑ин $3 · занос $16 000', title:'С $3 до $16 000', sub:'Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.',
    intro:{title:'С $3 до $16 000',text:'Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.',video:{url:'https://youtu.be/qMW6mOd7m6Q'},vStart:48,vEnd:80,channel:'Baby Shark'}}
 ];
 function blankIntro(name){return {title:'',text:'',video:{url:''},vStart:0,vEnd:0,channel:name||'Мой набор'};}
 // collections — EVERY collection is editable in the редактор (its own hands + display settings), including the
 // built-in demo packs. defaultCols() seeds the three demos (from PACKS meta + seed() hands) plus an empty "Мой набор".
 function defaultCols(){const hs=seed().map(migrateCards);
-  const cols=PACKS.map(p=>({id:p.id,name:p.title,emoji:p.emoji,accent:p.accent,tag:p.tag,host:p.host,hero:p.hero,cover:'',sub:p.sub,intro:JSON.parse(JSON.stringify(p.intro)),hands:hs.filter(h=>h.pack===p.id).map(h=>JSON.parse(JSON.stringify(h)))}));
+  const cols=PACKS.map(p=>({id:p.id,name:p.title,emoji:p.emoji,accent:p.accent,tag:p.tag,host:p.host,hero:p.hero,format:p.format||'',cover:'',sub:p.sub,intro:JSON.parse(JSON.stringify(p.intro)),hands:hs.filter(h=>h.pack===p.id).map(h=>JSON.parse(JSON.stringify(h)))}));
   cols.push({id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',tag:'',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:blankIntro('Мой набор'),hands:[]});
   return cols;}
 let COLS=defaultCols();
@@ -961,35 +1077,62 @@ function secClass(key){return _ui.collapsed[key]?' collapsed':'';}
 function activeCol(){if(curCol<0)curCol=0;if(curCol>=COLS.length)curCol=COLS.length-1;return COLS[curCol]||COLS[0];}
 function findCol(id){return COLS.find(c=>c.id===id);}
 // unified list for the home screen: demo packs (library) + user collections
-function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
+function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',format:c.format||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
 function packHands(id){const c=findCol(id);return c?c.hands.filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill
 function packStats(id){const c=findCol(id),hs=c?c.hands:[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}
+// home-screen filter facets. Each facet reads a pack field; a facet only appears if ≥2 distinct
+// non-empty values exist among visible packs (no point filtering on something everything shares).
+const FORMAT_RU={online:'Онлайн',offline:'Оффлайн'};
+const HOME_FACETS=[
+  {k:'host',  label:'Автор',  val:p=>p.host,   disp:v=>String(v).replace(/^Разбор:\s*/,'')},
+  {k:'format',label:'Формат', val:p=>p.format, disp:v=>FORMAT_RU[v]||v},
+  // future: {k:'hero', label:'Герой', val:p=>p.hero, ...} — enable once pack.hero holds clean hero names (сейчас там описания турниров)
+];
+let HOME_FILTER={host:'',format:'',hero:''};
+function packCardHTML(p){const st=packStats(p.id),empty=st.questions===0;
+  const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
+  const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
+  return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
+    <div class="part ${p.cover?'has-cover':''}" style="${partStyle}"><div class="pemoji">${p.emoji}</div></div>
+    <div class="pbody">
+      <div class="ptitle">${p.title}</div>
+      ${tags}
+      <div class="psub">${p.sub}</div>
+      <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.`}</div>
+    </div>
+  </button>`;}
 function renderHome(){
-  const cards=allPacks().filter(p=>!p.hidden).map(p=>{const st=packStats(p.id),empty=st.questions===0;   // hidden packs are curated out of the home library (still editable in редактор)
-    const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
-    const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
-    return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
-      <div class="part ${p.cover?'has-cover':''}" style="${partStyle}"><div class="pemoji">${p.emoji}</div></div>
-      <div class="pbody">
-        <div class="ptitle">${p.title}</div>
-        ${tags}
-        <div class="psub">${p.sub}</div>
-        <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.`}</div>
-      </div>
-    </button>`;}).join('');
+  const vis=allPacks().filter(p=>!p.hidden);   // hidden packs are curated out of the home library (still editable in редактор)
+  // build facet chip-bars from the FULL visible set, so chips stay put while filtering
+  const bars=HOME_FACETS.map(f=>{
+    const vals=[...new Set(vis.map(f.val).filter(Boolean))];
+    if(vals.length<2)return '';
+    const chips=[`<button class="fchip ${!HOME_FILTER[f.k]?'on':''}" data-facet="${f.k}" data-val="">Все</button>`]
+      .concat(vals.map(v=>`<button class="fchip ${HOME_FILTER[f.k]===v?'on':''}" data-facet="${f.k}" data-val="${esc(v)}">${esc(f.disp(v))}</button>`));
+    return `<div class="fgroup"><span class="flbl">${f.label}</span>${chips.join('')}</div>`;
+  }).filter(Boolean);
+  // clear any active filter whose facet no longer renders (keeps state honest)
+  HOME_FACETS.forEach(f=>{if(HOME_FILTER[f.k]&&![...new Set(vis.map(f.val).filter(Boolean))].includes(HOME_FILTER[f.k]))HOME_FILTER[f.k]='';});
+  const active=HOME_FACETS.some(f=>HOME_FILTER[f.k]);
+  const shown=vis.filter(p=>HOME_FACETS.every(f=>!HOME_FILTER[f.k]||f.val(p)===HOME_FILTER[f.k]));
+  const filterBar=bars.length?`<div class="homefilter">${bars.join('')}${active?`<button class="fclear" id="fclear">× сбросить</button>`:''}</div>${active?`<div class="fnote">${shown.length} из ${vis.length} подборок</div>`:''}`:'';
+  const cards=shown.length?shown.map(packCardHTML).join(''):`<div class="nomatch">Под фильтр ничего не подошло. <button class="fclear" id="fclear2" style="margin:0;color:var(--brass)">сбросить</button></div>`;
   $('homeScreen').innerHTML=`
     <div class="home">
       <div class="home-hero"><div class="cap">Тренажёр решений</div><h2>Выбери подборку</h2>
         <p>Каждая подборка — набор реальных моментов. Отвечай как игрок за столом, потом смотри разбор от автора видео.</p></div>
+      ${filterBar}
       <div class="packs">${cards}</div>
     </div>`;
+  $('homeScreen').querySelectorAll('.fchip').forEach(b=>b.onclick=()=>{HOME_FILTER[b.dataset.facet]=b.dataset.val;renderHome();});
+  ['fclear','fclear2'].forEach(id=>{const el=$(id);if(el)el.onclick=()=>{HOME_FILTER={host:'',format:'',hero:''};renderHome();};});
   $('homeScreen').querySelectorAll('.pack:not(.locked)').forEach(b=>b.onclick=()=>playPack(b.dataset.pack));
 }
 function plural(n){const a=n%10,b=n%100;return (a===1&&b!==11)?'':((a>=2&&a<=4)&&(b<10||b>=20)?'а':'ов');}
 function hasIntro(x){return !!(x&&(x.title||x.text||(x.video&&x.video.url)));}
 function packIntro(id){const c=findCol(id);return hasIntro(c&&c.intro)?c.intro:null;}
 function playPack(id){const hs=packHands(id);if(!hs.length){toast('В подборке пока нет вопросов',1);return;}
-  const meta=allPacks().find(p=>p.id===id);HANDS=hs;
+  const meta=allPacks().find(p=>p.id===id);HANDS=hs;CURPACK={id,title:meta?meta.title:id};   // remembered for «Сообщить об ошибке» reports
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
   $('drillTitle').innerHTML=meta?`${meta.emoji} ${meta.title}`:'';
   const intro=packIntro(id);if(intro)showIntro(intro);else beginDrill();}
@@ -1033,12 +1176,20 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       ${lastPub?`<div class="pubmsg ${lastPubOk?'ok':'bad'}" id="pubMsg">${esc(lastPub)}</div>`:`<div class="pubmsg" id="pubMsg" style="display:none"></div>`}
       <div class="pubhint">С токеном правки уходят в облако (packs.json) сами при каждом сохранении — зрители видят их через ~минуту. Кнопка нужна только для ручной публикации. Токен хранится лишь в этом браузере. «Мой набор» остаётся личным и в облако не уходит. Внутри артефакта не работает (CSP) — только на github‑версии.</div>
     </div>
+    <div class="pubbar">
+      <div class="pubtop"><span class="publbl">🗄 База отзывов · Supabase</span><span class="pubstate ${supaEnabled()?'ok':''}">${supaEnabled()?'подключена':'не подключена'}</span></div>
+      <div class="pubrow"><input id="supa-url" autocomplete="off" placeholder="https://xxxx.supabase.co" value="${supaCfg()?esc(supaCfg().url):''}"></div>
+      <div class="pubrow"><input id="supa-key" type="password" autocomplete="off" placeholder="${supaCfg()?'обновить anon‑ключ…':'anon public key'}"><button class="ghost newbtn" id="supa-save">${supaCfg()?'Заменить':'Подключить'}</button>${supaCfg()?`<button class="ghost newbtn" id="supa-clear">Отключить</button>`:''}</div>
+      <div class="pubrow"><button class="ghost newbtn" id="fb-copy" style="flex:1">📋 Отзывы в очереди: <b id="fbCount">${fbQueueGet().length}</b></button>${fbQueueGet().length?`<button class="ghost newbtn" id="fb-flush">↑ в базу</button><button class="ghost newbtn" id="fb-clearq">Очистить</button>`:''}</div>
+      <div class="pubhint">Отзывы игроков («Сообщить об ошибке») пишутся сюда. Пока база не подключена — копятся в этом браузере: жми «Отзывы в очереди», чтобы скопировать их JSON. Это ОТДЕЛЬНЫЙ проект Supabase (не clippoint), anon‑ключ хранится только в этом браузере. Как поднять базу за 5 минут — см. <b>SUPABASE-SETUP.md</b> в репозитории.</div>
+    </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
       <div class="fld"><label>Значок (эмодзи)</label><input id="col-emoji" value="${esc(c.emoji)}" placeholder="✎" maxlength="3"></div>
       <div class="fld"><label>Картинка‑заставка (URL)</label><input id="col-cover" value="${esc(c.cover)}" placeholder="https://…"></div>
       <div class="fld"><label>Тег: кто ведёт разбор</label><input id="col-host" value="${esc(c.host)}" placeholder="Разбор от Андрея Козленко"></div>
       <div class="fld"><label>Тег: кто герой</label><input id="col-hero" value="${esc(c.hero)}" placeholder="Негреану · про · $6M"></div>
+      <div class="fld"><label>Формат турнира (фильтр на главной)</label><select id="col-format"><option value=""${!c.format?' selected':''}>— не указан —</option><option value="online"${c.format==='online'?' selected':''}>Онлайн</option><option value="offline"${c.format==='offline'?' selected':''}>Оффлайн</option></select></div>
     </div>
     <div class="col-intro"><div class="cih">Вступление перед первым вопросом</div>
       <div class="fld"><label>Заголовок</label><input id="ci-title" value="${esc(it.title)}" placeholder="Финалка Sunday Million"></div>
@@ -1050,6 +1201,7 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
 function readCol(){if(!$('col-name'))return;const c=activeCol();
   c.name=$('col-name').value.trim()||c.name;c.emoji=$('col-emoji').value.trim()||'✎';
   c.cover=$('col-cover').value.trim();c.host=$('col-host').value.trim();c.hero=$('col-hero').value.trim();
+  if($('col-format'))c.format=$('col-format').value;
   c.intro={title:$('ci-title').value.trim(),text:$('ci-text').value.trim(),video:{url:$('ci-vurl').value.trim()},vStart:mmss2sec($('ci-vstart').value),vEnd:mmss2sec($('ci-vend').value),channel:c.name};}
 const TL_CHOICES=[['fold','Фолд'],['check','Чек'],['call','Колл'],['raise','Рейз']];
 function blankHand(){return {players:8,heroPos:'BTN',heroCards:['',''],cards:{},stacks:{},profiles:{},board:['','','','',''],video:{url:''},channel:'PokerLab',actions:[],curQ:0,editIndex:null,unit:(F&&F.unit)||'bb',bbChips:(F&&F.bbChips)||''};}
@@ -1303,6 +1455,14 @@ function wireForm(){
   if($('col-new'))$('col-new').onclick=()=>{readForm();const name=(prompt('Название новой подборки:','Новая подборка')||'').trim();if(!name)return;COLS.push({id:'u'+Date.now(),name,emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'',intro:blankIntro(name),hands:[]});useCol(COLS.length-1);F=blankHand();buildForm();renderSet();persist();toast('Подборка создана: '+name);};
   if($('gh-save'))$('gh-save').onclick=()=>{const v=$('gh-token').value.trim();if(!v){toast('Вставь токен',1);return;}setGhToken(v);toast('Токен сохранён в этом браузере');buildForm();schedulePublish();};
   if($('gh-clear'))$('gh-clear').onclick=()=>{setGhToken('');toast('Токен удалён');buildForm();};
+  if($('supa-save'))$('supa-save').onclick=async()=>{const u=$('supa-url').value.trim(),k=$('supa-key').value.trim();
+    if(!u||!k){toast('Нужны и URL, и anon‑ключ',1);return;}if(!/^https:\/\/.+\.supabase\.co/.test(u)){toast('URL вида https://xxxx.supabase.co',1);return;}
+    supaSet(u,k);toast('База подключена (этот браузер)');const n=await flushFbQueue();if(n)toast('Очередь отзывов отправлена в базу');buildForm();};
+  if($('supa-clear'))$('supa-clear').onclick=()=>{supaSet('','');toast('База отключена');buildForm();};
+  if($('fb-copy'))$('fb-copy').onclick=async()=>{const q=fbQueueGet();if(!q.length){toast('Очередь пуста');return;}
+    const txt=JSON.stringify(q,null,2);try{await navigator.clipboard.writeText(txt);toast('Скопировано: '+q.length+' отз.');}catch(e){toast('Не удалось скопировать',1);}};
+  if($('fb-flush'))$('fb-flush').onclick=async()=>{if(!supaEnabled()){toast('Сначала подключи базу',1);return;}const ok=await flushFbQueue();toast(ok?'Отправлено в базу ✓':'Не удалось отправить',ok?0:1);buildForm();};
+  if($('fb-clearq'))$('fb-clearq').onclick=()=>{if(confirm('Удалить локальную очередь отзывов? Это не затронет уже отправленные в базу.')){fbQueueSet([]);toast('Очередь очищена');buildForm();}};
   if($('col-publish'))$('col-publish').onclick=async()=>{const b=$('col-publish');const f=$('gh-token');if(f&&f.value.trim())setGhToken(f.value.trim());b.disabled=true;b.textContent='Публикую…';const ok=await publishPacks();if(ok){_syncedStr=pubStr();persist(true);}b.disabled=false;buildForm();if(ok)updSync('cloud');};
   if($('col-pull'))$('col-pull').onclick=async()=>{const pub=await loadPublished();if(!pub){toast('В облаке пусто или недоступно',1);return;}if(!confirm('Заменить подборки версией из облака? Несохранённые локальные правки пропадут («Мой набор» останется).'))return;adoptFromCloud(pub.cols);F=blankHand();persist(true);buildForm();renderSet();updSync('synced');toast('Загружено из облака');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
@@ -1378,7 +1538,21 @@ function syncPreview(){
   $('pvBand').innerHTML=qs.length>1?qs.map((q,j)=>`<span class="dot ${j<=k?'on':''}"></span>`).join('')+`<span style="margin-left:4px">вопрос ${k+1}/${qs.length}</span>`:'';
   $('pvWho').innerHTML=qs.length?whoText(v):`<b>${h.heroPos}</b> — построй ход раздачи`;
   $('pvCtx').innerHTML=qs.length?ctxText(v):'Отметь своё действие как вопрос в блоке 2, чтобы увидеть решение.';
-  $('pvActs').innerHTML=(v.options||[]).map(o=>`<button class="btn ${o.type}" disabled><span class="t">${o.label||'—'}</span>${optSizeHTML(o,v)}</button>`).join('');
+  $('pvActs').innerHTML=(v.options||[]).map(o=>`<button class="btn ${o.type}" disabled><span class="t">${optLabelDisp(o,v.street,v.history&&v.history.preflop)}</span>${optSizeHTML(o,v)}</button>`).join('');
+  syncAnsPreview(v);
+}
+// «Превью ответа» — mirrors the trainer's solution recap (graded options + who played what) and the timecoded
+// video for the CURRENT question, live as you edit. Video embeds on click (blocked by CSP in the artifact, works on the github build).
+function syncAnsPreview(v){
+  const box=$('ansBody');if(!box)return;
+  if(!v||!v.options||!v.options.length){box.innerHTML='<div class="ans-empty">Отметь действие героя как вопрос в блоке 3 — здесь покажется, как выглядит разбор ответа и видео с заданных таймкодов.</div>';return;}
+  const pot=potNum(v),pf=(v.history&&v.history.preflop)||[];
+  const opts=v.options.map(o=>optRecapRow(o,null,v.heroPick,pot,v.street,pf)).join('');   // pickId=null: no «Ты» chip in the editor, but the hero option keeps its «Герой» chip + grade colour
+  const hasVid=ytId(v.video&&v.video.url);
+  const vid=hasVid?videoBlockHTML(v):'<div class="ans-empty">Видео не задано — впиши ссылку и таймкоды (блок 3), чтобы увидеть отрезок разбора.</div>';
+  const expl=v.explain?`<div class="note">${v.explain}</div>`:'';
+  box.innerHTML=`<div class="qr"><div class="qr-head"><span class="qr-n">Ответ</span><span class="qr-st">${STREET_RU[v.street]||''}</span></div><div class="qr-opts">${opts}</div></div>${vid}${expl}`;
+  const fac=box.querySelector('.vfacade[data-embed]');if(fac)fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
 }
 // answer-option size, with postflop bb↔% cross-display ("9 bb · 75%"). Preflop stays as-is (bb or multiplier).
 // answer-option size, normalized to blinds with % of pot in parens: "9 bb (75%)". Multipliers (Nx) become N bb.
@@ -1393,6 +1567,19 @@ function sizeBBpct(size,potBB,showPct){const s=String(size==null?'':size).trim()
   const pct=(showPct&&potBB>0)?Math.round(bb/potBB*100):null;
   return `${bb} bb${pct!=null?` <span class="pct">(${pct}%)</span>`:''}`;}
 function optSizeHTML(o,v){if(!o||!o.size)return '';const t=sizeBBpct(o.size,v?potNum(v):0,v&&v.street!=='preflop');return t?`<span class="u num">${t}</span>`:'';}
+// A generic «Рейз» answer option gets relabelled to its street-accurate level (3-бет/4-бет/5-бет), inferred from
+// how many raises preceded it preflop. The timeline (ход розыгрыша) stays generic «Рейз» per spec — this only
+// sharpens the locked ANSWER wording. Postflop raises keep their label (there's no N-bet concept there).
+function raiseLevelLabel(preflopHist){
+  const raises=(preflopHist||[]).filter(a=>a.action==='raise').length;   // raises before the hero's turn (opens + re-raises)
+  const lvl=raises+1;                                                     // + the hero's own raise sitting on top
+  return lvl>=4?'5-бет':lvl===3?'4-бет':lvl===2?'3-бет':'Рейз';          // 1 raise before → 3-бет, 2 → 4-бет, …
+}
+function optLabelDisp(o,street,preflopHist){
+  const L=(o&&(o.label||ACT_RU[o.type]))||'—';
+  if(street==='preflop'&&o&&o.type==='raise'&&L==='Рейз'){const r=raiseLevelLabel(preflopHist);if(r&&r!==L)return r;}
+  return L;
+}
 function toast(msg,err){const t=$('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.classList.remove('show'),2000);}
 function showModal(issues){$('modalList').innerHTML=issues.map(x=>`<li>${x}</li>`).join('');$('modal').classList.add('show');}
 $('modalOk').onclick=()=>$('modal').classList.remove('show');
@@ -1529,7 +1716,9 @@ $('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth();});
 $('tab-train').onclick=()=>switchView('train');$('tab-admin').onclick=openEditor;
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
+if($('replayToggle'))$('replayToggle').onclick=()=>{setReplay(!REPLAY);toast('Анимация раздачи '+(REPLAY?'включена':'выключена'));};updateReplayBtn();
 initAdmin();showHome();
+try{flushFbQueue();}catch(e){}   // if a Supabase sink is configured, push any feedback queued while it was offline
 // packs.json on GitHub is the source of truth for the shared packs. Adopt it unless this browser has unpublished local edits.
 (async()=>{try{const pub=await loadPublished();
   if(!pub){if(_dirty)schedulePublish();return;}                       // offline / no cloud yet: keep local, retry the push if we have unsynced edits

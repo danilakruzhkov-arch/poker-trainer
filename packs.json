@@ -181,7 +181,8 @@
      }
     }
    ],
-   "hidden": true
+   "hidden": true,
+   "format": "offline"
   },
   {
    "id": "run",
@@ -510,7 +511,8 @@
      }
     }
    ],
-   "hidden": true
+   "hidden": true,
+   "format": "online"
   },
   {
    "id": "final",
@@ -691,7 +693,8 @@
      }
     }
    ],
-   "hidden": true
+   "hidden": true,
+   "format": "online"
   },
   {
    "id": "ft10k",
@@ -4338,7 +4341,8 @@
       ]
      }
     }
-   ]
+   ],
+   "format": "online"
   },
   {
    "id": "wsopme",
@@ -4704,7 +4708,7 @@
          },
          {
           "id": "o4",
-          "label": "4-Бет",
+          "label": "4-бет",
           "size": "",
           "type": "bet",
           "grade": "best",
@@ -5917,7 +5921,8 @@
        "Ah",
        "Qh"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -6738,7 +6743,8 @@
        "Jc",
        "9s"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -7800,7 +7806,8 @@
        "Jc",
        "Jd"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -8651,7 +8658,8 @@
       ]
      }
     }
-   ]
+   ],
+   "format": "offline"
   },
   {
    "id": "mtt16k",
@@ -11636,7 +11644,8 @@
        "Ah",
        "Kd"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "mtt16k",
@@ -12262,7 +12271,8 @@
       ]
      }
     }
-   ]
+   ],
+   "format": "online"
   }
  ],
  "publishedAt": 1784675030605
