@@ -2041,6 +2041,164 @@
     },
     {
      "pack": "wsopme",
+     "title": "Бессмысленный сквиз Король-9 (копия)",
+     "players": 9,
+     "heroPos": "BB",
+     "heroCards": [
+      "Kc",
+      "6c"
+     ],
+     "stacks": {
+      "BB": 150,
+      "UTG": null,
+      "CO": null,
+      "SB": null,
+      "UTG+1": 54.2,
+      "UTG+2": null,
+      "LJ": 283.3,
+      "HJ": null,
+      "BTN": null
+     },
+     "profiles": {
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "fish",
+       "style": "aggr"
+      },
+      "UTG+1": {
+       "status": "fish",
+       "style": "aggr"
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "rec",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG+1",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "LJ",
+       "action": "call",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "5.4 bb",
+       "q": {
+        "vStart": 1157,
+        "vEnd": 1182,
+        "depth": "подробно",
+        "explain": "Маленький сквиз K9s не решает никакой задачи и явно минусовый. Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "5.4 bb",
+          "hero": true
+         }
+        ],
+        "joinPrev": false,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+1",
+       "action": "raise",
+       "size": "54.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "LJ",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "fold",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Kc",
+       "6c"
+      ],
+      "UTG+1": [
+       "Jh",
+       "Th"
+      ],
+      "LJ": [
+       "As",
+       "Jc"
+      ]
+     },
+     "unit": "chips",
+     "bbChips": "1200"
+    },
+    {
+     "pack": "wsopme",
      "title": "Колл Фоксона с Туз-Валет",
      "players": 9,
      "heroPos": "CO",
@@ -12756,5 +12914,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784754304696
+ "publishedAt": 1784754311649
 }
