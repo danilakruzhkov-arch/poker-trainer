@@ -365,7 +365,7 @@
          {
           "id": "o4",
           "label": "4-бет",
-          "size": "",
+          "size": "18 bb",
           "type": "raise",
           "grade": "best",
           "hero": false
@@ -581,7 +581,7 @@
       ]
      },
      "unit": "chips",
-     "bbChips": "1500",
+     "bbChips": "2000",
      "_addStreet": null
     },
     {
@@ -12443,5 +12443,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784746431335
+ "publishedAt": 1784746598519
 }
