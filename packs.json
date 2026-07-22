@@ -2556,10 +2556,10 @@
       }
      },
      "board": [
-      "",
-      "",
-      "",
-      "",
+      "4s",
+      "8c",
+      "9d",
+      "8s",
       ""
      ],
      "video": {
@@ -2624,12 +2624,90 @@
          }
         ],
         "vStart": 0,
-        "vEnd": 0,
+        "vEnd": 1653,
         "depth": "подробно",
         "explain": null,
         "joinPrev": false,
         "contPrev": false
        }
+      },
+      {
+       "street": "flop",
+       "pos": "SB",
+       "action": "raise",
+       "size": "11 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "HJ",
+       "action": "call",
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "25 bb",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Олл-ин",
+          "size": "олл‑ин",
+          "type": "raise",
+          "grade": "ok",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "SB",
+       "action": "raise",
+       "size": "27.5 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "HJ",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "SB",
+       "action": "raise",
+       "size": "35.5 bb"
+      },
+      {
+       "street": "river",
+       "pos": "HJ",
+       "action": "call",
+       "size": ""
       }
      ],
      "cards": {
@@ -12958,5 +13036,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784756787719
+ "publishedAt": 1784757153042
 }
