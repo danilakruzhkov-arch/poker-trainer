@@ -442,6 +442,15 @@
   .ptag{font-size:10px;font-weight:700;line-height:1.25;display:inline-flex;align-items:center;gap:4px;color:#cdd8d1}
   .ptag .pti{opacity:.85;flex:none}
   .ptag.host{color:#e6cf95}.ptag.hero{color:#b9d0c4}
+  /* update banner — signals a newer deployed build (see checkAppVersion) */
+  .verbanner{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(160%);z-index:100;display:flex;align-items:center;gap:12px;padding:10px 12px 10px 16px;background:var(--field-lite);border:1px solid var(--brass);border-radius:12px;box-shadow:var(--shadow);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s;max-width:calc(100vw - 24px)}
+  .verbanner.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .verbanner .vbtxt{color:var(--text);font-size:14px;font-weight:600}
+  .verbanner .vbupd{background:var(--brass);color:#1a1200;border:0;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer;font-size:14px}
+  .verbanner .vbupd:hover{filter:brightness(1.07)}
+  .verbanner .vbx{background:transparent;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+  .verbanner .vbx:hover{color:var(--text)}
+  @media(max-width:480px){.verbanner{left:12px;right:12px;bottom:12px;transform:translateY(160%)}.verbanner.show{transform:translateY(0)}}
 </style>
 
 <div class="wrap" id="wrap">
@@ -868,7 +877,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22';
+const APP_VER='2026-07-22.1';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1715,19 +1724,46 @@ $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+
 if($('replayToggle'))$('replayToggle').onclick=()=>{setReplay(!REPLAY);toast('Анимация раздачи '+(REPLAY?'включена':'выключена'));};updateReplayBtn();
 initAdmin();showHome();
 try{flushFbQueue();}catch(e){}   // if a Supabase sink is configured, push any feedback queued while it was offline
-// packs.json on GitHub is the source of truth for the shared packs. Adopt it unless this browser has unpublished local edits.
-(async()=>{try{const pub=await loadPublished();
-  if(!pub){if(_dirty)schedulePublish();return;}                       // offline / no cloud yet: keep local, retry the push if we have unsynced edits
-  PUBLISHED=pub;
-  if(!_dirty){                                                        // clean browser: the cloud wins (personal 'Мой набор' is preserved)
-    adoptFromCloud(pub.cols);persist(true);
-    if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
-    if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}
-    updSync('synced');
-  }else{                                                              // this browser has edits the cloud doesn't — keep them and push up
-    if(ghToken())schedulePublish();else updSync('unpushed');
-  }
-}catch(e){}})();
+try{if(/[?&]v=/.test(location.search))history.replaceState({},'',location.pathname+location.hash);}catch(e){}  // drop the ?v= cache-buster from the URL once the fresh build is loaded
+// --- live sync: packs.json is the source of truth for shared packs; version.json flags a newer app build ---
+let _lastSync=0;
+async function syncPacks(){                                           // adopt fresh cloud packs unless THIS browser has unpublished edits
+  try{const pub=await loadPublished();
+    if(!pub){if(_dirty)schedulePublish();return;}                     // offline / no cloud yet: keep local, retry the push if we have unsynced edits
+    const fresher=!PUBLISHED||((pub.publishedAt||0)>(PUBLISHED.publishedAt||0));
+    PUBLISHED=pub;
+    if(!_dirty){                                                      // clean browser: the cloud wins (personal 'Мой набор' is preserved)
+      if(fresher){adoptFromCloud(pub.cols);persist(true);
+        if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
+        if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}}
+      updSync('synced');
+    }else{                                                            // this browser has edits the cloud doesn't — keep them and push up
+      if(ghToken())schedulePublish();else updSync('unpushed');
+    }
+  }catch(e){}
+}
+async function checkAppVersion(){                                     // compare the running build with the deployed version.json (cache-busted, so the CDN can't hide it)
+  try{const r=await fetch('version.json?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+    const j=await r.json();const cloud=j&&j.ver;
+    if(cloud&&cloud!==APP_VER)showUpdateBanner(cloud);
+  }catch(e){}
+}
+function showUpdateBanner(cloud){
+  try{if(sessionStorage.getItem('pk_ver_skip')===cloud)return;}catch(e){}   // user chose "later" for this exact version this session
+  if($('verBanner'))return;
+  const b=document.createElement('div');b.id='verBanner';b.className='verbanner';
+  b.innerHTML='<span class="vbtxt">Вышла новая версия приложения</span><button class="vbupd" id="vbUpd">Обновить</button><button class="vbx" id="vbX" aria-label="Позже">×</button>';
+  document.body.appendChild(b);
+  $('vbUpd').onclick=()=>{location.href=location.pathname+'?v='+Date.now();};   // a unique query busts the shared CDN (Fastly) edge cache that a hard reload can't
+  $('vbX').onclick=()=>{try{sessionStorage.setItem('pk_ver_skip',cloud);}catch(e){}b.remove();};
+  requestAnimationFrame(()=>b.classList.add('show'));
+}
+syncPacks();checkAppVersion();
+document.addEventListener('visibilitychange',()=>{                    // returning to the tab re-pulls packs + re-checks the build version
+  if(document.visibilityState!=='visible')return;
+  const now=Date.now();if(now-_lastSync<20000)return;_lastSync=now;   // throttle: at most once per 20s
+  syncPacks();checkAppVersion();
+});
 </script>
 </body>
 </html>
