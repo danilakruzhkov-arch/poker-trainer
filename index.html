@@ -675,8 +675,9 @@ function ctxText(v){
     return `Сфолдили до тебя. У тебя ${hand}.`;
   }
   const cur=v.history[v.street]||[], bet=[...cur].reverse().find(a=>(a.action==='bet'||a.action==='raise')&&a.pos!==v.heroPos);
+  const villainActed=cur.some(a=>a.pos!==v.heroPos);   // did anyone act before the hero on THIS street?
   let s=`${STREET_RU[v.street]} ${v.board.map(cardText).join(' ')}. `;
-  s+=bet?`${bet.pos} ${bet.action==='raise'?'рейзит':'ставит'}${bet.size?' '+bet.size:''}. `:`Чек до тебя. `;
+  s+=bet?`${bet.pos} ${bet.action==='raise'?'рейзит':'ставит'}${bet.size?' '+bet.size:''}. `:(villainActed?`Чек до тебя. `:`Ты ходишь первым. `);
   return s+`У тебя ${hand}.`;
 }
 
