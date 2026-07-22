@@ -3032,13 +3032,52 @@
       "Js"
      ],
      "stacks": {
-      "SB": 53,
-      "BTN": 55
+      "SB": 37.5,
+      "BTN": 255,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null
      },
      "profiles": {
       "BTN": {
-       "status": "reg",
+       "status": "rec",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -3068,14 +3107,14 @@
         "vStart": 1820,
         "vEnd": 1852,
         "depth": "подробно",
-        "explain": "<b>Флэт JJ против широкого опена Фоксена с баттона оставляет деньги на столе.</b> Фоксен открывает огромный диапазон, поэтому 3-бет заметно прибыльнее: строим банк с большим фаворитом и отнимаем эквити, тогда как колл недореализует руку.",
+        "explain": "Флэт JJ против широкого опена Фоксена с баттона оставляет деньги на столе. Фоксен открывает огромный диапазон, поэтому 3-бет заметно прибыльнее: строим банк с большим фаворитом и отнимаем эквити, тогда как колл недореализует руку.",
         "options": [
          {
           "id": "p1",
           "label": "3-бет",
+          "size": "12 bb",
           "type": "raise",
           "grade": "best",
-          "size": "12 bb",
           "hero": false
          },
          {
@@ -3083,18 +3122,20 @@
           "label": "Колл",
           "type": "call",
           "grade": "mistake",
-          "size": "",
+          "size": "2.5 bb",
           "hero": true
          },
          {
           "id": "p3",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       }
      ],
@@ -3104,7 +3145,9 @@
        "Js"
       ]
      },
-     "hidden": true
+     "hidden": true,
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -13044,5 +13087,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784758078915
+ "publishedAt": 1784758384457
 }
