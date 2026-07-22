@@ -2733,25 +2733,64 @@
      "players": 9,
      "heroPos": "CO",
      "heroCards": [
-      "Jh",
-      "Th"
+      "7h",
+      "5h"
      ],
      "stacks": {
-      "CO": 60,
-      "BB": 60
+      "CO": 206,
+      "BB": null,
+      "SB": 135,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "BTN": null
      },
      "profiles": {
       "BB": {
+       "status": "",
+       "style": ""
+      },
+      "SB": {
        "status": "rec",
        "style": "tight"
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Qh",
-      "8h",
-      "3c",
-      "Kd",
-      "2c"
+      "3h",
+      "Kh",
+      "9d",
+      "Ks",
+      "Qc"
      ],
      "video": {
       "url": "https://youtu.be/yATrt1addik"
@@ -2762,17 +2801,51 @@
        "street": "preflop",
        "pos": "CO",
        "action": "raise",
-       "size": "2.3 bb"
+       "size": "2 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 1654,
+        "vEnd": 1814,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "preflop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "call",
-       "size": "2.3 bb"
+       "size": ""
       },
       {
        "street": "flop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "check",
        "size": ""
       },
@@ -2780,109 +2853,174 @@
        "street": "flop",
        "pos": "CO",
        "action": "bet",
-       "size": "3.1 bb"
+       "size": "2 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "best",
+          "size": "2 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Бет",
+          "size": "75%",
+          "type": "bet",
+          "grade": "ok",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "call",
-       "size": "4.6 bb"
+       "size": ""
       },
       {
        "street": "turn",
-       "pos": "BB",
+       "pos": "SB",
        "action": "bet",
-       "size": "6.9 bb"
+       "size": "2.8 bb"
       },
       {
        "street": "turn",
        "pos": "CO",
        "action": "raise",
-       "size": "19 bb",
+       "size": "9.5 bb",
        "q": {
-        "vStart": 1654,
-        "vEnd": 1814,
+        "vStart": 0,
+        "vEnd": 0,
         "depth": "подробно",
-        "explain": "<b>Рейз репрезентует короля и выбивает даму-валет, валет-10 и флеш-дро.</b> А если коллят — есть ауты на усиление; продолжаем правдоподобную историю.",
+        "explain": "Рейз репрезентует короля и выбивает даму-валет, валет-10 и флеш-дро. А если коллят — есть ауты на усиление; продолжаем правдоподобную историю.",
         "options": [
          {
           "id": "t1",
           "label": "Рейз",
           "type": "raise",
           "grade": "best",
-          "size": "19 bb",
+          "size": "9.5 bb",
           "hero": true
          },
          {
           "id": "t2",
           "label": "Колл",
+          "size": "",
           "type": "call",
           "grade": "ok",
-          "size": "",
           "hero": false
          },
          {
           "id": "t3",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": true,
+        "contPrev": false
        }
       },
       {
        "street": "turn",
-       "pos": "BB",
+       "pos": "SB",
        "action": "call",
-       "size": "19 bb"
+       "size": ""
       },
       {
        "street": "river",
-       "pos": "BB",
+       "pos": "SB",
        "action": "check",
        "size": ""
       },
       {
        "street": "river",
        "pos": "CO",
-       "action": "bet",
-       "size": "44 bb",
+       "action": "raise",
+       "size": "21 bb",
        "q": {
         "vStart": 1780,
         "vEnd": 1810,
         "joinPrev": true,
         "depth": "подробно",
-        "explain": "<b>Небубновый ривер почти не усилил соперника — продолжаем историю про короля.</b> Доблеф выбивает даму-иксы и пропущенные дро; мастер-класс, топ-пара обязана пасовать.",
+        "explain": "Небубновый ривер почти не усилил соперника — продолжаем историю про короля. Доблеф выбивает даму-иксы и пропущенные дро; мастер-класс, топ-пара обязана пасовать.",
         "options": [
          {
           "id": "r1",
-          "label": "Бет",
-          "type": "bet",
+          "label": "Рейз",
+          "type": "raise",
           "grade": "best",
-          "size": "42.9 bb",
+          "size": "21 bb",
           "hero": true
          },
          {
           "id": "r2",
           "label": "Чек",
-          "type": "check",
-          "grade": "mistake",
           "size": "",
+          "type": "check",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "33%",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Олл-ин",
+          "size": "олл‑ин",
+          "type": "raise",
+          "grade": "mistake",
           "hero": false
          }
-        ]
+        ],
+        "contPrev": false
        }
+      },
+      {
+       "street": "river",
+       "pos": "SB",
+       "action": "fold",
+       "size": ""
       }
      ],
      "cards": {
       "CO": [
-       "Jh",
-       "Th"
+       "7h",
+       "5h"
+      ],
+      "SB": [
+       "8s",
+       "9s"
       ]
      },
-     "hidden": true
+     "hidden": true,
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -13036,5 +13174,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784757189907
+ "publishedAt": 1784758012216
 }
