@@ -1037,7 +1037,7 @@
          {
           "id": "p1",
           "label": "Олл-ин",
-          "size": "",
+          "size": "олл‑ин",
           "type": "raise",
           "grade": "best",
           "hero": false
@@ -1062,7 +1062,7 @@
           "id": "o4",
           "label": "4-бет",
           "size": "",
-          "type": "bet",
+          "type": "raise",
           "grade": "best",
           "hero": false
          }
@@ -1098,8 +1098,16 @@
           "id": "o2",
           "label": "Рейз",
           "size": "25%",
-          "type": "bet",
+          "type": "raise",
           "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Рейз",
+          "size": "60%",
+          "type": "raise",
+          "grade": "best",
           "hero": false
          }
         ],
@@ -1190,7 +1198,7 @@
           "id": "o2",
           "label": "Рейз",
           "size": "33%",
-          "type": "bet",
+          "type": "raise",
           "grade": "ok",
           "hero": false
          },
@@ -1198,8 +1206,16 @@
           "id": "o3",
           "label": "Рейз",
           "size": "66%",
-          "type": "bet",
+          "type": "raise",
           "grade": "best",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Олл-ин",
+          "size": "олл‑ин",
+          "type": "raise",
+          "grade": "ok",
           "hero": false
          }
         ],
@@ -1234,18 +1250,10 @@
          },
          {
           "id": "o2",
-          "label": "Колл",
-          "size": "",
-          "type": "call",
-          "grade": "best",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "size": "3x",
+          "label": "Олл-ин",
+          "size": "олл‑ин",
           "type": "raise",
-          "grade": "ok",
+          "grade": "best",
           "hero": false
          }
         ],
@@ -12275,5 +12283,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784738266959
+ "publishedAt": 1784738481090
 }
