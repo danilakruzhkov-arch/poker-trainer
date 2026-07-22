@@ -1597,23 +1597,62 @@
      "heroPos": "BB",
      "heroCards": [
       "Ad",
-      "Kc"
+      "Kh"
      ],
      "stacks": {
-      "BB": 70,
-      "UTG": 70
+      "BB": 82.5,
+      "UTG": 80,
+      "SB": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null,
+      "BTN": null
      },
      "profiles": {
       "UTG": {
-       "status": "reg",
+       "status": "",
        "style": "tight"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Kd",
-      "6d",
-      "3s",
-      "2c",
+      "Kc",
+      "5d",
+      "3d",
+      "6c",
       ""
      ],
      "video": {
@@ -1631,7 +1670,41 @@
        "street": "preflop",
        "pos": "BB",
        "action": "call",
-       "size": "2.2 bb"
+       "size": "2.2 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "2.2 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "8 bb",
+          "type": "raise",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 917,
+        "vEnd": 1082,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
@@ -1649,7 +1722,41 @@
        "street": "flop",
        "pos": "BB",
        "action": "raise",
-       "size": "9 bb"
+       "size": "9 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "9 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
@@ -1661,7 +1768,41 @@
        "street": "turn",
        "pos": "BB",
        "action": "bet",
-       "size": "13.5 bb"
+       "size": "13.5 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "ok",
+          "size": "13.5 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Бет",
+          "size": "75%",
+          "type": "bet",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "turn",
@@ -1675,17 +1816,17 @@
        "action": "call",
        "size": "60 bb",
        "q": {
-        "vStart": 1045,
-        "vEnd": 1075,
+        "vStart": 0,
+        "vEnd": 0,
         "depth": "подробно",
-        "explain": "<b>Наш туз бубновый блокирует основные Ax-блефы флеш-дро, в диапазоне пуша — сеты и две пары.</b> Блефов недостаточно, 70бб надо пасовать: классическая ошибка — влюбился в карту и вылетел на сет троек.",
+        "explain": "Наш туз бубновый блокирует основные Ax-блефы флеш-дро, в диапазоне пуша — сеты и две пары. Блефов недостаточно, 70бб надо пасовать: классическая ошибка — влюбился в карту и вылетел на сет троек.",
         "options": [
          {
           "id": "t1",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
@@ -1693,20 +1834,24 @@
           "label": "Колл",
           "type": "call",
           "grade": "mistake",
-          "size": "",
+          "size": "60 bb",
           "hero": true
          }
-        ]
+        ],
+        "joinPrev": true,
+        "contPrev": false
        }
       }
      ],
      "cards": {
       "BB": [
        "Ad",
-       "Kc"
+       "Kh"
       ]
      },
-     "hidden": false
+     "hidden": false,
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12589,5 +12734,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784748067092
+ "publishedAt": 1784748785961
 }
