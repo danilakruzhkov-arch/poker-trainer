@@ -162,6 +162,7 @@
   .fbtoggle{width:100%;background:none;border:1px dashed var(--stroke);color:var(--muted);border-radius:11px;padding:9px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
   .fbtoggle:hover{color:var(--text);border-color:var(--muted)}
   .fbform{margin-top:8px;background:var(--field);border:1px solid var(--stroke);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:8px}
+  .fbform[hidden]{display:none}   /* author display:flex would otherwise override the UA [hidden] rule — keep it collapsed until «Сообщить» is pressed */
   .fblbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
   .fbcats{display:flex;flex-wrap:wrap;gap:6px}
   .fbcat{font:inherit;font-size:11.5px;padding:5px 10px;border-radius:999px;border:1px solid var(--stroke);background:transparent;color:var(--muted);cursor:pointer}
@@ -462,6 +463,27 @@
   .authuser .out{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:999px}
   .authuser .out:hover{color:var(--text);background:var(--field-lite)}
   @media(max-width:560px){.authslot{top:10px;right:10px}.authbtn{padding:5px 10px}.authuser .anm{max-width:74px}}
+  .authstat{background:var(--chip);color:var(--text);border:1px solid var(--stroke);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+  .authstat:hover{border-color:var(--brass)}
+  @media(max-width:560px){.authstat{padding:5px 9px;font-size:12px}}
+  /* stats modal (3c) */
+  .statbox{position:relative;max-width:440px;width:100%;text-align:left}
+  .statclose{position:absolute;top:8px;right:10px;background:none;border:0;color:var(--muted);font-size:23px;line-height:1;cursor:pointer;padding:2px 6px}
+  .statclose:hover{color:var(--text)}
+  .statmsg{color:var(--muted);font-size:13px;padding:16px 2px;text-align:center}
+  .stbig{text-align:center;padding:4px 0 14px}
+  .stbignum{font-size:46px;font-weight:800;color:var(--brass);line-height:1}
+  .stbiglbl{font-size:12px;color:var(--muted);margin-top:4px}
+  .stbreak{display:flex;gap:8px;margin-bottom:15px}
+  .stb{flex:1;background:var(--field);border:1px solid var(--stroke);border-radius:11px;padding:9px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
+  .stb .num{font-size:20px;font-weight:800}
+  .stb .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .stsec{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:2px 0 9px}
+  .strow{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .stname{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .stbar{width:78px;height:7px;background:var(--field-lite);border-radius:99px;overflow:hidden;flex:none}
+  .stbar span{display:block;height:100%;background:var(--brass)}
+  .stnum{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;min-width:58px;text-align:right}
 </style>
 
 <div class="wrap" id="wrap">
@@ -519,6 +541,9 @@
 <div class="modal" id="authGate"><div class="box authbox"><h4>Редактор раздач</h4><p class="authp">Доступ к редактору защищён паролем. Тренажёр открыт всем.</p>
   <input id="authPass" type="password" placeholder="Пароль" autocomplete="off"><div class="autherr" id="authErr"></div>
   <div class="authrow"><button class="ghost" id="authCancel">Отмена</button><button class="primary" id="authOk">Войти</button></div></div></div>
+
+<div class="modal" id="statsGate"><div class="box statbox"><button class="statclose" id="statClose" aria-label="Закрыть">×</button><h4>Моя статистика</h4>
+  <div id="statsBody"></div></div></div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -578,7 +603,7 @@ function dispOptSize(s){return String(s==null?'':s).trim();}   // show an option
 // answer-option action picker: label + engine type. bet/raise/N-бет carry a size; олл-ин fixes the size; пас/чек/колл don't.
 const OPT_ACT=[{v:'fold',t:'fold',l:'Пас'},{v:'check',t:'check',l:'Чек'},{v:'call',t:'call',l:'Колл'},{v:'bet',t:'bet',l:'Бет',sized:true},{v:'raise',t:'raise',l:'Рейз',sized:true},{v:'3bet',t:'raise',l:'3-бет',sized:true},{v:'4bet',t:'raise',l:'4-бет',sized:true},{v:'5bet',t:'raise',l:'5-бет',sized:true},{v:'allin',t:'raise',l:'Олл-ин',allin:true}];
 function optActMeta(v){return OPT_ACT.find(a=>a.v===v)||OPT_ACT.find(a=>a.v==='raise');}
-function optActVal(o){if(o.allin||isAllinSize(o.size)||/олл/i.test(o.label||''))return 'allin';const byL=OPT_ACT.find(a=>a.l===(o.label||''));if(byL)return byL.v;const byT=OPT_ACT.find(a=>a.t===o.type);return byT?byT.v:'raise';}   // label wins; else fall back to the first action of this engine-type
+function optActVal(o){if(o.allin||isAllinSize(o.size)||/^олл/i.test((o.label||'').trim()))return 'allin';/* ^олл, not /олл/ — «Колл» contains "олл" */const byL=OPT_ACT.find(a=>a.l===(o.label||''));if(byL)return byL.v;const byT=OPT_ACT.find(a=>a.t===o.type);return byT?byT.v:'raise';}   // label wins; else fall back to the first action of this engine-type
 
 /* ===== hand model (v5): hand.actions[] = user-authored decisions in order.
    resolve() replays the hand — auto-filling passive folds/checks, tracking the betting round,
@@ -721,20 +746,38 @@ function renderTable(container,v,reveal){
   container.innerHTML=html;
 }
 function whoText(v){const stk=v.stacks[v.heroPos];const rem=(stk!=null&&stk!=='')?Math.max(0,Math.round((stk-((v.contrib||{})[v.heroPos]||0))*10)/10):stk;const pre=v.street==='preflop'?'Твой ход':STREET_RU[v.street];return `${pre} — <b>${v.heroPos}</b>${rem!=null&&rem!==''?' · '+rem+' bb':''}`;}
+// Context line above the answer options. Describes the street from the hero's seat: what the hero
+// already did THIS street (if anything), then the villain aggression he now faces — so a re-raise spot
+// reads "Ты открываешь до 2.5, BTN 3-бетит до 8", not just "BTN рейзит".
 function ctxText(v){
   const hand=handText(v.heroCards);
-  if(v.street==='preflop'){
-    const agg=[...(v.history.preflop||[])].reverse().find(a=>a.action==='raise'&&a.pos!==v.heroPos);
-    if(agg)return `${agg.pos} рейзит${agg.size?' до '+agg.size:''}, до тебя. У тебя ${hand}.`;
-    const limp=[...(v.history.preflop||[])].reverse().find(a=>a.action==='call'&&a.pos!==v.heroPos);
-    if(limp)return `${limp.pos} лимпит, до тебя. У тебя ${hand}.`;
-    return `Сфолдили до тебя. У тебя ${hand}.`;
+  const hp=v.heroPos, pre=v.street==='preflop';
+  const cur=(v.history[v.street]||[]).filter(a=>a.pos);
+  const board=pre?'':`${STREET_RU[v.street]} ${v.board.map(cardText).join(' ')}. `;
+  // count raises up to (and incl.) a given action → name the preflop level: 1=open, 2=3-бет, 3=4-бет, 4+=5-бет
+  const raisesUpto=t=>{let n=0;for(const a of cur){if(a.action==='raise')n++;if(a===t)break;}return n;};
+  const raiseWord=(n,hero)=>n<=1?(hero?'открываешь до':'открывает до'):n===2?(hero?'3-бетишь до':'3-бетит до'):n===3?(hero?'4-бетишь до':'4-бетит до'):(hero?'5-бетишь до':'5-бетит до');
+  const heroActs=cur.filter(a=>a.pos===hp&&a.action!=='fold');
+  const heroLast=heroActs[heroActs.length-1]||null;
+  const heroAt=heroLast?cur.lastIndexOf(heroLast):-1;
+  // the villain aggression the hero faces now = last bet/raise by a villain AFTER the hero's last action
+  const faced=[...cur.slice(heroAt+1)].reverse().find(a=>a.pos!==hp&&(a.action==='bet'||a.action==='raise'))||null;
+  const parts=[];
+  if(heroLast){
+    if(heroLast.action==='raise')parts.push(pre?`Ты ${raiseWord(raisesUpto(heroLast),true)}${heroLast.size?' '+heroLast.size:''}`:`Ты рейзишь${heroLast.size?' до '+heroLast.size:''}`);
+    else if(heroLast.action==='bet')parts.push(`Ты ставишь${heroLast.size?' '+heroLast.size:''}`);
+    else if(heroLast.action==='call')parts.push(`Ты коллируешь`);
+    else if(heroLast.action==='check')parts.push(`Ты чекаешь`);
   }
-  const cur=v.history[v.street]||[], bet=[...cur].reverse().find(a=>(a.action==='bet'||a.action==='raise')&&a.pos!==v.heroPos);
-  const villainActed=cur.some(a=>a.pos!==v.heroPos);   // did anyone act before the hero on THIS street?
-  let s=`${STREET_RU[v.street]} ${v.board.map(cardText).join(' ')}. `;
-  s+=bet?`${bet.pos} ${bet.action==='raise'?'рейзит':'ставит'}${bet.size?' '+bet.size:''}. `:(villainActed?`Чек до тебя. `:`Ты ходишь первым. `);
-  return s+`У тебя ${hand}.`;
+  if(faced){
+    if(faced.action==='raise')parts.push(pre?`${faced.pos} ${raiseWord(raisesUpto(faced),false)}${faced.size?' '+faced.size:''}`:`${faced.pos} рейзит${faced.size?' до '+faced.size:''}`);
+    else parts.push(`${faced.pos} ставит${faced.size?' '+faced.size:''}`);
+  }else if(!heroLast){
+    if(pre){const limp=[...cur].reverse().find(a=>a.action==='call'&&a.pos!==hp);parts.push(limp?`${limp.pos} лимпит, до тебя`:`Сфолдили до тебя`);}
+    else{const villActed=cur.some(a=>a.pos!==hp&&a.action!=='fold');parts.push(villActed?`Чек до тебя`:`Ты ходишь первым`);}
+  }
+  if(!parts.length)parts.push('Твой ход');
+  return `${board}${parts.join(', ')}. У тебя ${hand}.`;
 }
 
 /* ===== TRAINER ===== */
@@ -765,8 +808,7 @@ function replayInto(container,v,onDone){clearReplay();
   _replayTimers.push(setTimeout(()=>{renderTable(container,v);if(onDone)onDone();},STEP*(seq.length+1)));}   // settle on the real decision view
 // clip countdown: YouTube's scrubber shows the whole source video, so we overlay a timer that counts down to the
 // segment's end (where &end auto-pauses). It's a wall-clock estimate from press-play — may drift a second on buffering.
-let TIMERON=(()=>{try{return localStorage.getItem('pk_timer')!=='0';}catch(e){return true;}})();
-function setTimerOn(on){TIMERON=!!on;try{localStorage.setItem('pk_timer',on?'1':'0');}catch(e){}}
+const TIMERON=true;   // the segment timer always lives over the video (no toggle) — it's what keeps players inside the clip
 let VTIMERS=[];
 function fmtCountdown(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
 function startClipTimer(wrap,dur){if(!TIMERON||!(dur>0)||!wrap)return;
@@ -850,7 +892,7 @@ function showSheet(v,res){
     <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
     <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street,r.pf)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
-    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${TIMERON?'on':''}" id="sheetTimer" aria-pressed="${TIMERON}">Таймер отрезка: ${TIMERON?'вкл':'выкл'}</button><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
+    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
     <div class="hint">${v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'Видео стартует автоматически. В артефакте embed режет CSP — открой по ссылке ↗.':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.'}</div>
     <div class="fbwrap"><button class="fbtoggle" id="fbToggle">⚑ Сообщить об ошибке</button>
@@ -868,9 +910,6 @@ function showSheet(v,res){
     // basic autoplay of the review clip; disabled where YouTube embeds are blocked (sandboxed artifact) so the facade stays clean
     if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac);},420);}
   const sa=$('sheetAuto');if(sa)sa.onclick=()=>{setAutoplay(!AUTOPLAY);sa.className='vauto '+(AUTOPLAY?'on':'');sa.setAttribute('aria-pressed',AUTOPLAY);sa.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
-  const stg=$('sheetTimer');if(stg)stg.onclick=()=>{setTimerOn(!TIMERON);stg.className='vauto '+(TIMERON?'on':'');stg.setAttribute('aria-pressed',TIMERON);stg.textContent='Таймер отрезка: '+(TIMERON?'вкл':'выкл');
-    const wrap=$('sheet').querySelector('.video');
-    if(!TIMERON)clearClipTimers();else if(wrap&&wrap.querySelector('iframe')&&+wrap.dataset.dur>0){clearClipTimers();startClipTimer(wrap,+wrap.dataset.dur);}};
   $('next').onclick=next;
   wireFeedback();
 }
@@ -890,7 +929,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.3';
+const APP_VER='2026-07-22.4';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1600,7 +1639,23 @@ function sizeBBpct(size,potBB,showPct){const s=String(size==null?'':size).trim()
   if(bb==null)return s;
   const pct=(showPct&&potBB>0)?Math.round(bb/potBB*100):null;
   return `${bb} bb${pct!=null?` <span class="pct">(${pct}%)</span>`:''}`;}
-function optSizeHTML(o,v){if(!o||!o.size)return '';const t=sizeBBpct(o.size,v?potNum(v):0,v&&v.street!=='preflop');return t?`<span class="u num">${t}</span>`:'';}
+// remaining hero stack (bb) before the pending decision — the «Олл-ин» option shows this
+function heroRemBB(v){if(!v||!v.stacks)return null;const stk=v.stacks[v.heroPos];if(stk==null||stk==='')return null;return Math.max(0,Math.round((stk-((v.contrib||{})[v.heroPos]||0))*10)/10);}
+// bb the hero must ADD to call the current bet on this street (mirrors the resolve engine's bet levels) — the «Колл» option shows this
+function heroCallBB(v){if(!v)return 0;const st=v.street,hist=((v.history&&v.history[st])||[]).filter(a=>a.pos);
+  const com={};let level=st==='preflop'?1:0;if(st==='preflop'){com['SB']=0.5;com['BB']=1;}
+  hist.forEach(a=>{const m=String(a.size||'').match(/-?\d+(?:\.\d+)?/);const n=m?parseFloat(m[0]):null;
+    if((a.action==='bet'||a.action==='raise')&&n!=null){com[a.pos]=n;if(n>level)level=n;}
+    else if(a.action==='call'){com[a.pos]=level;}});
+  return Math.max(0,Math.round((level-(com[v.heroPos]||0))*10)/10);}
+function optSizeHTML(o,v){
+  if(!o)return '';
+  const isAllin=o.allin||isAllinSize(o.size)||/^олл/i.test((o.label||'').trim());   // ^олл, not /олл/ — the latter also matches «Колл» (К-олл)
+  if(isAllin){const r=heroRemBB(v);return r?`<span class="u num">${r} bb</span>`:'';}   // all-in = the hero's whole remaining stack
+  if(o.type==='call'||(o.label||'')==='Колл'){const c=heroCallBB(v);return c>0?`<span class="u num">${c} bb</span>`:'';}   // call = amount to match
+  if(!o.size)return '';
+  const t=sizeBBpct(o.size,v?potNum(v):0,v&&v.street!=='preflop');return t?`<span class="u num">${t}</span>`:'';
+}
 // A generic «Рейз» answer option gets relabelled to its street-accurate level (3-бет/4-бет/5-бет), inferred from
 // how many raises preceded it preflop. The timeline (ход розыгрыша) stays generic «Рейз» per spec — this only
 // sharpens the locked ANSWER wording. Postflop raises keep their label (there's no N-bet concept there).
@@ -1746,6 +1801,8 @@ let editorAuthed=(()=>{try{return sessionStorage.getItem('pk_editor_ok')==='1';}
 function openEditor(){if(editorAuthed){switchView('admin');return;}$('authErr').textContent='';$('authPass').value='';$('authGate').classList.add('show');setTimeout(()=>{try{$('authPass').focus();}catch(e){}},50);}
 function tryAuth(){if($('authPass').value===EDITOR_PASS){editorAuthed=true;try{sessionStorage.setItem('pk_editor_ok','1');}catch(e){}$('authGate').classList.remove('show');switchView('admin');}else{$('authErr').textContent='Неверный пароль';$('authPass').value='';try{$('authPass').focus();}catch(e){}}}
 $('authOk').onclick=tryAuth;$('authCancel').onclick=()=>$('authGate').classList.remove('show');
+if($('statClose'))$('statClose').onclick=()=>$('statsGate').classList.remove('show');
+if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('statsGate').classList.remove('show');};
 $('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth();});
 $('tab-train').onclick=()=>switchView('train');$('tab-admin').onclick=openEditor;
 $('toHome').onclick=showHome;
@@ -1771,7 +1828,8 @@ function renderAuth(){
   if(!authClient()){slot.innerHTML='';return;}                     // SDK not ready — no control shown
   if(CURUSER){
     const av=userAvatar(CURUSER),nm=userName(CURUSER);
-    slot.innerHTML='<span class="authuser">'+(av?'<img src="'+esc(av)+'" alt="" referrerpolicy="no-referrer">':'')+'<span class="anm">'+esc(nm)+'</span><button class="out" id="authOut">Выйти</button></span>';
+    slot.innerHTML='<button class="authstat" id="authStat">Статистика</button><span class="authuser">'+(av?'<img src="'+esc(av)+'" alt="" referrerpolicy="no-referrer">':'')+'<span class="anm">'+esc(nm)+'</span><button class="out" id="authOut">Выйти</button></span>';
+    const st=$('authStat');if(st)st.onclick=openStats;
     const o=$('authOut');if(o)o.onclick=authSignOut;
   }else{
     slot.innerHTML='<button class="authbtn" id="authIn">'+GOOGLE_SVG+'Войти</button>';
@@ -1793,6 +1851,27 @@ async function initAuth(){
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
   renderAuth();if(CURUSER)flushAttempts();                    // push any progress queued while signed-out/offline
   try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();if(CURUSER)flushAttempts();});}catch(e){}
+}
+// --- Stage 3c: personal stats, read from attempts (RLS returns only this user's rows) ---
+async function openStats(){
+  const c=authClient();if(!c||!CURUSER){toast('Нужен вход',1);return;}
+  const g=$('statsGate');if(g)g.classList.add('show');
+  const body=$('statsBody');if(body)body.innerHTML='<div class="statmsg">Загружаю…</div>';
+  let rows=[];
+  try{const {data,error}=await c.from('attempts').select('pack,pack_title,grade');if(!error&&Array.isArray(data))rows=data;}catch(e){}
+  renderStats(rows);
+}
+function renderStats(rows){
+  const body=$('statsBody');if(!body)return;
+  if(!rows.length){body.innerHTML='<div class="statmsg">Пока нет ответов. Пройди пару раздач — здесь появится статистика.</div>';return;}
+  const total=rows.length,best=rows.filter(r=>r.grade==='best').length,okc=rows.filter(r=>r.grade==='ok').length,bad=rows.filter(r=>r.grade==='mistake').length;
+  const acc=Math.round(best/total*100);
+  const packs={};rows.forEach(r=>{const k=r.pack||'—';const p=packs[k]||(packs[k]={title:r.pack_title||k,total:0,best:0});p.total++;if(r.grade==='best')p.best++;});
+  const packRows=Object.values(packs).sort((a,b)=>b.total-a.total).map(p=>{const a=Math.round(p.best/p.total*100);
+    return `<div class="strow"><div class="stname">${esc(p.title)}</div><div class="stbar"><span style="width:${a}%"></span></div><div class="stnum">${a}% · ${p.total}</div></div>`;}).join('');
+  body.innerHTML=`<div class="stbig"><div class="stbignum num">${acc}%</div><div class="stbiglbl">верных решений из ${total}</div></div>`+
+    `<div class="stbreak"><div class="stb"><span class="num g-best">${best}</span><span class="l">Верно</span></div><div class="stb"><span class="num g-ok">${okc}</span><span class="l">Погранич.</span></div><div class="stb"><span class="num g-mistake">${bad}</span><span class="l">Ошибки</span></div></div>`+
+    `<div class="stsec">По подборкам</div>${packRows}`;
 }
 initAdmin();showHome();
 try{flushFbQueue();}catch(e){}   // if a Supabase sink is configured, push any feedback queued while it was offline
