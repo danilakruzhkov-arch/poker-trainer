@@ -2191,104 +2191,6 @@
     },
     {
      "pack": "wsopme",
-     "title": "Колл Фоксона с Туз-Валет",
-     "players": 9,
-     "heroPos": "CO",
-     "heroCards": [
-      "Ac",
-      "Jd"
-     ],
-     "stacks": {
-      "CO": 55,
-      "UTG": 50,
-      "BB": 40
-     },
-     "profiles": {
-      "UTG": {
-       "status": "rec",
-       "style": "aggr"
-      },
-      "BB": {
-       "status": "rec",
-       "style": "aggr"
-      }
-     },
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/yATrt1addik"
-     },
-     "channel": "Андрей Козленко",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "UTG",
-       "action": "raise",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "call",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "raise",
-       "size": "7 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "UTG",
-       "action": "raise",
-       "size": "50 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "call",
-       "size": "50 bb",
-       "q": {
-        "vStart": 1230,
-        "vEnd": 1260,
-        "depth": "подробно",
-        "explain": "<b>Соперник ведёт себя зажигательно и пушит очень широко.</b> Туз-Валет отлично стоит против его диапазона олл-ина — считанный по поведению эксплойт-колл, the sickest call ever.",
-        "options": [
-         {
-          "id": "p1",
-          "label": "Колл",
-          "type": "call",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "p2",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "ok",
-          "size": "",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "CO": [
-       "Ac",
-       "Jd"
-      ]
-     }
-    },
-    {
-     "pack": "wsopme",
      "title": "Олл-ин девятками на 20бб",
      "players": 9,
      "heroPos": "SB",
@@ -12906,5 +12808,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784754543378
+ "publishedAt": 1784754570566
 }
