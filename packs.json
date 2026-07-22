@@ -1587,7 +1587,8 @@
        "As",
        "Kd"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -12588,5 +12589,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784747899051
+ "publishedAt": 1784748067092
 }
