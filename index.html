@@ -998,7 +998,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.11';
+const APP_VER='2026-07-22.12';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1727,7 +1727,7 @@ function wireForm(){
     if($('f-depth'))$('f-depth').onchange=()=>{readForm();syncPreview();};
   }
 }
-function previewHand(){const h=JSON.parse(JSON.stringify(F));delete h.curQ;delete h.editIndex;delete h._baseline;delete h._addStreet;h.actions.forEach(a=>{if(a.q&&!a.q.explain)a.q.explain=null;});return h;}
+function previewHand(){const h=JSON.parse(JSON.stringify(F));delete h.curQ;delete h.editIndex;delete h.editColId;delete h._baseline;delete h._addStreet;h.actions.forEach(a=>{if(a.q&&!a.q.explain)a.q.explain=null;});return h;}
 function fullView(h){const res=resolve(h),last=res.streets[res.streets.length-1],street=last?last.street:'preflop';
   const history={preflop:[],flop:[],turn:[],river:[]};res.rows.forEach(r=>{if(r.pos&&history[r.street])history[r.street].push({pos:r.pos,action:r.action,size:r.size});});
   return {players:h.players,heroPos:h.heroPos,heroCards:heroCardsOf(h),cards:h.cards||{},stacks:h.stacks||{},profiles:h.profiles||{},street,board:(h.board||[]).slice(0,BOARDN[street]),history,contrib:contribUpTo(res,res.rows.length-1,h.players),options:[],video:h.video,channel:h.channel};}
@@ -1811,18 +1811,21 @@ function validateHand(h){const issues=[];const qs=questionsOf(h);
   const hc=heroCardsOf(h);if(!hc[0]||!hc[1])issues.push('Не указаны твои карты');
   return issues;}
 function saveHand(){readForm();const h=previewHand();const issues=validateHand(h);if(issues.length){showModal(issues);return false;}
-  if(F.editIndex!=null){SET[F.editIndex]=h;toast('Раздача #'+(F.editIndex+1)+' обновлена');}else{SET.push(h);toast('Раздача добавлена ('+SET.length+')');}
+  // save into the pack the hand was opened from — never whatever pack a background cloud-sync may have made active.
+  const col=(F.editColId&&findCol(F.editColId))||activeCol();const ci=COLS.indexOf(col);if(ci>=0&&ci!==curCol)useCol(ci);
+  if(F.editIndex!=null&&F.editIndex>=0&&F.editIndex<SET.length){SET[F.editIndex]=h;toast('Раздача #'+(F.editIndex+1)+' обновлена');}
+  else{SET.push(h);toast('Раздача добавлена ('+SET.length+')');}   // stale / out-of-range index → append, never clobber a foreign slot
   F=blankHand();buildForm();renderSet();persist();backupSnapshot();markDraftSaved();return true;}
-function editHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;F=migrateCards(JSON.parse(JSON.stringify(SET[idx])));F.curQ=0;F.editIndex=idx;if(pu){F.unit=pu;F.bbChips=pb;}buildForm();renderSet();markDraftSaved();window.scrollTo({top:0,behavior:'smooth'});}
+function editHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;F=migrateCards(JSON.parse(JSON.stringify(SET[idx])));F.curQ=0;F.editIndex=idx;F.editColId=activeCol().id;if(pu){F.unit=pu;F.bbChips=pb;}buildForm();renderSet();markDraftSaved();window.scrollTo({top:0,behavior:'smooth'});}
 // duplicate a hand: clone it into the set right after the original and open the copy for editing (original untouched)
 function duplicateHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;const clone=migrateCards(JSON.parse(JSON.stringify(SET[idx])));delete clone.source;clone.title=(clone.title?clone.title+' ':'')+'(копия)';
   SET.splice(idx+1,0,clone);persist();
-  F=migrateCards(JSON.parse(JSON.stringify(clone)));F.curQ=0;F.editIndex=idx+1;if(pu){F.unit=pu;F.bbChips=pb;}
+  F=migrateCards(JSON.parse(JSON.stringify(clone)));F.curQ=0;F.editIndex=idx+1;F.editColId=activeCol().id;if(pu){F.unit=pu;F.bbChips=pb;}
   buildForm();renderSet();markDraftSaved();window.scrollTo({top:0,behavior:'smooth'});toast('Раздача скопирована — правь копию и жми «Обновить»');}
 // ===== unsaved-draft guard: switching hands / leaving the editor with un-saved edits must ask first =====
 // fingerprint of the hand's real content (transient UI state stripped) — compared against the baseline captured
 // when the hand was opened or last saved. Divergence == unsaved edits.
-function draftKey(h){h=h||F;if(!h)return '';try{const c=JSON.parse(JSON.stringify(h));['curQ','editIndex','unit','bbChips','_addStreet','_baseline'].forEach(k=>delete c[k]);return JSON.stringify(c);}catch(e){return '';}}
+function draftKey(h){h=h||F;if(!h)return '';try{const c=JSON.parse(JSON.stringify(h));['curQ','editIndex','editColId','unit','bbChips','_addStreet','_baseline'].forEach(k=>delete c[k]);return JSON.stringify(c);}catch(e){return '';}}
 function markDraftSaved(){if(!F)return;try{readForm();}catch(e){}F._baseline=draftKey(F);}
 function isDirtyDraft(){if(!F||F._baseline==null)return false;try{readForm();}catch(e){}return draftKey(F)!==F._baseline;}
 let _guardCb=null,_leaving=false;
@@ -1896,7 +1899,7 @@ function ghToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){retu
 function setGhToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
 function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
 // take a plain cols array (from the cloud) and make it a live, migrated COLS
-function adoptCols(cols){COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});curCol=COLS.length-1;useCol(curCol);}
+function adoptCols(cols){const prevId=COLS[curCol]&&COLS[curCol].id;COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});const keep=prevId?COLS.findIndex(c=>c.id===prevId):-1;curCol=keep>=0?keep:COLS.length-1;useCol(curCol);}
 // adopt the cloud packs as the shared truth, but keep this browser's personal 'Мой набор' (it never goes to the cloud)
 function adoptFromCloud(serverCols){const mine=COLS.find(c=>c&&c.id==='mine');const cols=serverCols.filter(c=>c&&c.id!=='mine');if(mine)cols.push(mine);adoptCols(cols);}
 async function loadPublished(){try{const r=await fetch(GH_FILE+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return null;const j=await r.json();if(j&&Array.isArray(j.cols))return j;}catch(e){}return null;}
@@ -2036,13 +2039,19 @@ async function syncPacks(){                                           // adopt f
   try{const pub=await loadPublished();
     if(!pub){if(_dirty)schedulePublish();return;}                     // offline / no cloud yet: keep local, retry the push if we have unsynced edits
     const fresher=!PUBLISHED||((pub.publishedAt||0)>(PUBLISHED.publishedAt||0));
-    PUBLISHED=pub;
     if(!_dirty){                                                      // clean browser: the cloud wins (personal 'Мой набор' is preserved)
+      // NEVER rebuild COLS / curCol / SET while the editor is open or a draft is unsaved — doing so used to move the
+      // active pack out from under an in-progress edit, so the next save landed in (and overwrote) the wrong pack.
+      // Defer: leave PUBLISHED stale so a later sync adopts once the editor is idle.
+      const editing=($('view-admin')&&$('view-admin').style.display!=='none')||isDirtyDraft();
+      if(fresher&&editing){updSync('synced');return;}
+      PUBLISHED=pub;
       if(fresher){adoptFromCloud(pub.cols);persist(true);
         if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
         if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}}
       updSync('synced');
     }else{                                                            // this browser has edits the cloud doesn't — keep them and push up
+      PUBLISHED=pub;
       if(ghToken())schedulePublish();else updSync('unpushed');
     }
   }catch(e){}
