@@ -1457,7 +1457,13 @@
      "stacks": {
       "CO": 50,
       "HJ": 50,
-      "BTN": 60
+      "BTN": 60,
+      "SB": null,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null
      },
      "profiles": {
       "HJ": {
@@ -1465,8 +1471,36 @@
        "style": "aggr"
       },
       "BTN": {
-       "status": "reg",
+       "status": "",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -1511,36 +1545,38 @@
        "action": "call",
        "size": "8 bb",
        "q": {
-        "vStart": 392,
-        "vEnd": 424,
+        "vStart": 385,
+        "vEnd": 490,
         "depth": "подробно",
-        "explain": "<b>Колл 33 в сет-майнинг здесь допустимая, чуть лузовая линия.</b> Заплатить ~20k, чтобы разыграть ~200k банк, даёт огромные имплайд-оддсы, а против слегка переросшего сквиза Хельмута флэт оправдан, если умеешь играть постфлоп.",
+        "explain": "Колл 33 в сет-майнинг здесь допустимая, чуть лузовая линия. Заплатить ~20k, чтобы разыграть ~200k банк, даёт огромные имплайд-оддсы, а против слегка переросшего сквиза Хельмута флэт оправдан, если умеешь играть постфлоп.",
         "options": [
          {
           "id": "c1",
           "label": "Колл",
           "type": "call",
           "grade": "best",
-          "size": "",
+          "size": "8 bb",
           "hero": true
          },
          {
           "id": "c2",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "ok",
-          "size": "",
           "hero": false
          },
          {
           "id": "c3",
           "label": "4-бет",
+          "size": "",
           "type": "raise",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       },
       {
@@ -1580,7 +1616,9 @@
        "3d"
       ]
      },
-     "hidden": false
+     "hidden": false,
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12286,5 +12324,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784742899448
+ "publishedAt": 1784742919100
 }
