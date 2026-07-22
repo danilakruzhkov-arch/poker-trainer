@@ -2830,7 +2830,7 @@
          }
         ],
         "vStart": 1654,
-        "vEnd": 1814,
+        "vEnd": 1813,
         "depth": "подробно",
         "explain": null,
         "joinPrev": false,
@@ -3018,7 +3018,7 @@
        "9s"
       ]
      },
-     "hidden": true,
+     "hidden": false,
      "unit": "chips",
      "bbChips": "2000"
     },
@@ -13174,5 +13174,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784758012216
+ "publishedAt": 1784758039320
 }
