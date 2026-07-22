@@ -1579,7 +1579,8 @@
        "3s",
        "3d"
       ]
-     }
+     },
+     "hidden": true
     },
     {
      "pack": "wsopme",
@@ -12283,5 +12284,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784738672858
+ "publishedAt": 1784742858496
 }
