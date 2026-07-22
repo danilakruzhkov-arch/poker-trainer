@@ -1888,46 +1888,46 @@
      "heroPos": "BB",
      "heroCards": [
       "Kc",
-      "9c"
+      "6c"
      ],
      "stacks": {
-      "BB": 50,
-      "UTG": 50,
-      "CO": 50,
+      "BB": 150,
+      "UTG": null,
+      "CO": null,
       "SB": null,
-      "UTG+1": null,
+      "UTG+1": 54.2,
       "UTG+2": null,
-      "LJ": null,
+      "LJ": 283.3,
       "HJ": null,
       "BTN": null
      },
      "profiles": {
       "UTG": {
-       "status": "rec",
-       "style": "aggr"
+       "status": "",
+       "style": ""
       },
       "CO": {
        "status": "",
-       "style": "aggr"
+       "style": ""
       },
       "SB": {
        "status": "",
        "style": ""
       },
       "BB": {
-       "status": "",
-       "style": ""
+       "status": "fish",
+       "style": "aggr"
       },
       "UTG+1": {
-       "status": "",
-       "style": ""
+       "status": "fish",
+       "style": "aggr"
       },
       "UTG+2": {
        "status": "",
        "style": ""
       },
       "LJ": {
-       "status": "",
+       "status": "rec",
        "style": ""
       },
       "HJ": {
@@ -1953,13 +1953,13 @@
      "actions": [
       {
        "street": "preflop",
-       "pos": "UTG",
+       "pos": "UTG+1",
        "action": "raise",
-       "size": "2.5 bb"
+       "size": "2.3 bb"
       },
       {
        "street": "preflop",
-       "pos": "CO",
+       "pos": "LJ",
        "action": "call",
        "size": "2.5 bb"
       },
@@ -1967,10 +1967,10 @@
        "street": "preflop",
        "pos": "BB",
        "action": "raise",
-       "size": "6 bb",
+       "size": "5.4 bb",
        "q": {
         "vStart": 1157,
-        "vEnd": 1196,
+        "vEnd": 1182,
         "depth": "подробно",
         "explain": "Маленький сквиз K9s не решает никакой задачи и явно минусовый. Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
         "options": [
@@ -1995,7 +1995,7 @@
           "label": "Рейз",
           "type": "raise",
           "grade": "mistake",
-          "size": "6 bb",
+          "size": "5.4 bb",
           "hero": true
          }
         ],
@@ -2005,15 +2005,15 @@
       },
       {
        "street": "preflop",
-       "pos": "UTG",
+       "pos": "UTG+1",
        "action": "raise",
-       "size": "50 bb"
+       "size": "54.2 bb"
       },
       {
        "street": "preflop",
-       "pos": "CO",
+       "pos": "LJ",
        "action": "call",
-       "size": "50 bb"
+       "size": ""
       },
       {
        "street": "preflop",
@@ -2025,11 +2025,19 @@
      "cards": {
       "BB": [
        "Kc",
-       "9c"
+       "6c"
+      ],
+      "UTG+1": [
+       "Jh",
+       "Th"
+      ],
+      "LJ": [
+       "As",
+       "Jc"
       ]
      },
      "unit": "chips",
-     "bbChips": "2000"
+     "bbChips": "1200"
     },
     {
      "pack": "wsopme",
@@ -12748,5 +12756,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784753815420
+ "publishedAt": 1784754304696
 }
