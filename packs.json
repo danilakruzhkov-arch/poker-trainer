@@ -2347,109 +2347,6 @@
     },
     {
      "pack": "wsopme",
-     "title": "Колл олл-ина с Король-9",
-     "players": 9,
-     "heroPos": "HJ",
-     "heroCards": [
-      "Kh",
-      "9d"
-     ],
-     "stacks": {
-      "HJ": 20,
-      "BB": 20,
-      "UTG": 40,
-      "BTN": 25
-     },
-     "profiles": {
-      "BB": {
-       "status": "rec",
-       "style": "aggr"
-      },
-      "UTG": {
-       "status": "rec",
-       "style": "tight"
-      },
-      "BTN": {
-       "status": "rec",
-       "style": "aggr"
-      }
-     },
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/yATrt1addik"
-     },
-     "channel": "Андрей Козленко",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "UTG",
-       "action": "raise",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "call",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "call",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "raise",
-       "size": "20 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "call",
-       "size": "20 bb",
-       "q": {
-        "vStart": 1345,
-        "vEnd": 1375,
-        "depth": "подробно",
-        "explain": "<b>Король-9 доминирован, за спиной огромный стек — колл пуша сильно минусовый (~68% у пушера).</b> Так никогда не делайте: колл доминированным Король-9 отдаёт стек, для пушера это фантастика.",
-        "options": [
-         {
-          "id": "p1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "best",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "p2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "mistake",
-          "size": "",
-          "hero": true
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "HJ": [
-       "Kh",
-       "9d"
-      ]
-     }
-    },
-    {
-     "pack": "wsopme",
      "title": "Дамы пасуют на 4-бет",
      "players": 9,
      "heroPos": "CO",
@@ -12841,5 +12738,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784755292673
+ "publishedAt": 1784755305501
 }
