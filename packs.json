@@ -4614,6 +4614,137 @@
        "7c"
       ]
      }
+    },
+    {
+     "pack": "wsopme",
+     "title": "Хельмут пасует Туз-Даму на 4-бет",
+     "players": 9,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ah",
+      "Qh"
+     ],
+     "stacks": {
+      "BTN": 60,
+      "HJ": 60,
+      "SB": null,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "CO": null
+     },
+     "profiles": {
+      "HJ": {
+       "status": "",
+       "style": "tight"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "8 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "20 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1132,
+        "vEnd": 1140,
+        "depth": "подробно",
+        "explain": "Туз-Дама против 4-бет-диапазона стоит плохо — фолд стандартен. Альтернатива — вообще коллить префлоп, а не 3-бетить и фолдить, иначе сам становишься мишенью для 4-бет-блефа.",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "joinPrev": false,
+        "contPrev": false
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ah",
+       "Qh"
+      ]
+     },
+     "hidden": false,
+     "unit": "chips",
+     "bbChips": "2000"
     }
    ],
    "format": "offline",
@@ -12579,5 +12710,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784753739882
+ "publishedAt": 1784753746530
 }
