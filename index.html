@@ -812,6 +812,7 @@ function choose(btn,v){
   $('acts').querySelectorAll('.btn').forEach(b=>{b.disabled=true;const g=b.dataset.grade;
     if(b===btn)b.classList.add('pick-'+(grade==='best'?'best':grade==='ok'?'ok':'bad'));else if(g==='best')b.classList.add('reveal-best');else b.classList.add('dim');});
   renderPips();showSheet(v,{grade,id,pts});
+  logAttempt();   // record this answer for signed-in users (fire-and-forget; anon plays are skipped)
 }
 function opt(opts,id){return opts.find(o=>o.id===id);}
 // one answer option as a recap row: the option itself, its verdict colour, and chips for who chose it (ты / герой).
@@ -889,7 +890,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.2';
+const APP_VER='2026-07-22.3';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -918,6 +919,22 @@ function fbContext(){const p=PLAY[i],h=HANDS[p.hi],v=qView(h,p.k);const pk=opt(v
   return {pack:CURPACK.id,pack_title:CURPACK.title,hand:h.title||('#'+(p.hi+1)),street:v.street,q_index:p.k+1,q_total:p.stepCount||questionsOf(h).length,
     pick_label:optLabelDisp(pk,v.street,v.history&&v.history.preflop)||pk.label||'',pick_grade:answered[i]||'',
     hero_label:(opt(v.options,v.heroPick)||{}).label||''};}
+// --- progress log: one row per answered question, for signed-in users (Stage 3b). Writes via the
+//     supabase-js client so PostgREST sees the user's token (RLS: auth.uid() = user_id), NOT the anon key. ---
+function attemptRow(){const c=fbContext();
+  return {pack:c.pack,pack_title:c.pack_title,hand:c.hand,street:c.street,q_index:c.q_index,q_total:c.q_total,pick_label:c.pick_label,grade:c.pick_grade,hero_label:c.hero_label,app_ver:APP_VER,client_ts:new Date().toISOString()};}
+function atQueueGet(){try{return JSON.parse(localStorage.getItem('pk_attempts')||'[]')||[];}catch(e){return [];}}
+function atQueueSet(q){try{localStorage.setItem('pk_attempts',JSON.stringify(q));}catch(e){}}
+async function logAttempt(){
+  if(!CURUSER)return;                                       // progress is per-user; anonymous plays are not recorded
+  const c=authClient();const row=attemptRow();
+  if(c){try{const {error}=await c.from('attempts').insert(row);if(!error){flushAttempts();return;}}catch(e){}}
+  const q=atQueueGet();q.push(row);while(q.length>500)q.shift();atQueueSet(q);   // durable retry, capped at 500
+}
+async function flushAttempts(){
+  if(!CURUSER)return;const c=authClient();if(!c)return;const q=atQueueGet();if(!q.length)return;
+  try{const {error}=await c.from('attempts').insert(q);if(!error)atQueueSet([]);}catch(e){}
+}
 async function sendFeedback(rec){const note=$('fbNote');if(note)note.textContent='Отправляю…';
   let stored='local';
   if(supaEnabled()){const r=await supaInsert('feedback',[fbRow(rec)]);if(r.ok)stored='cloud';}
@@ -1774,8 +1791,8 @@ async function initAuth(){
   const c=authClient();
   if(!c){const s=$('authSlot');if(s)s.innerHTML='';return;}         // SDK unavailable (offline / artifact mode) — hide the control
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
-  renderAuth();
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();});}catch(e){}
+  renderAuth();if(CURUSER)flushAttempts();                    // push any progress queued while signed-out/offline
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();if(CURUSER)flushAttempts();});}catch(e){}
 }
 initAdmin();showHome();
 try{flushFbQueue();}catch(e){}   // if a Supabase sink is configured, push any feedback queued while it was offline
