@@ -388,8 +388,8 @@
   .guardbox .gtxt{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:14px}
   .guardbox .gbtns{display:flex;flex-direction:column;gap:8px}
   .guardbox .gbtns button{width:100%;margin:0}
-  .guardbox .gdiscard{background:transparent;border:1px solid var(--bad);color:#f0a6a4;font-weight:700}
-  .guardbox .gcancel{background:var(--chip);border:1px solid var(--stroke);color:var(--text);font-weight:700}
+  .modal .box.guardbox .gdiscard{background:transparent;border:1px solid var(--bad);color:#f0a6a4;font-weight:700}
+  .modal .box.guardbox .gcancel{background:var(--chip);border:1px solid var(--stroke);color:var(--text);font-weight:700}
   .authbox input{margin-bottom:8px}
   .authbox .autherr{color:var(--bad);font-size:12px;font-weight:700;min-height:16px;margin-bottom:8px}
   .authbox .authrow{display:flex;gap:8px}
@@ -998,7 +998,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.10';
+const APP_VER='2026-07-22.11';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
