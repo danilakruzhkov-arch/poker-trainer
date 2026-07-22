@@ -3145,7 +3145,7 @@
        "Js"
       ]
      },
-     "hidden": true,
+     "hidden": false,
      "unit": "chips",
      "bbChips": "2000"
     },
@@ -3159,20 +3159,59 @@
       "7d"
      ],
      "stacks": {
-      "BTN": 60,
-      "BB": 53
+      "BTN": 333.3,
+      "BB": null,
+      "SB": 50,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null
      },
      "profiles": {
       "BB": {
-       "status": "reg",
+       "status": "",
+       "style": ""
+      },
+      "SB": {
+       "status": "",
        "style": "tight"
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Jc",
-      "7s",
+      "Jh",
+      "7c",
       "4h",
-      "",
+      "Ks",
       ""
      ],
      "video": {
@@ -3184,17 +3223,51 @@
        "street": "preflop",
        "pos": "BTN",
        "action": "raise",
-       "size": "2.3 bb"
+       "size": "2.3 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2.3 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 1813,
+        "vEnd": 1960,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "preflop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "call",
-       "size": "2.3 bb"
+       "size": ""
       },
       {
        "street": "flop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "check",
        "size": ""
       },
@@ -3202,31 +3275,65 @@
        "street": "flop",
        "pos": "BTN",
        "action": "bet",
-       "size": "2 bb"
+       "size": "2.7 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "best",
+          "size": "2.7 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Бет",
+          "size": "7.2 bb",
+          "type": "bet",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
-       "pos": "BB",
+       "pos": "SB",
        "action": "raise",
-       "size": "9 bb"
+       "size": "6.7 bb"
       },
       {
        "street": "flop",
        "pos": "BTN",
        "action": "call",
-       "size": "9 bb",
+       "size": "",
        "q": {
-        "vStart": 1900,
-        "vEnd": 1930,
+        "vStart": 0,
+        "vEnd": 0,
         "depth": "подробно",
-        "explain": "<b>Против рейза большого агрессивного стека вторая пара стоит плохо: стрит/флеш-дро, две пары, сеты.</b> Тянуть семёрку было необязательно — колл рейза Король-7 привёл прямо под сет валетов.",
+        "explain": "Против рейза большого агрессивного стека вторая пара стоит плохо: стрит/флеш-дро, две пары, сеты. Тянуть семёрку было необязательно — колл рейза Король-7 привёл прямо под сет валетов.",
         "options": [
          {
           "id": "f1",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
@@ -3240,22 +3347,88 @@
          {
           "id": "f3",
           "label": "Рейз",
+          "size": "14.1 bb",
           "type": "raise",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": true,
+        "contPrev": false
        }
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "SB",
+       "action": "raise",
+       "size": "20 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "324.3 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "324.3 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "SB",
+       "action": "call",
+       "size": ""
       }
      ],
      "cards": {
       "BTN": [
        "Kh",
        "7d"
+      ],
+      "SB": [
+       "Js",
+       "Jc"
       ]
      },
-     "hidden": true
+     "hidden": true,
+     "unit": "chips",
+     "bbChips": "1500"
     },
     {
      "pack": "wsopme",
@@ -13087,5 +13260,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784758384457
+ "publishedAt": 1784759620378
 }
