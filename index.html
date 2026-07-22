@@ -384,6 +384,12 @@
   .modal .box button{width:100%;border:none;background:var(--brass);color:#1b1200;font-weight:800;padding:10px;border-radius:10px;cursor:pointer}
   .modal .box.authbox{border-color:var(--stroke)}
   .authbox .authp{color:var(--muted);font-size:12.5px;line-height:1.5;margin-bottom:12px}
+  .modal .box.guardbox{border-color:var(--brass)}
+  .guardbox .gtxt{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:14px}
+  .guardbox .gbtns{display:flex;flex-direction:column;gap:8px}
+  .guardbox .gbtns button{width:100%;margin:0}
+  .guardbox .gdiscard{background:transparent;border:1px solid var(--bad);color:#f0a6a4;font-weight:700}
+  .guardbox .gcancel{background:var(--chip);border:1px solid var(--stroke);color:var(--text);font-weight:700}
   .authbox input{margin-bottom:8px}
   .authbox .autherr{color:var(--bad);font-size:12px;font-weight:700;min-height:16px;margin-bottom:8px}
   .authbox .authrow{display:flex;gap:8px}
@@ -553,6 +559,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="box"><h4 id="modalTitle">Заполни поля</h4><ul id="modalList"></ul><button id="modalOk">Понятно</button></div></div>
+<div class="modal" id="editGuard"><div class="box guardbox"><h4>Раздача не обновлена</h4><p class="gtxt">В открытой раздаче есть изменения, которые ты не сохранил. Что сделать?</p><div class="gbtns"><button class="gsave" id="egSave">Сохранить и продолжить</button><button class="gdiscard" id="egDiscard">Закрыть без сохранения</button><button class="gcancel" id="egCancel">Продолжить редактирование</button></div></div></div>
 <div class="modal" id="authGate"><div class="box authbox"><h4>Редактор раздач</h4><p class="authp">Доступ к редактору защищён паролем. Тренажёр открыт всем.</p>
   <input id="authPass" type="password" placeholder="Пароль" autocomplete="off"><div class="autherr" id="authErr"></div>
   <div class="authrow"><button class="ghost" id="authCancel">Отмена</button><button class="primary" id="authOk">Войти</button></div></div></div>
@@ -991,7 +998,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.9';
+const APP_VER='2026-07-22.10';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1720,7 +1727,7 @@ function wireForm(){
     if($('f-depth'))$('f-depth').onchange=()=>{readForm();syncPreview();};
   }
 }
-function previewHand(){const h=JSON.parse(JSON.stringify(F));delete h.curQ;delete h.editIndex;h.actions.forEach(a=>{if(a.q&&!a.q.explain)a.q.explain=null;});return h;}
+function previewHand(){const h=JSON.parse(JSON.stringify(F));delete h.curQ;delete h.editIndex;delete h._baseline;delete h._addStreet;h.actions.forEach(a=>{if(a.q&&!a.q.explain)a.q.explain=null;});return h;}
 function fullView(h){const res=resolve(h),last=res.streets[res.streets.length-1],street=last?last.street:'preflop';
   const history={preflop:[],flop:[],turn:[],river:[]};res.rows.forEach(r=>{if(r.pos&&history[r.street])history[r.street].push({pos:r.pos,action:r.action,size:r.size});});
   return {players:h.players,heroPos:h.heroPos,heroCards:heroCardsOf(h),cards:h.cards||{},stacks:h.stacks||{},profiles:h.profiles||{},street,board:(h.board||[]).slice(0,BOARDN[street]),history,contrib:contribUpTo(res,res.rows.length-1,h.players),options:[],video:h.video,channel:h.channel};}
@@ -1803,15 +1810,33 @@ function validateHand(h){const issues=[];const qs=questionsOf(h);
     if(o.some(x=>!x.label.trim()))issues.push(`${tag}пустой лейбл варианта`);});
   const hc=heroCardsOf(h);if(!hc[0]||!hc[1])issues.push('Не указаны твои карты');
   return issues;}
-function saveHand(){readForm();const h=previewHand();const issues=validateHand(h);if(issues.length){showModal(issues);return;}
+function saveHand(){readForm();const h=previewHand();const issues=validateHand(h);if(issues.length){showModal(issues);return false;}
   if(F.editIndex!=null){SET[F.editIndex]=h;toast('Раздача #'+(F.editIndex+1)+' обновлена');}else{SET.push(h);toast('Раздача добавлена ('+SET.length+')');}
-  F=blankHand();buildForm();renderSet();persist();}
-function editHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;F=migrateCards(JSON.parse(JSON.stringify(SET[idx])));F.curQ=0;F.editIndex=idx;if(pu){F.unit=pu;F.bbChips=pb;}buildForm();renderSet();window.scrollTo({top:0,behavior:'smooth'});}
+  F=blankHand();buildForm();renderSet();persist();backupSnapshot();markDraftSaved();return true;}
+function editHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;F=migrateCards(JSON.parse(JSON.stringify(SET[idx])));F.curQ=0;F.editIndex=idx;if(pu){F.unit=pu;F.bbChips=pb;}buildForm();renderSet();markDraftSaved();window.scrollTo({top:0,behavior:'smooth'});}
 // duplicate a hand: clone it into the set right after the original and open the copy for editing (original untouched)
 function duplicateHand(idx){const pu=F&&F.unit,pb=F&&F.bbChips;const clone=migrateCards(JSON.parse(JSON.stringify(SET[idx])));delete clone.source;clone.title=(clone.title?clone.title+' ':'')+'(копия)';
   SET.splice(idx+1,0,clone);persist();
   F=migrateCards(JSON.parse(JSON.stringify(clone)));F.curQ=0;F.editIndex=idx+1;if(pu){F.unit=pu;F.bbChips=pb;}
-  buildForm();renderSet();window.scrollTo({top:0,behavior:'smooth'});toast('Раздача скопирована — правь копию и жми «Обновить»');}
+  buildForm();renderSet();markDraftSaved();window.scrollTo({top:0,behavior:'smooth'});toast('Раздача скопирована — правь копию и жми «Обновить»');}
+// ===== unsaved-draft guard: switching hands / leaving the editor with un-saved edits must ask first =====
+// fingerprint of the hand's real content (transient UI state stripped) — compared against the baseline captured
+// when the hand was opened or last saved. Divergence == unsaved edits.
+function draftKey(h){h=h||F;if(!h)return '';try{const c=JSON.parse(JSON.stringify(h));['curQ','editIndex','unit','bbChips','_addStreet','_baseline'].forEach(k=>delete c[k]);return JSON.stringify(c);}catch(e){return '';}}
+function markDraftSaved(){if(!F)return;try{readForm();}catch(e){}F._baseline=draftKey(F);}
+function isDirtyDraft(){if(!F||F._baseline==null)return false;try{readForm();}catch(e){}return draftKey(F)!==F._baseline;}
+let _guardCb=null,_leaving=false;
+// run `proceed` now if the open hand is clean; otherwise pop the 3-way dialog and let the user decide.
+function guardUnsaved(proceed){if(!isDirtyDraft()){proceed();return;}_guardCb=proceed;$('editGuard').classList.add('show');}
+function closeGuard(){$('editGuard').classList.remove('show');}
+// rolling backup of the whole local store to side keys — a bad overwrite (or a mis-click) stays recoverable.
+// only snapshots a state that actually HAS hands, so an empty/reverted store can never clobber a good backup.
+function backupSnapshot(){try{const cur=localStorage.getItem(LS_KEY);if(!cur)return;const j=JSON.parse(cur);
+  const n=(j.cols||[]).reduce((s,c)=>s+((c&&c.hands&&c.hands.length)||0),0);if(n<=0)return;
+  const prev=localStorage.getItem(LS_KEY+'_bak0');if(prev&&prev!==cur)localStorage.setItem(LS_KEY+'_bak1',prev);
+  localStorage.setItem(LS_KEY+'_bak0',cur);}catch(e){}}
+// restore the most recent non-empty backup into the live store (used by the recovery button if a set goes missing)
+function restoreBackup(){try{for(const k of [LS_KEY+'_bak0',LS_KEY+'_bak1']){const b=localStorage.getItem(k);if(b){const j=JSON.parse(b);const n=(j.cols||[]).reduce((s,c)=>s+((c&&c.hands&&c.hands.length)||0),0);if(n>0){localStorage.setItem(LS_KEY,b);return n;}}}}catch(e){}return 0;}
 function renderSet(){
   const vis=SET.filter(h=>!h.hidden).length,hid=SET.length-vis;
   const rows=SET.length?SET.map((h,k)=>{const nq=questionsOf(h).length,series=nq>1?` · ${nq} вопроса`:nq===1?' · 1 вопрос':'';
@@ -1822,8 +1847,8 @@ function renderSet(){
   $('setList').className='setlist'+secClass('set');
   $('setList').innerHTML=`<div class="sethdr"><span>Набор раздач</span><small>${vis} в наборе${hid?(' · '+hid+' скрыто'):''}</small></div><div class="setrows">${rows}</div>`;
   $('setList').querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{const k=+b.dataset.hide;SET[k].hidden=!SET[k].hidden;renderSet();persist();});
-  $('setList').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>editHand(+b.dataset.ed));
-  $('setList').querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>duplicateHand(+b.dataset.cp));
+  $('setList').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{const k=+b.dataset.ed;if(F&&F.editIndex===k)return;guardUnsaved(()=>editHand(k));});
+  $('setList').querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{const k=+b.dataset.cp;guardUnsaved(()=>duplicateHand(k));});
   $('setList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const k=+b.dataset.del;SET.splice(k,1);if(F&&F.editIndex===k)F.editIndex=null;else if(F&&F.editIndex>k)F.editIndex--;renderSet();persist();});
 }
 function copyText(text){
@@ -1898,9 +1923,16 @@ function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');
   _dirty=!!s.dirty;_syncedStr=_dirty?'':pubStr();   // clean local == last synced; dirty means unpushed edits the boot fetch must not overwrite
 }catch(e){}}
 function initAdmin(){
-  restore();if(!F)F=blankHand();else migrateCards(F);buildForm();renderSet();
+  restore();if(!F)F=blankHand();else migrateCards(F);buildForm();renderSet();markDraftSaved();backupSnapshot();   // snapshot the just-restored state before any cloud sync can touch it
   $('saveHand').onclick=saveHand;
-  $('playSet').onclick=()=>{if(!SET.length){toast('В подборке нет раздач',1);return;}switchView('train');playPack(activeCol().id);};
+  $('playSet').onclick=()=>{if(!SET.length){toast('В подборке нет раздач',1);return;}guardUnsaved(()=>{switchView('train');playPack(activeCol().id);});};
+  // unsaved-draft guard: dialog buttons + a native warning if the tab is closed/reloaded mid-edit
+  if(!initAdmin._guardWired){initAdmin._guardWired=true;
+    $('egSave').onclick=()=>{closeGuard();const cb=_guardCb;_guardCb=null;const ok=saveHand();if(ok!==false&&cb)cb();};   // validation may block the save → stay put
+    $('egDiscard').onclick=()=>{closeGuard();const cb=_guardCb;_guardCb=null;markDraftSaved();if(cb)cb();};              // proceed without saving; keep the typed draft (never silently wiped)
+    $('egCancel').onclick=()=>{closeGuard();_guardCb=null;};
+    if(window.addEventListener)window.addEventListener('beforeunload',e=>{if(!_leaving&&isDirtyDraft()){e.preventDefault();e.returnValue='';}});
+  }
   $('exportBtn').onclick=()=>{readForm();copyText(JSON.stringify(SET.length?SET:[previewHand()],null,2));};
   $('importToggle').onclick=()=>{const b=$('importBox');b.style.display=b.style.display==='none'?'block':'none';};
   $('importBtn').onclick=()=>{const raw=$('importArea').value.trim();if(!raw){toast('Пусто',1);return;}
@@ -1926,7 +1958,7 @@ $('authOk').onclick=tryAuth;$('authCancel').onclick=()=>$('authGate').classList.
 if($('statClose'))$('statClose').onclick=()=>$('statsGate').classList.remove('show');
 if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('statsGate').classList.remove('show');};
 $('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth();});
-$('tab-train').onclick=()=>switchView('train');$('tab-admin').onclick=openEditor;
+$('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('train'));else switchView('train');};$('tab-admin').onclick=openEditor;
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
 if($('replayToggle'))$('replayToggle').onclick=()=>{setReplay(!REPLAY);toast('Анимация раздачи '+(REPLAY?'включена':'выключена'));};updateReplayBtn();
@@ -2027,7 +2059,13 @@ function showUpdateBanner(cloud){
   const b=document.createElement('div');b.id='verBanner';b.className='verbanner';
   b.innerHTML='<span class="vbtxt">Вышла новая версия приложения</span><button class="vbupd" id="vbUpd">Обновить</button><button class="vbx" id="vbX" aria-label="Позже">×</button>';
   document.body.appendChild(b);
-  $('vbUpd').onclick=()=>{location.href=location.pathname+'?v='+Date.now();};   // a unique query busts the shared CDN (Fastly) edge cache that a hard reload can't
+  $('vbUpd').onclick=()=>{                                                      // save first, THEN reload — never drop in-progress work on update
+    try{if($('view-admin')&&$('view-admin').style.display!=='none')readForm();}catch(e){}
+    try{persist();backupSnapshot();}catch(e){}
+    const localHands=(COLS.find(c=>c&&c.id==='mine')||{hands:[]}).hands.length;
+    if((localHands>0||isDirtyDraft())&&!confirm('Обновить приложение?\n\nТвои раздачи уже сохранены в этом браузере и переживут обновление. Но если ты правишь в режиме инкогнито — сделай бэкап через «Скопировать JSON» перед обновлением: инкогнито стирает всё при закрытии окна.'))return;
+    _leaving=true;location.href=location.pathname+'?v='+Date.now();          // a unique query busts the shared CDN (Fastly) edge cache that a hard reload can't
+  };
   $('vbX').onclick=()=>{try{sessionStorage.setItem('pk_ver_skip',cloud);}catch(e){}b.remove();};
   requestAnimationFrame(()=>b.classList.add('show'));
 }
