@@ -1597,23 +1597,62 @@
      "heroPos": "BB",
      "heroCards": [
       "Ad",
-      "Kc"
+      "Kh"
      ],
      "stacks": {
-      "BB": 70,
-      "UTG": 70
+      "BB": 92.5,
+      "UTG": null,
+      "SB": null,
+      "UTG+1": 80,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null,
+      "BTN": null
      },
      "profiles": {
       "UTG": {
-       "status": "reg",
+       "status": "",
+       "style": ""
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
        "style": "tight"
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Kd",
-      "6d",
-      "3s",
-      "2c",
+      "Kc",
+      "5d",
+      "3d",
+      "6c",
       ""
      ],
      "video": {
@@ -1623,7 +1662,7 @@
      "actions": [
       {
        "street": "preflop",
-       "pos": "UTG",
+       "pos": "UTG+1",
        "action": "raise",
        "size": "2.2 bb"
       },
@@ -1631,7 +1670,41 @@
        "street": "preflop",
        "pos": "BB",
        "action": "call",
-       "size": "2.2 bb"
+       "size": "2.2 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "2.2 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "8 bb",
+          "type": "raise",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 917,
+        "vEnd": 1082,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
@@ -1641,72 +1714,149 @@
       },
       {
        "street": "flop",
-       "pos": "UTG",
+       "pos": "UTG+1",
        "action": "bet",
-       "size": "3 bb"
+       "size": "2.5 bb"
       },
       {
        "street": "flop",
        "pos": "BB",
        "action": "raise",
-       "size": "9 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "UTG",
-       "action": "call",
-       "size": "9 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "BB",
-       "action": "bet",
-       "size": "13.5 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "UTG",
-       "action": "raise",
-       "size": "60 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "BB",
-       "action": "call",
-       "size": "60 bb",
+       "size": "8.5 bb",
        "q": {
-        "vStart": 1045,
-        "vEnd": 1075,
-        "depth": "подробно",
-        "explain": "<b>Наш туз бубновый блокирует основные Ax-блефы флеш-дро, в диапазоне пуша — сеты и две пары.</b> Блефов недостаточно, 70бб надо пасовать: классическая ошибка — влюбился в карту и вылетел на сет троек.",
         "options": [
          {
-          "id": "t1",
-          "label": "Пас",
-          "type": "fold",
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
           "grade": "best",
+          "size": "8.5 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
           "size": "",
+          "type": "fold",
+          "grade": "mistake",
           "hero": false
          },
          {
-          "id": "t2",
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "UTG+1",
+       "action": "call",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "bet",
+       "size": "10.5 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "ok",
+          "size": "10.5 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Чек",
+          "size": "",
+          "type": "check",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Бет",
+          "size": "75%",
+          "type": "bet",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "turn",
+       "pos": "UTG+1",
+       "action": "raise",
+       "size": "69.3 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "call",
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
           "label": "Колл",
           "type": "call",
           "grade": "mistake",
           "size": "",
           "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
          }
-        ]
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
        }
       }
      ],
      "cards": {
       "BB": [
        "Ad",
-       "Kc"
+       "Kh"
+      ],
+      "UTG+1": [
+       "3h",
+       "3c"
       ]
      },
-     "hidden": false
+     "hidden": false,
+     "unit": "chips",
+     "bbChips": "2000",
+     "_addStreet": null
     },
     {
      "pack": "wsopme",
@@ -12589,5 +12739,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784748847505
+ "publishedAt": 1784750572294
 }
