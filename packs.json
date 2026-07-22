@@ -2357,16 +2357,50 @@
      "stacks": {
       "CO": 90,
       "BTN": 70,
-      "SB": 60
+      "SB": 60,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null
      },
      "profiles": {
       "BTN": {
-       "status": "reg",
+       "status": "",
        "style": "aggr"
       },
       "SB": {
-       "status": "reg",
+       "status": "",
        "style": "aggr"
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -2405,10 +2439,10 @@
        "action": "fold",
        "size": "",
        "q": {
-        "vStart": 1445,
+        "vStart": 1423,
         "vEnd": 1475,
         "depth": "подробно",
-        "explain": "<b>Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит.</b> Простой дисциплинированный пас; драма дня в том, что короли не ждали колла 9-8 и влетели в две пары.",
+        "explain": "Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит. Простой дисциплинированный пас; драма дня в том, что короли не ждали колла 9-8 и влетели в две пары.",
         "options": [
          {
           "id": "p1",
@@ -2421,20 +2455,22 @@
          {
           "id": "p2",
           "label": "Колл",
+          "size": "",
           "type": "call",
           "grade": "mistake",
-          "size": "",
           "hero": false
          },
          {
           "id": "p3",
           "label": "5-бет",
+          "size": "",
           "type": "raise",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       }
      ],
@@ -2443,7 +2479,9 @@
        "Qh",
        "Qd"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12754,5 +12792,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784755700115
+ "publishedAt": 1784755738095
 }
