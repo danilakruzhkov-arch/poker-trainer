@@ -1580,7 +1580,7 @@
        "3d"
       ]
      },
-     "hidden": true
+     "hidden": false
     },
     {
      "pack": "wsopme",
@@ -1735,7 +1735,8 @@
        "Qs",
        "Jd"
       ]
-     }
+     },
+     "hidden": false
     },
     {
      "pack": "wsopme",
@@ -12284,5 +12285,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784742858496
+ "publishedAt": 1784742873148
 }
