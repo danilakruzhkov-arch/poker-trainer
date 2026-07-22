@@ -1399,9 +1399,9 @@
          },
          {
           "id": "o2",
-          "label": "Колл",
-          "size": "2.5 bb",
-          "type": "call",
+          "label": "Олл-ин",
+          "size": "олл‑ин",
+          "type": "raise",
           "grade": "mistake",
           "hero": false
          }
@@ -12283,5 +12283,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784738551275
+ "publishedAt": 1784738672858
 }
