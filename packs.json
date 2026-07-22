@@ -920,7 +920,7 @@
        "3d"
       ]
      },
-     "hidden": false,
+     "hidden": true,
      "unit": "chips",
      "bbChips": "2000"
     },
@@ -12326,5 +12326,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784745658852
+ "publishedAt": 1784745683253
 }
