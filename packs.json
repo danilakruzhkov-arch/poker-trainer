@@ -9825,9 +9825,9 @@
       "BB": null,
       "UTG": null,
       "UTG+1": null,
-      "UTG+2": null,
       "LJ": 190,
-      "CO": null
+      "CO": null,
+      "UTG+2": null
      },
      "profiles": {
       "BTN": {
@@ -12624,5 +12624,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784750947852
+ "publishedAt": 1784751003957
 }
