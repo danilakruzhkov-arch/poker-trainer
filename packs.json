@@ -3426,7 +3426,7 @@
        "Jc"
       ]
      },
-     "hidden": true,
+     "hidden": false,
      "unit": "chips",
      "bbChips": "1500"
     },
@@ -3441,12 +3441,51 @@
      ],
      "stacks": {
       "SB": 50,
-      "BB": 50
+      "BB": 50,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null,
+      "BTN": null
      },
      "profiles": {
       "BB": {
        "status": "rec",
        "style": "tight"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -3494,25 +3533,27 @@
         "vStart": 60,
         "vEnd": 90,
         "depth": "подробно",
-        "explain": "<b>Шов двумя парами против диапазона, полного трипсов, лишён смысла.</b> У Мани куча семёрок, которые бьют две пары, а всё слабее на овербет-шов просто не заплатит — вгрузка не собирает вэлью.",
+        "explain": "Шов двумя парами против диапазона, полного трипсов, лишён смысла. У Мани куча семёрок, которые бьют две пары, а всё слабее на овербет-шов просто не заплатит — вгрузка не собирает вэлью.",
         "options": [
          {
           "id": "o1",
           "label": "Чек",
+          "size": "",
           "type": "check",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
           "id": "o2",
-          "label": "Олл-ин",
+          "label": "Бет",
           "type": "bet",
           "grade": "mistake",
-          "size": "",
+          "size": "50 bb",
           "hero": true
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       }
      ],
@@ -3522,7 +3563,9 @@
        "Jd"
       ]
      },
-     "hidden": true
+     "hidden": true,
+     "unit": "chips",
+     "bbChips": "1500"
     },
     {
      "pack": "wsopme",
@@ -13260,5 +13303,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784759620378
+ "publishedAt": 1784759883115
 }
