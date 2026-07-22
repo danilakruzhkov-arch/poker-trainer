@@ -2193,30 +2193,30 @@
      "pack": "wsopme",
      "title": "Олл-ин девятками на 20бб",
      "players": 9,
-     "heroPos": "SB",
+     "heroPos": "BB",
      "heroCards": [
       "9h",
       "9c"
      ],
      "stacks": {
-      "SB": 20,
-      "UTG": 45,
-      "HJ": 40,
-      "BTN": 35,
-      "BB": null,
+      "SB": null,
+      "UTG": 47.5,
+      "HJ": null,
+      "BTN": 182.5,
+      "BB": 20,
       "UTG+1": null,
       "UTG+2": null,
       "LJ": null,
-      "CO": null
+      "CO": 67
      },
      "profiles": {
       "UTG": {
-       "status": "rec",
-       "style": "tight"
+       "status": "",
+       "style": ""
       },
       "HJ": {
-       "status": "rec",
-       "style": "aggr"
+       "status": "",
+       "style": ""
       },
       "BTN": {
        "status": "rec",
@@ -2243,7 +2243,7 @@
        "style": ""
       },
       "CO": {
-       "status": "",
+       "status": "fish",
        "style": ""
       }
      },
@@ -2263,11 +2263,11 @@
        "street": "preflop",
        "pos": "UTG",
        "action": "raise",
-       "size": "2.5 bb"
+       "size": "2 bb"
       },
       {
        "street": "preflop",
-       "pos": "HJ",
+       "pos": "CO",
        "action": "call",
        "size": "2.5 bb"
       },
@@ -2275,21 +2275,17 @@
        "street": "preflop",
        "pos": "BTN",
        "action": "call",
-       "size": "2.5 bb"
+       "size": ""
       },
       {
        "street": "preflop",
-       "pos": "SB",
+       "pos": "BB",
        "action": "raise",
        "size": "20 bb",
        "q": {
-        "vStart": 1314,
-        "vEnd": 1350,
-        "depth": "подробно",
-        "explain": "Пуш 99 на 20бб в лузовое поле однозначно верен и жирно плюсовый. Сильное эквити против оверкартов, отнимаем их беквдоры и растим стек без борьбы — отличная точка заехать вперёд.",
         "options": [
          {
-          "id": "p1",
+          "id": "o3",
           "label": "Рейз",
           "type": "raise",
           "grade": "best",
@@ -2297,22 +2293,26 @@
           "hero": true
          },
          {
-          "id": "p2",
-          "label": "Колл",
-          "size": "",
-          "type": "call",
-          "grade": "ok",
+          "id": "o1",
+          "label": "Рейз",
+          "size": "8 bb",
+          "type": "raise",
+          "grade": "mistake",
           "hero": false
          },
          {
-          "id": "p3",
-          "label": "Пас",
+          "id": "o2",
+          "label": "Колл",
           "size": "",
-          "type": "fold",
+          "type": "call",
           "grade": "mistake",
           "hero": false
          }
         ],
+        "vStart": 1313,
+        "vEnd": 1423,
+        "depth": "подробно",
+        "explain": null,
         "joinPrev": false,
         "contPrev": false
        }
@@ -2325,25 +2325,25 @@
       },
       {
        "street": "preflop",
-       "pos": "BTN",
-       "action": "fold",
+       "pos": "CO",
+       "action": "call",
        "size": ""
       },
       {
        "street": "preflop",
-       "pos": "HJ",
-       "action": "call",
-       "size": "20 bb"
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
       }
      ],
      "cards": {
-      "SB": [
+      "BB": [
        "9h",
        "9c"
       ]
      },
      "unit": "chips",
-     "bbChips": "1200"
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12841,5 +12841,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784754588675
+ "publishedAt": 1784755292673
 }
