@@ -926,15 +926,50 @@ function showSheet(v,res){
   $('next').onclick=next;
   wireFeedback();
 }
+/* ===== spoiler guard (C): the YouTube scrubber exposes the WHOLE source video, so a player can drag past the
+   clip's end and see the author reveal the next street / next decision. With enablejsapi we watch playback time
+   and snap the scrubber back inside [start,end] (pausing + warning on the forward, spoiler-y side). Where the
+   IFrame API can't load (artifact CSP / offline), we silently fall back to the countdown-only behaviour. ===== */
+let _ytApi=null,_ytPlayers=[],_ytSeq=0,_spoilAt=0;
+function loadYTAPI(){                                   // on-demand; present on the github build, blocked in the sandboxed artifact
+  if(_ytApi)return _ytApi;
+  _ytApi=new Promise(res=>{
+    if(window.YT&&window.YT.Player)return res(window.YT);
+    const prev=window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady=function(){if(typeof prev==='function'){try{prev();}catch(e){}}res(window.YT);};
+    const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';sc.onerror=()=>res(null);document.head.appendChild(sc);
+  });
+  return _ytApi;
+}
+function spoilerNote(){const now=Date.now();if(now-_spoilAt<3000)return;_spoilAt=now;toast('Дальше — разбор следующего решения. Отрезок остановлен, чтобы не спойлить.');}
+function clipTick(player,s,en,lo){                      // one watchdog step; returns which zone we were in (for tests)
+  if(!player||typeof player.getCurrentTime!=='function')return;
+  let t;try{t=player.getCurrentTime();}catch(e){return;}
+  if(typeof t!=='number'||isNaN(t))return;
+  if(en>0&&t>en+0.5){try{player.pauseVideo();player.seekTo(en,true);}catch(e){}spoilerNote();return 'ahead';}   // scrubbed past the clip → pause at its end + warn
+  if(t<lo){try{player.seekTo(s,true);}catch(e){}return 'behind';}                                              // scrubbed before the clip → nudge back to start
+  return 'in';
+}
+function guardClip(iframeId,s,en,wrap){
+  loadYTAPI().then(YT=>{
+    if(!YT||!YT.Player||!document.getElementById(iframeId))return;   // no API → countdown-only, no snap-back
+    let player;try{player=new YT.Player(iframeId,{});}catch(e){return;}
+    _ytPlayers.push(player);
+    const lo=Math.max(0,s-1.2);
+    const iv=setInterval(()=>clipTick(player,s,en,lo),500);
+    VTIMERS.push(iv);   // reuse the video-timer cleanup list so stopVideos() clears the watchdog too
+  });
+}
 function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
   // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT and can't be removed via params
-  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1';if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
-  const wrap=fac.parentElement;
-  wrap.innerHTML=`<iframe width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
-  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);}}
+  // enablejsapi+origin turn on the JS control channel the spoiler guard needs to read time and seek the player
+  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&origin='+encodeURIComponent(location.origin);if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
+  const wrap=fac.parentElement,fid='ytf'+(++_ytSeq);
+  wrap.innerHTML=`<iframe id="${fid}" width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
+  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);guardClip(fid,s,en,wrap);}}
 function canAutoEmbed(){try{return window.self===window.top;}catch(e){return false;}}
 // kill any playing YouTube iframe (sheet review clip or intro clip) so audio stops the moment we move on
-function stopVideos(){clearClipTimers();document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
+function stopVideos(){clearClipTimers();_ytPlayers.forEach(p=>{try{p&&p.destroy&&p.destroy();}catch(e){}});_ytPlayers=[];document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
 function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-1)setTimeout(()=>{i++;renderHand();},300);else setTimeout(showEnd,300);}
 
 /* ===== FEEDBACK («Сообщить об ошибке») + optional Supabase sink =====
@@ -942,7 +977,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.5';
+const APP_VER='2026-07-22.6';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
