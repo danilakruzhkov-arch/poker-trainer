@@ -222,6 +222,10 @@
   .heroPick span{font-size:8.5px;text-transform:uppercase;color:var(--muted)}
   .prow .pnum{font-size:9px;color:var(--muted);min-width:12px}
   .prow .pos{font-weight:800;font-size:13px;color:var(--brass);min-width:40px}
+  .seatmv{display:inline-flex;flex-direction:column;gap:1px;margin:-2px 2px -2px -2px}
+  .seatmv .smv{width:20px;height:14px;padding:0;line-height:1;border:1px solid var(--stroke);background:var(--chip);color:var(--muted);border-radius:5px;font-size:8px;cursor:pointer;display:grid;place-items:center}
+  .seatmv .smv:hover:not(:disabled){border-color:var(--brass);color:var(--brass)}
+  .seatmv .smv:disabled{opacity:.28;cursor:default}
   .prow .stkwrap{margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--field-lite);border:1px solid rgba(198,161,91,.35);border-radius:8px;padding:3px 8px}
   .prow .stkwrap input{border:none;background:transparent;padding:2px 0;width:48px;text-align:right;font-weight:700;font-size:13px}
   .prow .stkwrap .bb{font-size:10px;color:var(--muted)}
@@ -987,7 +991,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.8';
+const APP_VER='2026-07-22.9';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1393,6 +1397,19 @@ function dropPassivesAfter(hand,a){
   authored.slice(idx+1).filter(x=>(x.action==='check'||x.action==='fold')&&!x.q)
     .forEach(x=>{const i=hand.actions.indexOf(x);if(i>=0)hand.actions.splice(i,1);});
 }
+// Reseat two players: mis-labelled a seat? Swap the whole occupant (cards, stack, profile, every action, the hero
+// mark) between positions a and b. Actions keep their array order — only their pos label flips — so the replay
+// re-orders them by seat and any now-illegal sequence (a raiser landing behind a caller) lights up as a row error
+// instead of freezing the hand. The user then fixes those actions by hand.
+function swapSeats(hand,a,b){
+  if(a===b)return;
+  const sw=obj=>{const t=obj[a];if(obj[b]===undefined)delete obj[a];else obj[a]=obj[b];if(t===undefined)delete obj[b];else obj[b]=t;};
+  hand.cards=hand.cards||{};hand.stacks=hand.stacks||{};hand.profiles=hand.profiles||{};
+  sw(hand.cards);sw(hand.stacks);sw(hand.profiles);
+  (hand.actions||[]).forEach(x=>{if(x.pos===a)x.pos=b;else if(x.pos===b)x.pos=a;});
+  if(hand.heroPos===a)hand.heroPos=b;else if(hand.heroPos===b)hand.heroPos=a;
+  const hc=hand.cards[hand.heroPos];hand.heroCards=(hc&&(hc[0]||hc[1]))?hc.slice():['',''];   // keep the legacy hero-cards mirror in sync
+}
 function markQuestion(a){const facing=rowFacing(a);
   const opts=defaultOptions(a.street,facing);
   // hero's real action is known (from the timeline / imported history) — prefill it as one option,
@@ -1513,9 +1530,10 @@ function buildForm(){
   $('adForm').innerHTML=html;wireForm();syncPreview();
   if($('saveHand'))$('saveHand').textContent=F.editIndex!=null?'Обновить раздачу #'+(F.editIndex+1):'Добавить в набор';   // edit mode → «Обновить», иначе «Добавить»
 }
-function playerRow(p,idx){const isHero=p===F.heroPos,stk=F.stacks[p],prof=F.profiles[p]||{};
+function playerRow(p,idx){const isHero=p===F.heroPos,stk=F.stacks[p],prof=F.profiles[p]||{},last=dispOrder(F.players).length-1;
   return `<div class="prow ${isHero?'hero':''}" data-pos="${p}"><div class="l1"><div class="heroPick" data-hero="${p}"><span class="dot"></span><span>ты</span></div>
     <span class="pnum">${idx+1}</span><span class="pos">${p}</span>
+    <span class="seatmv"><button type="button" class="smv" data-mv="up" data-pos="${p}" ${idx===0?'disabled':''} title="Пересадить выше">▲</button><button type="button" class="smv" data-mv="dn" data-pos="${p}" ${idx===last?'disabled':''} title="Пересадить ниже">▼</button></span>
     <div class="stkwrap"><input class="num f-stk" data-pos="${p}" value="${stk!=null?dispNum(stk):''}" placeholder="—" inputmode="decimal"><span class="bb">${chipsMode()?'фишек':'bb'}</span></div></div>
     <div class="l2"><select class="f-status" data-pos="${p}">${Object.keys(STATUS).map(k=>`<option value="${k}" ${(prof.status||'')===k?'selected':''}>${STATUS[k]}</option>`).join('')}</select>
       <select class="f-style" data-pos="${p}">${Object.keys(STYLE).map(k=>`<option value="${k}" ${(prof.style||'')===k?'selected':''}>${STYLE[k]}</option>`).join('')}</select></div>
@@ -1649,6 +1667,8 @@ function wireForm(){
   if($('f-unit'))$('f-unit').querySelectorAll('button').forEach(b=>b.onclick=()=>{readForm();F.unit=b.dataset.u;buildForm();});
   if($('f-bbchips'))$('f-bbchips').addEventListener('change',()=>{readForm();buildForm();});   // re-render on blur so all fields switch to chips
   $('adForm').querySelectorAll('.heroPick').forEach(el=>el.onclick=()=>{readForm();F.heroPos=el.dataset.hero;buildForm();});
+  // reseat a player one place up/down among the seats — cards, stack, profile and all actions travel with them
+  $('adForm').querySelectorAll('.smv').forEach(b=>b.onclick=()=>{readForm();const ord=dispOrder(F.players),i=ord.indexOf(b.dataset.pos),j=b.dataset.mv==='up'?i-1:i+1;if(i<0||j<0||j>=ord.length)return;swapSeats(F,ord[i],ord[j]);buildForm();});
   $('adForm').querySelectorAll('.f-stk').forEach(el=>el.addEventListener('input',()=>{readForm();syncPreview();}));
   $('adForm').querySelectorAll('.f-status,.f-style').forEach(el=>el.addEventListener('change',()=>{readForm();syncPreview();}));
   $('adForm').querySelectorAll('.cardsel select').forEach(s=>s.onchange=()=>{if(s.classList.contains('cs-s'))s.style.color=suitSelCol(s.value);readForm();syncPreview();});
