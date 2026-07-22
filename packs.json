@@ -9054,23 +9054,23 @@
   },
   {
    "id": "mtt16k",
-   "name": "С $3 до $16 000",
-   "emoji": "◆",
+   "name": "WSOP Main Event $10K",
+   "emoji": "★",
    "accent": "#1C8FA8",
    "tag": "Онлайн MTT",
-   "host": "Разбор: Baby Shark",
-   "hero": "Бай‑ин $3 · занос $16 000",
-   "cover": "https://img.youtube.com/vi/qMW6mOd7m6Q/hqdefault.jpg",
+   "host": "Разбор: Андрей Козленко",
+   "hero": "Мейн Ивент WSOP · дни 2–3",
+   "cover": "https://img.youtube.com/vi/yATrt1addik/hqdefault.jpg",
    "sub": "Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.",
    "intro": {
-    "title": "С $3 до $16 000",
-    "text": "Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.",
+    "title": "WSOP Main Event — 10 000$",
+    "text": "Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.",
     "video": {
-     "url": "https://youtu.be/qMW6mOd7m6Q"
+     "url": "https://youtu.be/yATrt1addik"
     },
-    "vStart": 48,
-    "vEnd": 80,
-    "channel": "Baby Shark"
+    "vStart": 0,
+    "vEnd": 30,
+    "channel": "WSOP Main Event $10K"
    },
    "hands": [
     {
@@ -12663,9 +12663,9 @@
      }
     }
    ],
-   "format": "online",
+   "format": "offline",
    "gate": "free"
   }
  ],
- "publishedAt": 1784752762923
+ "publishedAt": 1784753442582
 }
