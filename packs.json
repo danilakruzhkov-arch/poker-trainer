@@ -1006,7 +1006,13 @@
      "stacks": {
       "CO": 45,
       "SB": 60,
-      "BB": 60
+      "BB": 60,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "BTN": null
      },
      "profiles": {
       "SB": {
@@ -1014,8 +1020,36 @@
        "style": "aggr"
       },
       "BB": {
-       "status": "reg",
+       "status": "",
        "style": "tight"
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -1069,14 +1103,14 @@
         "vStart": 490,
         "vEnd": 619,
         "depth": "подробно",
-        "explain": "<b>Когда после ставки идёт рейз, диапазон — сеты и флеши.</b> Топ-две пары стоят меньше 1%, отдавать надо сразу, а не коллить.",
+        "explain": "Когда после ставки идёт рейз, диапазон — сеты и флеши. Топ-две пары стоят меньше 1%, отдавать надо сразу, а не коллить.",
         "options": [
          {
           "id": "f1",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
@@ -1084,18 +1118,28 @@
           "label": "Колл",
           "type": "call",
           "grade": "mistake",
-          "size": "",
+          "size": "5 bb",
           "hero": true
          },
          {
           "id": "f3",
-          "label": "Рейз",
+          "label": "4-бет",
+          "size": "12 bb",
           "type": "raise",
           "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Рейз",
           "size": "",
+          "type": "raise",
+          "grade": "ok",
           "hero": false
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       },
       {
@@ -1120,7 +1164,7 @@
         "vEnd": 575,
         "joinPrev": true,
         "depth": "подробно",
-        "explain": "<b>Два олл-ина по 60бб — у кого-то сет, у кого-то флеш.</b> Дама-валет тут просто мусор: лёгкий пас, капитальный красавчик.",
+        "explain": "Два олл-ина по 60бб — у кого-то сет, у кого-то флеш. Дама-валет тут просто мусор: лёгкий пас, капитальный красавчик.",
         "options": [
          {
           "id": "g1",
@@ -1133,12 +1177,13 @@
          {
           "id": "g2",
           "label": "Колл",
+          "size": "",
           "type": "call",
           "grade": "mistake",
-          "size": "",
           "hero": false
          }
-        ]
+        ],
+        "contPrev": false
        }
       }
      ],
@@ -1148,7 +1193,9 @@
        "Jd"
       ]
      },
-     "hidden": false
+     "hidden": false,
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12396,5 +12443,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784746263248
+ "publishedAt": 1784746431335
 }
