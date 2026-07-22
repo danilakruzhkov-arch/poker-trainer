@@ -2349,26 +2349,26 @@
      "pack": "wsopme",
      "title": "Дамы пасуют на 4-бет",
      "players": 9,
-     "heroPos": "CO",
+     "heroPos": "UTG+2",
      "heroCards": [
       "Qh",
       "Qd"
      ],
      "stacks": {
-      "CO": 90,
-      "BTN": 70,
-      "SB": 60,
+      "CO": null,
+      "BTN": null,
+      "SB": 92,
       "BB": null,
       "UTG": null,
       "UTG+1": null,
-      "UTG+2": null,
+      "UTG+2": 170,
       "LJ": null,
-      "HJ": null
+      "HJ": 112.5
      },
      "profiles": {
       "BTN": {
        "status": "",
-       "style": "aggr"
+       "style": ""
       },
       "SB": {
        "status": "",
@@ -2396,7 +2396,7 @@
       },
       "HJ": {
        "status": "",
-       "style": ""
+       "style": "aggr"
       },
       "CO": {
        "status": "",
@@ -2417,32 +2417,32 @@
      "actions": [
       {
        "street": "preflop",
-       "pos": "CO",
+       "pos": "UTG+2",
        "action": "raise",
        "size": "2.2 bb"
       },
       {
        "street": "preflop",
-       "pos": "BTN",
+       "pos": "HJ",
        "action": "raise",
-       "size": "7 bb"
+       "size": "6 bb"
       },
       {
        "street": "preflop",
        "pos": "SB",
        "action": "raise",
-       "size": "24 bb"
+       "size": "18 bb"
       },
       {
        "street": "preflop",
-       "pos": "CO",
+       "pos": "UTG+2",
        "action": "fold",
        "size": "",
        "q": {
         "vStart": 1423,
-        "vEnd": 1475,
+        "vEnd": 1495,
         "depth": "подробно",
-        "explain": "Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит. Простой дисциплинированный пас; драма дня в том, что короли не ждали колла 9-8 и влетели в две пары.",
+        "explain": "Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит. Простой дисциплинированный пас;",
         "options": [
          {
           "id": "p1",
@@ -2472,10 +2472,24 @@
         "joinPrev": false,
         "contPrev": false
        }
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": ""
       }
      ],
      "cards": {
-      "CO": [
+      "SB": [
+       "Ks",
+       "Kd"
+      ],
+      "HJ": [
+       "8h",
+       "9h"
+      ],
+      "UTG+2": [
        "Qh",
        "Qd"
       ]
@@ -12792,5 +12806,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784755738095
+ "publishedAt": 1784756652218
 }
