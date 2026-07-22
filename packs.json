@@ -9810,142 +9810,159 @@
      }
     },
     {
-     "pack": "mtt16k",
-     "title": "Туз-король: пассивный ривер",
-     "players": 7,
-     "heroPos": "UTG",
+     "pack": "wsopme",
+     "title": "Давим Хельмута четвёртым бетом",
+     "players": 9,
+     "heroPos": "LJ",
      "heroCards": [
       "Ac",
-      "Kh"
+      "Jd"
      ],
      "stacks": {
-      "UTG": 30,
-      "HJ": 30,
-      "BB": 30
+      "HJ": null,
+      "BTN": 92.5,
+      "SB": null,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": 190,
+      "CO": null
      },
      "profiles": {
-      "HJ": {
-       "status": "fish",
+      "BTN": {
+       "status": "rec",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Ks",
-      "8d",
-      "4c",
-      "2h",
-      "7s"
+      "",
+      "",
+      "",
+      "",
+      ""
      ],
      "video": {
-      "url": "https://youtu.be/qMW6mOd7m6Q"
+      "url": "https://youtu.be/yATrt1addik"
      },
-     "channel": "Baby Shark",
+     "channel": "Андрей Козленко",
      "actions": [
       {
        "street": "preflop",
-       "pos": "UTG",
+       "pos": "LJ",
        "action": "raise",
-       "size": "2.2 bb"
+       "size": "2 bb"
       },
       {
        "street": "preflop",
-       "pos": "HJ",
-       "action": "call",
-       "size": "2.2 bb"
+       "pos": "BTN",
+       "action": "raise",
+       "size": "6 bb"
       },
       {
        "street": "preflop",
-       "pos": "BB",
-       "action": "call",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "BB",
-       "action": "check",
+       "pos": "SB",
+       "action": "fold",
        "size": ""
       },
       {
-       "street": "flop",
-       "pos": "UTG",
-       "action": "bet",
-       "size": "2.7 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "HJ",
-       "action": "call",
-       "size": "3.6 bb"
-      },
-      {
-       "street": "flop",
+       "street": "preflop",
        "pos": "BB",
        "action": "fold",
        "size": ""
       },
       {
-       "street": "turn",
-       "pos": "UTG",
-       "action": "bet",
-       "size": "8 bb"
-      },
-      {
-       "street": "turn",
-       "pos": "HJ",
-       "action": "call",
-       "size": "8 bb"
-      },
-      {
-       "street": "river",
-       "pos": "UTG",
-       "action": "check",
-       "size": "",
+       "street": "preflop",
+       "pos": "LJ",
+       "action": "raise",
+       "size": "13 bb",
        "q": {
-        "vStart": 944,
-        "vEnd": 976,
-        "depth": "подробно",
-        "explain": "<b>Пассивный чек оставляет на столе крупную велью-ставку против кэпнутого Kx.</b> Линия колл-колл вилана репрезентует слабого неуверенного короля, и по диапазонам он куда чаще держит худшего Kx, чем редкие X4 две пары, поэтому олл-ин печатает в среднем ~27bb, а чек их упускает.",
         "options": [
          {
-          "id": "r1",
-          "label": "Олл-ин",
-          "type": "bet",
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
           "grade": "best",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "r2",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "mistake",
-          "size": "8.9 bb",
-          "hero": false
-         },
-         {
-          "id": "r3",
-          "label": "Чек",
-          "type": "check",
-          "grade": "mistake",
-          "size": "",
+          "size": "13 bb",
           "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
          }
-        ]
+        ],
+        "vStart": 1084,
+        "vEnd": 1132,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
        }
       },
       {
-       "street": "river",
-       "pos": "HJ",
-       "action": "check",
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "fold",
        "size": ""
       }
      ],
      "cards": {
-      "UTG": [
+      "LJ": [
        "Ac",
-       "Kh"
+       "Jd"
+      ],
+      "BTN": [
+       "As",
+       "Qs"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "2000",
+     "_addStreet": null
     },
     {
      "pack": "mtt16k",
@@ -12607,5 +12624,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784750594839
+ "publishedAt": 1784750947852
 }
