@@ -5021,7 +5021,8 @@
      }
     }
    ],
-   "format": "offline"
+   "format": "offline",
+   "gate": "free"
   },
   {
    "id": "ft10k",
@@ -12285,5 +12286,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784742873148
+ "publishedAt": 1784742899448
 }
