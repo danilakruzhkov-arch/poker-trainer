@@ -1,702 +1,6 @@
 {
  "cols": [
   {
-   "id": "wsop",
-   "name": "WSOP — топ‑моменты",
-   "emoji": "♠",
-   "accent": "#C8322F",
-   "tag": "Оффлайн",
-   "host": "Разбор: Андрей Козленко",
-   "hero": "Хелмут · профи · 17 браслетов",
-   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
-   "sub": "Ключевые решения с мирового живого турнира: дисциплина, вэлью, чтения.",
-   "intro": {
-    "title": "WSOP Main Event — топ‑моменты",
-    "text": "Подборка ключевых решений с одного из главных живых турниров мира. Сначала спот — принимаешь решение как за столом, потом разбор от автора.",
-    "video": {
-     "url": "https://youtu.be/EEqzDDutT-E"
-    },
-    "vStart": 1700,
-    "vEnd": 1730,
-    "channel": "Разбор WSOP"
-   },
-   "hands": [
-    {
-     "pack": "wsop",
-     "title": "Дисциплина в ранней позиции",
-     "players": 8,
-     "heroPos": "UTG",
-     "heroCards": [
-      "7h",
-      "2c"
-     ],
-     "stacks": {
-      "UTG": 25,
-      "CO": 55,
-      "BTN": 30,
-      "BB": 48
-     },
-     "profiles": {},
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Разбор WSOP",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "UTG",
-       "action": "fold",
-       "size": "",
-       "q": {
-        "vStart": 1740,
-        "vEnd": 1758,
-        "depth": "подробно",
-        "explain": "<b>7‑2 — худшая рука.</b> Из ранней позиции только фолд. Герой сыграл правильно.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "mistake",
-          "size": "2 bb",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "UTG": [
-       "7h",
-       "2c"
-      ]
-     }
-    },
-    {
-     "pack": "wsop",
-     "title": "Дисциплинированный фолд AQ",
-     "players": 8,
-     "heroPos": "CO",
-     "heroCards": [
-      "Ad",
-      "Qs"
-     ],
-     "stacks": {
-      "CO": 40,
-      "UTG": 52,
-      "BTN": 38,
-      "BB": 45
-     },
-     "profiles": {
-      "UTG": {
-       "status": "reg",
-       "style": "tight"
-      }
-     },
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Разбор WSOP",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "UTG",
-       "action": "raise",
-       "size": "2.2 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "fold",
-       "size": "",
-       "q": {
-        "vStart": 1802,
-        "vEnd": 1828,
-        "depth": "коротко",
-        "explain": "<b>Тайтовый рег открывает из‑под пушки.</b> AQo здесь доминируется его диапазоном — 3‑бет раздувает банк, колл играет плохо вне позиции. Аккуратный фолд.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "ok",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "3-бет",
-          "type": "raise",
-          "grade": "mistake",
-          "size": "7 bb",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "CO": [
-       "Ad",
-       "Qs"
-      ]
-     }
-    }
-   ],
-   "hidden": true,
-   "format": "offline"
-  },
-  {
-   "id": "run",
-   "name": "Занос известного игрока",
-   "emoji": "♦",
-   "accent": "#2668C4",
-   "tag": "Онлайн",
-   "host": "Разбор: avr0ra (A‑Game)",
-   "hero": "Регуляр · онлайн‑занос",
-   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
-   "sub": "Одна онлайн‑сессия глазами про: линии на несколько улиц, тонкие коллы.",
-   "intro": {
-    "title": "Онлайн‑занос: путь известного игрока",
-    "text": "Разбираем ключевые руки одной большой онлайн‑сессии: как про строит линии на несколько улиц и ловит тонкие коллы.",
-    "video": {
-     "url": "https://youtu.be/EEqzDDutT-E"
-    },
-    "vStart": 1740,
-    "vEnd": 1770,
-    "channel": "Онлайн‑занос"
-   },
-   "hands": [
-    {
-     "pack": "run",
-     "title": "AKs: линия на три улицы",
-     "players": 8,
-     "heroPos": "BTN",
-     "heroCards": [
-      "Ah",
-      "Kh"
-     ],
-     "stacks": {
-      "BTN": 36,
-      "BB": 34
-     },
-     "profiles": {
-      "BB": {
-       "status": "fish",
-       "style": "tight"
-      }
-     },
-     "board": [
-      "Kc",
-      "7s",
-      "2d",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Онлайн‑занос",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "raise",
-       "size": "2 bb",
-       "q": {
-        "vStart": 1900,
-        "vEnd": 1912,
-        "depth": "коротко",
-        "explain": "<b>AK на баттоне — открываемся.</b> Топ‑рука, лучшая позиция.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "best",
-          "size": "2 bb",
-          "hero": true
-         }
-        ]
-       }
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "call",
-       "size": "2 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "flop",
-       "pos": "BTN",
-       "action": "bet",
-       "size": "4.1 bb",
-       "q": {
-        "vStart": 1914,
-        "vEnd": 1946,
-        "depth": "подробно",
-        "explain": "<b>Топ‑пара топ‑кикер на сухом K‑7‑2.</b> Чистое вэлью — ставь. Против тайтового любителя (метки на BB) особенно.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Чек",
-          "type": "check",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "ok",
-          "size": "1.8 bb",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "best",
-          "size": "2.8 bb",
-          "hero": false
-         },
-         {
-          "id": "o4",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "ok",
-          "size": "4.1 bb",
-          "hero": true
-         }
-        ]
-       }
-      },
-      {
-       "street": "flop",
-       "pos": "BB",
-       "action": "raise",
-       "size": "9 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "BTN",
-       "action": "call",
-       "size": "9 bb",
-       "q": {
-        "vStart": 1914,
-        "vEnd": 1980,
-        "joinPrev": true,
-        "depth": "подробно",
-        "explain": "<b>Любитель бьёт чек‑рейз в сухую доску — это почти всегда сила (сет 77/22 или две пары).</b> Топ‑пара тут уже не так хороша: колл нормально, но не рейз. Фолд слишком слаб.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "mistake",
-          "size": "24 bb",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "BTN": [
-       "Ah",
-       "Kh"
-      ]
-     }
-    },
-    {
-     "pack": "run",
-     "title": "Ловля блефа на ривере",
-     "players": 6,
-     "heroPos": "BB",
-     "heroCards": [
-      "Ac",
-      "9c"
-     ],
-     "stacks": {
-      "BB": 44,
-      "BTN": 60
-     },
-     "profiles": {
-      "BTN": {
-       "status": "reg",
-       "style": "aggr"
-      }
-     },
-     "board": [
-      "9h",
-      "5s",
-      "2d",
-      "Jc",
-      "Qs"
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Онлайн‑занос",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "raise",
-       "size": "2.3 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "call",
-       "size": "2.3 bb"
-      },
-      {
-       "street": "flop",
-       "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "flop",
-       "pos": "BTN",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "turn",
-       "pos": "BTN",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "river",
-       "pos": "BB",
-       "action": "check",
-       "size": ""
-      },
-      {
-       "street": "river",
-       "pos": "BTN",
-       "action": "bet",
-       "size": "4 bb"
-      },
-      {
-       "street": "river",
-       "pos": "BB",
-       "action": "call",
-       "size": "6.7 bb",
-       "q": {
-        "vStart": 2040,
-        "vEnd": 2078,
-        "depth": "подробно",
-        "explain": "<b>Дважды чекнул и вдруг бьёт ривер — диапазон перевешен блефами.</b> Вторая пара с тузом‑кикером ловит достаточно блефов. Колл. Фолд слишком слаб, рейз превращает руку в блеф.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "mistake",
-          "size": "10.4 bb",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "BB": [
-       "Ac",
-       "9c"
-      ]
-     }
-    }
-   ],
-   "hidden": true,
-   "format": "online"
-  },
-  {
-   "id": "final",
-   "name": "Финальный стол онлайн",
-   "emoji": "♣",
-   "accent": "#2E8B57",
-   "tag": "Финалка",
-   "host": "Разбор: Академия Покера",
-   "hero": "Финалист · борьба за титул",
-   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
-   "sub": "Короткие стеки и ICM: пуши, защита BB, борьба за титул.",
-   "intro": {
-    "title": "Финальный стол онлайн‑турнира",
-    "text": "Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.",
-    "video": {
-     "url": "https://youtu.be/EEqzDDutT-E"
-    },
-    "vStart": 1780,
-    "vEnd": 1810,
-    "channel": "Финалка онлайн"
-   },
-   "hands": [
-    {
-     "pack": "final",
-     "title": "JJ против позднего опена",
-     "players": 8,
-     "heroPos": "BB",
-     "heroCards": [
-      "Jh",
-      "Jc"
-     ],
-     "stacks": {
-      "BB": 30,
-      "CO": 38,
-      "BTN": 50
-     },
-     "profiles": {
-      "CO": {
-       "status": "rec",
-       "style": "aggr"
-      }
-     },
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Финалка онлайн",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "CO",
-       "action": "raise",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BB",
-       "action": "call",
-       "size": "2.5 bb",
-       "q": {
-        "vStart": 2140,
-        "vEnd": 2158,
-        "depth": "коротко",
-        "explain": "<b>JJ — премиум.</b> Против опена с поздней позиции — 3‑бет. Колл тоже ок. Фолд нельзя.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "ok",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "o3",
-          "label": "3-бет",
-          "type": "raise",
-          "grade": "best",
-          "size": "8 bb",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "BB": [
-       "Jh",
-       "Jc"
-      ]
-     }
-    },
-    {
-     "pack": "final",
-     "title": "ICM: шов ATo на 12 bb",
-     "players": 3,
-     "heroPos": "BTN",
-     "heroCards": [
-      "As",
-      "Th"
-     ],
-     "stacks": {
-      "BTN": 12,
-      "SB": 20,
-      "BB": 18
-     },
-     "profiles": {},
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/EEqzDDutT-E"
-     },
-     "channel": "Финалка онлайн",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "raise",
-       "size": "12 bb",
-       "q": {
-        "vStart": 2210,
-        "vEnd": 2242,
-        "depth": "подробно",
-        "explain": "<b>12 bb, баттон, три игрока — ATo это чистый пуш.</b> Опен‑рейз мелким сайзом оставляет себя в тяжёлых спотах, фолд слишком тайтово при таком стеке.",
-        "options": [
-         {
-          "id": "o1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "ok",
-          "size": "2 bb",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Олл-ин",
-          "type": "raise",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "BTN": [
-       "As",
-       "Th"
-      ]
-     }
-    }
-   ],
-   "hidden": true,
-   "format": "online"
-  },
-  {
    "id": "wsopme",
    "name": "WSOP Main Event $10K",
    "emoji": "★",
@@ -5060,6 +4364,703 @@
     }
    ],
    "format": "offline",
+   "gate": "free"
+  },
+  {
+   "id": "wsop",
+   "name": "WSOP — топ‑моменты",
+   "emoji": "♠",
+   "accent": "#C8322F",
+   "tag": "Оффлайн",
+   "host": "Разбор: Андрей Козленко",
+   "hero": "Хелмут · профи · 17 браслетов",
+   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
+   "sub": "Ключевые решения с мирового живого турнира: дисциплина, вэлью, чтения.",
+   "intro": {
+    "title": "WSOP Main Event — топ‑моменты",
+    "text": "Подборка ключевых решений с одного из главных живых турниров мира. Сначала спот — принимаешь решение как за столом, потом разбор от автора.",
+    "video": {
+     "url": "https://youtu.be/EEqzDDutT-E"
+    },
+    "vStart": 1700,
+    "vEnd": 1730,
+    "channel": "Разбор WSOP"
+   },
+   "hands": [
+    {
+     "pack": "wsop",
+     "title": "Дисциплина в ранней позиции",
+     "players": 8,
+     "heroPos": "UTG",
+     "heroCards": [
+      "7h",
+      "2c"
+     ],
+     "stacks": {
+      "UTG": 25,
+      "CO": 55,
+      "BTN": 30,
+      "BB": 48
+     },
+     "profiles": {},
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Разбор WSOP",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1740,
+        "vEnd": 1758,
+        "depth": "подробно",
+        "explain": "<b>7‑2 — худшая рука.</b> Из ранней позиции только фолд. Герой сыграл правильно.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "2 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "UTG": [
+       "7h",
+       "2c"
+      ]
+     }
+    },
+    {
+     "pack": "wsop",
+     "title": "Дисциплинированный фолд AQ",
+     "players": 8,
+     "heroPos": "CO",
+     "heroCards": [
+      "Ad",
+      "Qs"
+     ],
+     "stacks": {
+      "CO": 40,
+      "UTG": 52,
+      "BTN": 38,
+      "BB": 45
+     },
+     "profiles": {
+      "UTG": {
+       "status": "reg",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Разбор WSOP",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1802,
+        "vEnd": 1828,
+        "depth": "коротко",
+        "explain": "<b>Тайтовый рег открывает из‑под пушки.</b> AQo здесь доминируется его диапазоном — 3‑бет раздувает банк, колл играет плохо вне позиции. Аккуратный фолд.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "7 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "CO": [
+       "Ad",
+       "Qs"
+      ]
+     }
+    }
+   ],
+   "hidden": true,
+   "format": "offline"
+  },
+  {
+   "id": "run",
+   "name": "Занос известного игрока",
+   "emoji": "♦",
+   "accent": "#2668C4",
+   "tag": "Онлайн",
+   "host": "Разбор: avr0ra (A‑Game)",
+   "hero": "Регуляр · онлайн‑занос",
+   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
+   "sub": "Одна онлайн‑сессия глазами про: линии на несколько улиц, тонкие коллы.",
+   "intro": {
+    "title": "Онлайн‑занос: путь известного игрока",
+    "text": "Разбираем ключевые руки одной большой онлайн‑сессии: как про строит линии на несколько улиц и ловит тонкие коллы.",
+    "video": {
+     "url": "https://youtu.be/EEqzDDutT-E"
+    },
+    "vStart": 1740,
+    "vEnd": 1770,
+    "channel": "Онлайн‑занос"
+   },
+   "hands": [
+    {
+     "pack": "run",
+     "title": "AKs: линия на три улицы",
+     "players": 8,
+     "heroPos": "BTN",
+     "heroCards": [
+      "Ah",
+      "Kh"
+     ],
+     "stacks": {
+      "BTN": 36,
+      "BB": 34
+     },
+     "profiles": {
+      "BB": {
+       "status": "fish",
+       "style": "tight"
+      }
+     },
+     "board": [
+      "Kc",
+      "7s",
+      "2d",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Онлайн‑занос",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2 bb",
+       "q": {
+        "vStart": 1900,
+        "vEnd": 1912,
+        "depth": "коротко",
+        "explain": "<b>AK на баттоне — открываемся.</b> Топ‑рука, лучшая позиция.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "best",
+          "size": "2 bb",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "4.1 bb",
+       "q": {
+        "vStart": 1914,
+        "vEnd": 1946,
+        "depth": "подробно",
+        "explain": "<b>Топ‑пара топ‑кикер на сухом K‑7‑2.</b> Чистое вэлью — ставь. Против тайтового любителя (метки на BB) особенно.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "ok",
+          "size": "1.8 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "best",
+          "size": "2.8 bb",
+          "hero": false
+         },
+         {
+          "id": "o4",
+          "label": "Бет",
+          "type": "bet",
+          "grade": "ok",
+          "size": "4.1 bb",
+          "hero": true
+         }
+        ]
+       }
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "raise",
+       "size": "9 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "call",
+       "size": "9 bb",
+       "q": {
+        "vStart": 1914,
+        "vEnd": 1980,
+        "joinPrev": true,
+        "depth": "подробно",
+        "explain": "<b>Любитель бьёт чек‑рейз в сухую доску — это почти всегда сила (сет 77/22 или две пары).</b> Топ‑пара тут уже не так хороша: колл нормально, но не рейз. Фолд слишком слаб.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "24 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "Ah",
+       "Kh"
+      ]
+     }
+    },
+    {
+     "pack": "run",
+     "title": "Ловля блефа на ривере",
+     "players": 6,
+     "heroPos": "BB",
+     "heroCards": [
+      "Ac",
+      "9c"
+     ],
+     "stacks": {
+      "BB": 44,
+      "BTN": 60
+     },
+     "profiles": {
+      "BTN": {
+       "status": "reg",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "9h",
+      "5s",
+      "2d",
+      "Jc",
+      "Qs"
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Онлайн‑занос",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.3 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "4 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BB",
+       "action": "call",
+       "size": "6.7 bb",
+       "q": {
+        "vStart": 2040,
+        "vEnd": 2078,
+        "depth": "подробно",
+        "explain": "<b>Дважды чекнул и вдруг бьёт ривер — диапазон перевешен блефами.</b> Вторая пара с тузом‑кикером ловит достаточно блефов. Колл. Фолд слишком слаб, рейз превращает руку в блеф.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "10.4 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Ac",
+       "9c"
+      ]
+     }
+    }
+   ],
+   "hidden": true,
+   "format": "online"
+  },
+  {
+   "id": "final",
+   "name": "Финальный стол онлайн",
+   "emoji": "♣",
+   "accent": "#2E8B57",
+   "tag": "Финалка",
+   "host": "Разбор: Академия Покера",
+   "hero": "Финалист · борьба за титул",
+   "cover": "https://img.youtube.com/vi/EEqzDDutT-E/hqdefault.jpg",
+   "sub": "Короткие стеки и ICM: пуши, защита BB, борьба за титул.",
+   "intro": {
+    "title": "Финальный стол онлайн‑турнира",
+    "text": "Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.",
+    "video": {
+     "url": "https://youtu.be/EEqzDDutT-E"
+    },
+    "vStart": 1780,
+    "vEnd": 1810,
+    "channel": "Финальный стол онлайн"
+   },
+   "hands": [
+    {
+     "pack": "final",
+     "title": "JJ против позднего опена",
+     "players": 8,
+     "heroPos": "BB",
+     "heroCards": [
+      "Jh",
+      "Jc"
+     ],
+     "stacks": {
+      "BB": 30,
+      "CO": 38,
+      "BTN": 50
+     },
+     "profiles": {
+      "CO": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Финалка онлайн",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "CO",
+       "action": "raise",
+       "size": "2.5 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BB",
+       "action": "call",
+       "size": "2.5 bb",
+       "q": {
+        "vStart": 2140,
+        "vEnd": 2158,
+        "depth": "коротко",
+        "explain": "<b>JJ — премиум.</b> Против опена с поздней позиции — 3‑бет. Колл тоже ок. Фолд нельзя.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o3",
+          "label": "3-бет",
+          "type": "raise",
+          "grade": "best",
+          "size": "8 bb",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BB": [
+       "Jh",
+       "Jc"
+      ]
+     }
+    },
+    {
+     "pack": "final",
+     "title": "ICM: шов ATo на 12 bb",
+     "players": 3,
+     "heroPos": "BTN",
+     "heroCards": [
+      "As",
+      "Th"
+     ],
+     "stacks": {
+      "BTN": 12,
+      "SB": 20,
+      "BB": 18
+     },
+     "profiles": {},
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/EEqzDDutT-E"
+     },
+     "channel": "Финалка онлайн",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "12 bb",
+       "q": {
+        "vStart": 2210,
+        "vEnd": 2242,
+        "depth": "подробно",
+        "explain": "<b>12 bb, баттон, три игрока — ATo это чистый пуш.</b> Опен‑рейз мелким сайзом оставляет себя в тяжёлых спотах, фолд слишком тайтово при таком стеке.",
+        "options": [
+         {
+          "id": "o1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "o2",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "ok",
+          "size": "2 bb",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Олл-ин",
+          "type": "raise",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "As",
+       "Th"
+      ]
+     }
+    }
+   ],
+   "hidden": true,
+   "format": "online",
    "gate": "free"
   },
   {
@@ -12321,8 +12322,9 @@
      }
     }
    ],
-   "format": "online"
+   "format": "online",
+   "gate": "free"
   }
  ],
- "publishedAt": 1784742919100
+ "publishedAt": 1784745658852
 }
