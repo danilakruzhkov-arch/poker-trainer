@@ -950,23 +950,33 @@ function clipTick(player,s,en,lo){                      // one watchdog step; re
   if(t<lo){try{player.seekTo(s,true);}catch(e){}return 'behind';}                                              // scrubbed before the clip → nudge back to start
   return 'in';
 }
-function guardClip(iframeId,s,en,wrap){
-  loadYTAPI().then(YT=>{
-    if(!YT||!YT.Player||!document.getElementById(iframeId))return;   // no API → countdown-only, no snap-back
-    let player;try{player=new YT.Player(iframeId,{});}catch(e){return;}
-    _ytPlayers.push(player);
-    const lo=Math.max(0,s-1.2);
-    const iv=setInterval(()=>clipTick(player,s,en,lo),500);
-    VTIMERS.push(iv);   // reuse the video-timer cleanup list so stopVideos() clears the watchdog too
-  });
+function armWatchdog(player,s,en){                       // poll the live player and snap the scrubber back inside [s,en]
+  const lo=Math.max(0,s-1.2);
+  const iv=setInterval(()=>clipTick(player,s,en,lo),500);
+  VTIMERS.push(iv);   // reuse the video-timer cleanup list so stopVideos() clears the watchdog too
+}
+function plainEmbed(slot,id,s,en){                       // fallback when the IFrame API can't load (artifact CSP / offline): a dumb clip, no snap-back
+  const el=document.getElementById(slot);if(!el)return;
+  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1';if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
+  el.outerHTML=`<iframe width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
 }
 function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
-  // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT and can't be removed via params
-  // enablejsapi+origin turn on the JS control channel the spoiler guard needs to read time and seek the player
-  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&origin='+encodeURIComponent(location.origin);if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
-  const wrap=fac.parentElement,fid='ytf'+(++_ytSeq);
-  wrap.innerHTML=`<iframe id="${fid}" width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
-  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);guardClip(fid,s,en,wrap);}}
+  // Let the IFrame API BUILD the player from a placeholder div (host=nocookie). Attaching to a pre-made
+  // youtube-nocookie iframe silently fails, so this div-first path is what makes the spoiler guard actually work.
+  const wrap=fac.parentElement,slot='ytf'+(++_ytSeq);
+  wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
+  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);}   // countdown overlay is a sibling of the div → survives the API swap
+  loadYTAPI().then(YT=>{
+    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en);return;}   // no API → dumb embed, countdown-only
+    // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT
+    const pv={autoplay:1,rel:0,playsinline:1,modestbranding:1,iv_load_policy:3,disablekb:1,start:s||0,origin:location.origin};
+    if(en>s)pv.end=en;
+    let player;
+    try{player=new YT.Player(slot,{host:'https://www.youtube-nocookie.com',videoId:id,playerVars:pv,
+      events:{onReady:()=>{if(en>s)armWatchdog(player,s,en);}}});}
+    catch(e){plainEmbed(slot,id,s,en);return;}
+    _ytPlayers.push(player);
+  });}
 function canAutoEmbed(){try{return window.self===window.top;}catch(e){return false;}}
 // kill any playing YouTube iframe (sheet review clip or intro clip) so audio stops the moment we move on
 function stopVideos(){clearClipTimers();_ytPlayers.forEach(p=>{try{p&&p.destroy&&p.destroy();}catch(e){}});_ytPlayers=[];document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
@@ -977,7 +987,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.6';
+const APP_VER='2026-07-22.7';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
