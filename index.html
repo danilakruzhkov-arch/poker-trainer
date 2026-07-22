@@ -877,10 +877,12 @@ const FB_CATS=[
   {k:'other',  t:'Другое'},
 ];
 let CURPACK={id:'',title:''};
-// --- Supabase (feature-flagged; disabled until the user pastes a URL + anon key) ---
-function supaCfg(){try{return JSON.parse(localStorage.getItem('pk_supa')||'null')||null;}catch(e){return null;}}
-function supaSet(url,key){try{if(url&&key)localStorage.setItem('pk_supa',JSON.stringify({url:url.trim().replace(/\/+$/,''),key:key.trim()}));else localStorage.removeItem('pk_supa');}catch(e){}}
-function supaEnabled(){const c=supaCfg();return !!(c&&c.url&&c.key);}
+// --- Supabase feedback sink. The anon key is PUBLIC-safe by design: RLS lets it only INSERT into `feedback`
+//     (no read/update/delete). Baked into the build — no per-browser config. The service_role key is NEVER here. ---
+const SUPA_URL='https://mydnywznytluikbwbhsk.supabase.co';
+const SUPA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZG55d3pueXRsdWlrYndiaHNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NzYyMjUsImV4cCI6MjEwMDI1MjIyNX0.jMzRxcToJg-j6nS_HO01C70zC_8UpM-tjOlYPPd3BuA';
+function supaCfg(){return (SUPA_URL&&SUPA_ANON)?{url:SUPA_URL,key:SUPA_ANON}:null;}
+function supaEnabled(){return !!(SUPA_URL&&SUPA_ANON);}
 async function supaInsert(table,rows){const c=supaCfg();if(!c||!c.url||!c.key)return {ok:false,status:0};
   try{const r=await fetch(c.url+'/rest/v1/'+table,{method:'POST',headers:{'Content-Type':'application/json','apikey':c.key,'Authorization':'Bearer '+c.key,'Prefer':'return=minimal'},body:JSON.stringify(rows)});
     return {ok:r.ok,status:r.status};}catch(e){return {ok:false,status:0,err:String(e)};}}
@@ -1177,11 +1179,9 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <div class="pubhint">С токеном правки уходят в облако (packs.json) сами при каждом сохранении — зрители видят их через ~минуту. Кнопка нужна только для ручной публикации. Токен хранится лишь в этом браузере. «Мой набор» остаётся личным и в облако не уходит. Внутри артефакта не работает (CSP) — только на github‑версии.</div>
     </div>
     <div class="pubbar">
-      <div class="pubtop"><span class="publbl">🗄 База отзывов · Supabase</span><span class="pubstate ${supaEnabled()?'ok':''}">${supaEnabled()?'подключена':'не подключена'}</span></div>
-      <div class="pubrow"><input id="supa-url" autocomplete="off" placeholder="https://xxxx.supabase.co" value="${supaCfg()?esc(supaCfg().url):''}"></div>
-      <div class="pubrow"><input id="supa-key" type="password" autocomplete="off" placeholder="${supaCfg()?'обновить anon‑ключ…':'anon public key'}"><button class="ghost newbtn" id="supa-save">${supaCfg()?'Заменить':'Подключить'}</button>${supaCfg()?`<button class="ghost newbtn" id="supa-clear">Отключить</button>`:''}</div>
-      <div class="pubrow"><button class="ghost newbtn" id="fb-copy" style="flex:1">📋 Отзывы в очереди: <b id="fbCount">${fbQueueGet().length}</b></button>${fbQueueGet().length?`<button class="ghost newbtn" id="fb-flush">↑ в базу</button><button class="ghost newbtn" id="fb-clearq">Очистить</button>`:''}</div>
-      <div class="pubhint">Отзывы игроков («Сообщить об ошибке») пишутся сюда. Пока база не подключена — копятся в этом браузере: жми «Отзывы в очереди», чтобы скопировать их JSON. Это ОТДЕЛЬНЫЙ проект Supabase (не clippoint), anon‑ключ хранится только в этом браузере. Как поднять базу за 5 минут — см. <b>SUPABASE-SETUP.md</b> в репозитории.</div>
+      <div class="pubtop"><span class="publbl">🗄 Отзывы · Supabase</span><span class="pubstate ok">пишутся в базу</span></div>
+      ${fbQueueGet().length?`<div class="pubrow"><span class="mini" style="flex:1">Не ушло (нет сети): <b id="fbCount">${fbQueueGet().length}</b></span><button class="ghost newbtn" id="fb-flush">↑ в базу</button><button class="ghost newbtn" id="fb-copy">📋</button><button class="ghost newbtn" id="fb-clearq">Очистить</button></div>`:''}
+      <div class="pubhint">Отзывы игроков («Сообщить об ошибке») уходят прямо в Supabase (проект <code>mydnywzn…</code>, отдельный от clippoint). Ключ и адрес зашиты в сборке — вводить ничего не нужно. Смотреть отзывы: Supabase → Table Editor → <b>feedback</b>.</div>
     </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
@@ -1455,10 +1455,6 @@ function wireForm(){
   if($('col-new'))$('col-new').onclick=()=>{readForm();const name=(prompt('Название новой подборки:','Новая подборка')||'').trim();if(!name)return;COLS.push({id:'u'+Date.now(),name,emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'',intro:blankIntro(name),hands:[]});useCol(COLS.length-1);F=blankHand();buildForm();renderSet();persist();toast('Подборка создана: '+name);};
   if($('gh-save'))$('gh-save').onclick=()=>{const v=$('gh-token').value.trim();if(!v){toast('Вставь токен',1);return;}setGhToken(v);toast('Токен сохранён в этом браузере');buildForm();schedulePublish();};
   if($('gh-clear'))$('gh-clear').onclick=()=>{setGhToken('');toast('Токен удалён');buildForm();};
-  if($('supa-save'))$('supa-save').onclick=async()=>{const u=$('supa-url').value.trim(),k=$('supa-key').value.trim();
-    if(!u||!k){toast('Нужны и URL, и anon‑ключ',1);return;}if(!/^https:\/\/.+\.supabase\.co/.test(u)){toast('URL вида https://xxxx.supabase.co',1);return;}
-    supaSet(u,k);toast('База подключена (этот браузер)');const n=await flushFbQueue();if(n)toast('Очередь отзывов отправлена в базу');buildForm();};
-  if($('supa-clear'))$('supa-clear').onclick=()=>{supaSet('','');toast('База отключена');buildForm();};
   if($('fb-copy'))$('fb-copy').onclick=async()=>{const q=fbQueueGet();if(!q.length){toast('Очередь пуста');return;}
     const txt=JSON.stringify(q,null,2);try{await navigator.clipboard.writeText(txt);toast('Скопировано: '+q.length+' отз.');}catch(e){toast('Не удалось скопировать',1);}};
   if($('fb-flush'))$('fb-flush').onclick=async()=>{if(!supaEnabled()){toast('Сначала подключи базу',1);return;}const ok=await flushFbQueue();toast(ok?'Отправлено в базу ✓':'Не удалось отправить',ok?0:1);buildForm();};
