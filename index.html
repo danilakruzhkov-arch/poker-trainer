@@ -987,7 +987,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.7';
+const APP_VER='2026-07-22.8';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1373,6 +1373,26 @@ function normalizeHand(){F.actions.forEach(a=>{if(a.pos!==F.heroPos)delete a.q;}
 function choiceOf(action){return action==='bet'?'raise':action;}
 // did this user-action face a bet when it was made? (read from the resolved replay)
 function rowFacing(a){const row=resolve(F).rows.find(r=>r.ref===a);return row?row.facing:(a.action==='call'||a.action==='fold');}
+// Keep auto-inferred passives fluid. A trailing authored check/fold (no question) is only ever an auto-fill the
+// engine reproduces on its own; leaving it explicit freezes the hand and hides the «＋ ход» frontier. So after a
+// delete we peel such passives off the tail (revealing the add-move point), and after a seat turns into a raise we
+// drop the now-stale passives behind it so the following seats re-resolve against the new bet.
+function trimTrailingPassives(hand){
+  for(let g=0;g<200;g++){
+    const authored=resolve(hand).rows.filter(r=>r.ref);
+    const last=authored[authored.length-1];
+    if(last&&(last.action==='check'||last.action==='fold')&&!last.ref.q){
+      const i=hand.actions.indexOf(last.ref);if(i>=0){hand.actions.splice(i,1);continue;}
+    }
+    return;
+  }
+}
+function dropPassivesAfter(hand,a){
+  const authored=resolve(hand).rows.filter(r=>r.ref).map(r=>r.ref);
+  const idx=authored.indexOf(a);if(idx<0)return;
+  authored.slice(idx+1).filter(x=>(x.action==='check'||x.action==='fold')&&!x.q)
+    .forEach(x=>{const i=hand.actions.indexOf(x);if(i>=0)hand.actions.splice(i,1);});
+}
 function markQuestion(a){const facing=rowFacing(a);
   const opts=defaultOptions(a.street,facing);
   // hero's real action is known (from the timeline / imported history) — prefill it as one option,
@@ -1635,10 +1655,10 @@ function wireForm(){
   // timeline row edits (position/action commit immediately → re-resolve; sizes debounced)
   $('adForm').querySelectorAll('.tlrow').forEach(r=>{const ai=+r.dataset.ai,a=F.actions[ai];if(!a)return;
     const ps=r.querySelector('.ta-pos');if(ps)ps.onchange=e=>{readForm();a.pos=e.target.value;buildForm();};
-    const ac=r.querySelector('.ta-act');if(ac)ac.onchange=e=>{readForm();a.action=e.target.value;if(a.action==='fold'||a.action==='check')a.size='';buildForm();};
+    const ac=r.querySelector('.ta-act');if(ac)ac.onchange=e=>{readForm();a.action=e.target.value;if(a.action==='fold'||a.action==='check')a.size='';if(a.action==='raise')dropPassivesAfter(F,a);buildForm();};
     const sz=r.querySelector('.ta-size');if(sz&&!sz.readOnly)sz.addEventListener('input',()=>{readForm();syncPreview();});
   });
-  $('adForm').querySelectorAll('[data-delact]').forEach(b=>b.onclick=()=>{readForm();F.actions.splice(+b.dataset.delact,1);ensureBoard(F);buildForm();});
+  $('adForm').querySelectorAll('[data-delact]').forEach(b=>b.onclick=()=>{readForm();F.actions.splice(+b.dataset.delact,1);trimTrailingPassives(F);ensureBoard(F);buildForm();});
   $('adForm').querySelectorAll('[data-mkq]').forEach(b=>b.onclick=()=>{readForm();const a=F.actions[+b.dataset.mkq];if(!a)return;if(a.pos!==F.heroPos){toast('Вопрос — только из своего хода',1);return;}markQuestion(a);F.curQ=questionEntries().indexOf(a);buildForm();});
   $('adForm').querySelectorAll('[data-goq]').forEach(b=>b.onclick=()=>{readForm();F.curQ=+b.dataset.goq;buildForm();});
   // materialize a run of auto passives into editable explicit rows (delete a row to revert to auto)
