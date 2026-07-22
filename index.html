@@ -484,6 +484,17 @@
   .stbar{width:78px;height:7px;background:var(--field-lite);border-radius:99px;overflow:hidden;flex:none}
   .stbar span{display:block;height:100%;background:var(--brass)}
   .stnum{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;min-width:58px;text-align:right}
+  /* content gate (E): login wall past the free hands, or for «по входу» packs */
+  .gate{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:230px;padding:26px 20px;gap:11px}
+  .gate-ic{font-size:34px;line-height:1;opacity:.92}
+  .gate-t{font-size:19px;font-weight:800;color:var(--text)}
+  .gate-s{font-size:13.5px;color:var(--muted);max-width:330px;line-height:1.5}
+  .gate-btn{display:inline-flex;align-items:center;gap:9px;margin-top:6px;background:var(--brass);color:#20160a;border:0;border-radius:999px;padding:11px 20px;font-size:14px;font-weight:800;cursor:pointer}
+  .gate-btn:hover{filter:brightness(1.06)}
+  .gate-btn .gic{width:17px;height:17px;flex:none}
+  .gate-foot{font-size:11px;color:var(--muted);max-width:290px;line-height:1.45;margin-top:2px}
+  .pbadge{position:absolute;top:9px;left:9px;z-index:2;background:rgba(12,12,12,.72);color:#f2e6c9;border:1px solid var(--brass);border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+  .pbadge.pro{background:var(--brass);color:#20160a}
 </style>
 
 <div class="wrap" id="wrap">
@@ -829,7 +840,9 @@ function renderBand(){const p=PLAY[i];if(!p||p.stepCount<2){$('stepband').innerH
   $('stepband').innerHTML=`${dots}<span style="margin-left:4px">${STREET_RU[v.street]} · решение ${p.stepNo}/${p.stepCount}</span><span class="series">одна раздача</span>`;}
 function renderHand(){
   if(!PLAY.length){$('trainTable').innerHTML='';$('who').textContent='Нет раздач';$('ctx').textContent='Добавь раздачи в редакторе.';$('acts').innerHTML='';$('pips').innerHTML='';$('stepband').innerHTML='';return;}
-  const p=PLAY[i], v=qView(HANDS[p.hi],p.k);
+  const p=PLAY[i];
+  if(handLocked(CURPACK.id,p.hi)){showGate(packGateOf(CURPACK.id));return;}   // E: login wall before the question renders
+  const v=qView(HANDS[p.hi],p.k);
   replayInto($('trainTable'),v);renderBand();renderActionLog(v);   // #10 quick replay of prior streets, then settle on the decision
 
   $('who').innerHTML=whoText(v);$('ctx').innerHTML=ctxText(v);
@@ -929,7 +942,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.4';
+const APP_VER='2026-07-22.5';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1156,7 +1169,7 @@ function secClass(key){return _ui.collapsed[key]?' collapsed':'';}
 function activeCol(){if(curCol<0)curCol=0;if(curCol>=COLS.length)curCol=COLS.length-1;return COLS[curCol]||COLS[0];}
 function findCol(id){return COLS.find(c=>c.id===id);}
 // unified list for the home screen: demo packs (library) + user collections
-function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',format:c.format||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
+function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',format:c.format||'',gate:c.gate||'free',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
 function packHands(id){const c=findCol(id);return c?c.hands.filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill
 function packStats(id){const c=findCol(id),hs=c?c.hands:[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}
 // home-screen filter facets. Each facet reads a pack field; a facet only appears if ≥2 distinct
@@ -1171,8 +1184,9 @@ let HOME_FILTER={host:'',format:'',hero:''};
 function packCardHTML(p){const st=packStats(p.id),empty=st.questions===0;
   const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
   const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
+  const gate=p.gate||'free';const badge=gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
   return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
-    <div class="part ${p.cover?'has-cover':''}" style="${partStyle}"><div class="pemoji">${p.emoji}</div></div>
+    <div class="part ${p.cover?'has-cover':''}" style="${partStyle}">${badge}<div class="pemoji">${p.emoji}</div></div>
     <div class="pbody">
       <div class="ptitle">${p.title}</div>
       ${tags}
@@ -1210,6 +1224,27 @@ function renderHome(){
 function plural(n){const a=n%10,b=n%100;return (a===1&&b!==11)?'':((a>=2&&a<=4)&&(b<10||b>=20)?'а':'ов');}
 function hasIntro(x){return !!(x&&(x.title||x.text||(x.video&&x.video.url)));}
 function packIntro(id){const c=findCol(id);return hasIntro(c&&c.intro)?c.intro:null;}
+/* ===== content gating (E): first N hands of a pack are free; beyond that — or whole «по входу» packs — need a login.
+   'pro' is reserved for paid packs later; for now it behaves like 'login' (account required) with its own badge. ===== */
+const FREE_HANDS=7;                                                  // how many hands of a normal pack play without an account
+function packGateOf(id){const c=findCol(id);return (c&&c.gate)||'free';}   // 'free' | 'login' | 'pro'
+function handLocked(id,hi){const g=packGateOf(id);
+  if(g==='login'||g==='pro')return !CURUSER;                         // whole pack requires an account
+  return hi>=FREE_HANDS&&!CURUSER;}                                  // free pack: the first FREE_HANDS hands are open to everyone
+function showGate(kind){                                             // draw the login wall in place of the question
+  clearReplay();stopVideos();
+  $('pips').innerHTML='';$('stepband').innerHTML='';const al=$('alog');if(al){al.style.display='none';al.innerHTML='';}
+  const whole=(kind==='login'||kind==='pro');
+  const title=whole?'Подборка открывается по входу':'Дальше — после входа';
+  const sub=whole?'Войди через Google, чтобы открыть все раздачи этой подборки. Это бесплатно.'
+                 :`Первые ${FREE_HANDS} раздач бесплатны. Войди, чтобы продолжить — прогресс и статистика сохранятся.`;
+  $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">${title}</div><div class="gate-s">${sub}</div>`+
+    `<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`+
+    `<div class="gate-foot">Вход нужен только чтобы хранить твой прогресс. Мы ничего не публикуем от твоего имени.</div></div>`;
+  $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
+  const b=$('gateIn');if(b)b.onclick=authSignIn;}
+function refreshGate(){                                              // after a login, if the drill is sitting on a locked hand, reveal it
+  if(PLAY.length&&$('drillWrap')&&$('drillWrap').style.display!=='none'&&$('trainApp')&&$('trainApp').style.display!=='none')renderHand();}
 function playPack(id){const hs=packHands(id);if(!hs.length){toast('В подборке пока нет вопросов',1);return;}
   const meta=allPacks().find(p=>p.id===id);HANDS=hs;CURPACK={id,title:meta?meta.title:id};   // remembered for «Сообщить об ошибке» reports
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
@@ -1267,6 +1302,7 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <div class="fld"><label>Тег: кто ведёт разбор</label><input id="col-host" value="${esc(c.host)}" placeholder="Разбор от Андрея Козленко"></div>
       <div class="fld"><label>Тег: кто герой</label><input id="col-hero" value="${esc(c.hero)}" placeholder="Негреану · про · $6M"></div>
       <div class="fld"><label>Формат турнира (фильтр на главной)</label><select id="col-format"><option value=""${!c.format?' selected':''}>— не указан —</option><option value="online"${c.format==='online'?' selected':''}>Онлайн</option><option value="offline"${c.format==='offline'?' selected':''}>Оффлайн</option></select></div>
+      <div class="fld"><label>Доступ (вход в аккаунт)</label><select id="col-gate"><option value="free"${(!c.gate||c.gate==='free')?' selected':''}>Первые ${FREE_HANDS} раздач — бесплатно</option><option value="login"${c.gate==='login'?' selected':''}>Только по входу</option><option value="pro"${c.gate==='pro'?' selected':''}>PRO — платно (скоро)</option></select></div>
     </div>
     <div class="col-intro"><div class="cih">Вступление перед первым вопросом</div>
       <div class="fld"><label>Заголовок</label><input id="ci-title" value="${esc(it.title)}" placeholder="Финалка Sunday Million"></div>
@@ -1279,6 +1315,7 @@ function readCol(){if(!$('col-name'))return;const c=activeCol();
   c.name=$('col-name').value.trim()||c.name;c.emoji=$('col-emoji').value.trim()||'✎';
   c.cover=$('col-cover').value.trim();c.host=$('col-host').value.trim();c.hero=$('col-hero').value.trim();
   if($('col-format'))c.format=$('col-format').value;
+  if($('col-gate'))c.gate=$('col-gate').value;
   c.intro={title:$('ci-title').value.trim(),text:$('ci-text').value.trim(),video:{url:$('ci-vurl').value.trim()},vStart:mmss2sec($('ci-vstart').value),vEnd:mmss2sec($('ci-vend').value),channel:c.name};}
 const TL_CHOICES=[['fold','Фолд'],['check','Чек'],['call','Колл'],['raise','Рейз']];
 function blankHand(){return {players:8,heroPos:'BTN',heroCards:['',''],cards:{},stacks:{},profiles:{},board:['','','','',''],video:{url:''},channel:'PokerLab',actions:[],curQ:0,editIndex:null,unit:(F&&F.unit)||'bb',bbChips:(F&&F.bbChips)||''};}
@@ -1850,7 +1887,7 @@ async function initAuth(){
   if(!c){const s=$('authSlot');if(s)s.innerHTML='';return;}         // SDK unavailable (offline / artifact mode) — hide the control
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
   renderAuth();if(CURUSER)flushAttempts();                    // push any progress queued while signed-out/offline
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();if(CURUSER)flushAttempts();});}catch(e){}
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();if(CURUSER){flushAttempts();refreshGate();}});}catch(e){}
 }
 // --- Stage 3c: personal stats, read from attempts (RLS returns only this user's rows) ---
 async function openStats(){
