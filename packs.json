@@ -1704,7 +1704,8 @@
        "Ad",
        "Kc"
       ]
-     }
+     },
+     "hidden": false
     },
     {
      "pack": "wsopme",
@@ -12587,5 +12588,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784747605555
+ "publishedAt": 1784747899051
 }
