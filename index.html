@@ -998,7 +998,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-22.12';
+const APP_VER='2026-07-23.1';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1339,12 +1339,12 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
     <div class="pubbar">
-      <div class="pubtop"><span class="publbl">☁ Облако · GitHub</span><span class="pubstate ${ghToken()?'ok':''}">${ghToken()?'токен сохранён':'токен не задан'}</span></div>
-      <div class="pubrow"><input id="gh-token" type="password" autocomplete="off" placeholder="${ghToken()?'обновить токен…':'GitHub fine‑grained токен (Contents: write)'}"><button class="ghost newbtn" id="gh-save">${ghToken()?'Заменить':'Сохранить'}</button>${ghToken()?`<button class="ghost newbtn" id="gh-clear">Удалить</button>`:''}</div>
+      <div class="pubtop"><span class="publbl">☁ Облако · Supabase</span><span class="pubstate ${CURUSER?'ok':''}">${CURUSER?'вход выполнен':'нужен вход через Google'}</span></div>
+      ${CURUSER?'':`<div class="pubhint" style="margin-top:0;margin-bottom:8px">Публикация привязана к твоему Google‑аккаунту — нажми «Войти» вверху справа. Токен больше не нужен: любой браузер видит паки сразу, публиковать можешь только ты после входа.</div>`}
       <div class="pubrow"><button class="pubbtn" id="col-publish">⬆ Опубликовать сейчас</button><button class="ghost newbtn" id="col-pull">⬇ Загрузить из облака</button></div>
       <div class="syncstat" id="syncStat" style="display:none"></div>
       ${lastPub?`<div class="pubmsg ${lastPubOk?'ok':'bad'}" id="pubMsg">${esc(lastPub)}</div>`:`<div class="pubmsg" id="pubMsg" style="display:none"></div>`}
-      <div class="pubhint">С токеном правки уходят в облако (packs.json) сами при каждом сохранении — зрители видят их через ~минуту. Кнопка нужна только для ручной публикации. Токен хранится лишь в этом браузере. «Мой набор» остаётся личным и в облако не уходит. Внутри артефакта не работает (CSP) — только на github‑версии.</div>
+      <div class="pubhint">Правки уходят в облако (Supabase) сами при каждом сохранении — если ты вошёл через Google. Зрители видят их при обновлении страницы. «Мой набор» остаётся личным и в облако не уходит. Внутри артефакта не работает (CSP) — только на github‑версии.</div>
     </div>
     <div class="pubbar">
       <div class="pubtop"><span class="publbl">🗄 Отзывы · Supabase</span><span class="pubstate ok">пишутся в базу</span></div>
@@ -1877,7 +1877,7 @@ function persist(clean){
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(()=>persist(),400);}
 // debounced auto-push to GitHub. Fires ~2.5s after the last edit; skips a no-op if nothing that goes to the cloud actually changed.
 function schedulePublish(){
-  if(!ghToken()){updSync('unpushed');return;}
+  if(!CURUSER){updSync('unpushed');return;}   // not signed in → can't publish; edits stay local until Google login
   clearTimeout(_pubT);_pubT=setTimeout(async()=>{
     if(pubStr()===_syncedStr){_dirty=false;persist(true);return;}
     updSync('saving');
@@ -1887,7 +1887,7 @@ function schedulePublish(){
 }
 function updSync(state){const el=document.getElementById('syncStat');if(!el)return;
   const M={cloud:['☁ Сохранено в облако','ok'],saving:['⟳ Сохраняю…','dim'],synced:['☁ Синхронизировано с облаком','dim'],
-    unpushed:['● Правки только в этом браузере — задай GitHub‑токен выше, чтобы они ушли в облако','warn'],
+    unpushed:['● Правки только в этом браузере — войди через Google (вверху справа), чтобы опубликовать','warn'],
     error:['⚠ Не ушло в облако — правки пока сохранены только локально','bad']};
   const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='block';}
 // ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
@@ -1902,19 +1902,28 @@ function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
 function adoptCols(cols){const prevId=COLS[curCol]&&COLS[curCol].id;COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});const keep=prevId?COLS.findIndex(c=>c.id===prevId):-1;curCol=keep>=0?keep:COLS.length-1;useCol(curCol);}
 // adopt the cloud packs as the shared truth, but keep this browser's personal 'Мой набор' (it never goes to the cloud)
 function adoptFromCloud(serverCols){const mine=COLS.find(c=>c&&c.id==='mine');const cols=serverCols.filter(c=>c&&c.id!=='mine');if(mine)cols.push(mine);adoptCols(cols);}
-async function loadPublished(){try{const r=await fetch(GH_FILE+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return null;const j=await r.json();if(j&&Array.isArray(j.cols))return j;}catch(e){}return null;}
-async function publishPacks(auto){const tok=ghToken();if(!tok){if(!auto)pubSay('Нет токена — вставь GitHub‑токен и жми «Опубликовать»',1);return false;}
-  if(!auto)readForm();const body=JSON.stringify({cols:pubCols(),publishedAt:Date.now()},null,1);
-  const api='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
-  const H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-  try{let sha;const g=await fetch(api+'?ref='+GH_BRANCH,{headers:H,cache:'no-store'});
-    if(g.status===200){sha=(await g.json()).sha;}
-    else if(g.status===401){pubSay('Токен неверный (401) — скопирован не целиком или отозван',1);return false;}
-    else if(g.status===403||g.status===404){pubSay('Нет доступа ('+g.status+') — токен должен быть на репозиторий poker‑trainer с правом Contents: read/write',1);return false;}
-    const put=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message:'publish packs',content:b64utf8(body),branch:GH_BRANCH,sha:sha})});
-    if(put.ok){PUBLISHED={cols:pubCols(),publishedAt:Date.now()};try{localStorage.setItem('pk_pub_at',String(PUBLISHED.publishedAt));}catch(e){}if(!auto)pubSay('Опубликовано ✓ — зрители увидят через ~минуту');return true;}
-    const ej=await put.json().catch(()=>({}));pubSay('Не вышло ('+put.status+'): '+(ej.message||'проверь права токена'),1);return false;
-  }catch(e){pubSay('Запрос не прошёл — в артефакте блокирует CSP, публикуй с github‑версии сайта',1);return false;}}
+// Supabase is the source of truth for shared packs; packs.json is a static fallback used only if the DB is unreachable.
+async function loadPublished(){
+  try{await loadSupaSDK();const c=authClient();
+    if(c){const {data,error}=await c.from('packs').select('cols,published_at').eq('id',1).maybeSingle();
+      if(!error&&data&&Array.isArray(data.cols))return {cols:data.cols,publishedAt:Number(data.published_at)||0};}
+  }catch(e){}
+  try{const r=await fetch(GH_FILE+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return null;const j=await r.json();if(j&&Array.isArray(j.cols))return j;}catch(e){}
+  return null;
+}
+// publish the shared packs to Supabase; writes are RLS-gated to the admin Google account, so no token lives in the browser.
+async function publishPacks(auto){
+  await loadSupaSDK();const c=authClient();
+  if(!c){if(!auto)pubSay('Облако недоступно (нет сети или клиент не загрузился)',1);return false;}
+  if(!CURUSER){if(!auto)pubSay('Войди через Google (кнопка вверху справа), чтобы публиковать',1);return false;}
+  if(!auto)readForm();
+  const at=Date.now(),cols=pubCols();
+  try{const {error}=await c.from('packs').upsert({id:1,cols:cols,published_at:at,updated_at:new Date(at).toISOString()},{onConflict:'id'});
+    if(error){const m=error.message||'';pubSay(/row-level|policy|permission|denied|403/i.test(m)?'Нет прав на публикацию — этот Google‑аккаунт не админ':'Не вышло: '+(m||'ошибка'),1);return false;}
+    PUBLISHED={cols:cols,publishedAt:at};try{localStorage.setItem('pk_pub_at',String(at));}catch(e){}
+    if(!auto)pubSay('Опубликовано ✓ — зрители увидят при обновлении страницы');return true;
+  }catch(e){pubSay('Запрос не прошёл — проверь сеть',1);return false;}
+}
 function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(!s)return;
   let cols=Array.isArray(s.cols)&&s.cols.length?s.cols.slice()
     :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[]}];   // migrate old {set,mine} shape
@@ -2052,7 +2061,7 @@ async function syncPacks(){                                           // adopt f
       updSync('synced');
     }else{                                                            // this browser has edits the cloud doesn't — keep them and push up
       PUBLISHED=pub;
-      if(ghToken())schedulePublish();else updSync('unpushed');
+      schedulePublish();                                            // self-gates on CURUSER; shows 'unpushed' if not signed in
     }
   }catch(e){}
 }
