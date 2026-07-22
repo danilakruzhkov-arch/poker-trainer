@@ -2501,10 +2501,10 @@
      "pack": "wsopme",
      "title": "Дамы пасуют на 4-бет (копия)",
      "players": 9,
-     "heroPos": "UTG+2",
+     "heroPos": "HJ",
      "heroCards": [
-      "Qh",
-      "Qd"
+      "8h",
+      "9h"
      ],
      "stacks": {
       "CO": null,
@@ -2589,47 +2589,47 @@
        "street": "preflop",
        "pos": "UTG+2",
        "action": "fold",
-       "size": "",
-       "q": {
-        "vStart": 1423,
-        "vEnd": 1495,
-        "depth": "подробно",
-        "explain": "Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит. Простой дисциплинированный пас;",
-        "options": [
-         {
-          "id": "p1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "p2",
-          "label": "Колл",
-          "size": "",
-          "type": "call",
-          "grade": "mistake",
-          "hero": false
-         },
-         {
-          "id": "p3",
-          "label": "5-бет",
-          "size": "",
-          "type": "raise",
-          "grade": "mistake",
-          "hero": false
-         }
-        ],
-        "joinPrev": false,
-        "contPrev": false
-       }
+       "size": ""
       },
       {
        "street": "preflop",
        "pos": "HJ",
        "action": "call",
-       "size": ""
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "27 bb",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       }
      ],
      "cards": {
@@ -12958,5 +12958,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784756658270
+ "publishedAt": 1784756787719
 }
