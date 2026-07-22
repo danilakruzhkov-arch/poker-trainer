@@ -2499,6 +2499,158 @@
     },
     {
      "pack": "wsopme",
+     "title": "Дамы пасуют на 4-бет (копия)",
+     "players": 9,
+     "heroPos": "UTG+2",
+     "heroCards": [
+      "Qh",
+      "Qd"
+     ],
+     "stacks": {
+      "CO": null,
+      "BTN": null,
+      "SB": 92,
+      "BB": null,
+      "UTG": null,
+      "UTG+1": null,
+      "UTG+2": 170,
+      "LJ": null,
+      "HJ": 112.5
+     },
+     "profiles": {
+      "BTN": {
+       "status": "",
+       "style": ""
+      },
+      "SB": {
+       "status": "",
+       "style": "aggr"
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": "aggr"
+      },
+      "CO": {
+       "status": "",
+       "style": ""
+      }
+     },
+     "board": [
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG+2",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "raise",
+       "size": "6 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "SB",
+       "action": "raise",
+       "size": "18 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG+2",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 1423,
+        "vEnd": 1495,
+        "depth": "подробно",
+        "explain": "Против холодного 4-бета мало кто блефует — рисковать 90бб с дамами не стоит. Простой дисциплинированный пас;",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "best",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "p2",
+          "label": "Колл",
+          "size": "",
+          "type": "call",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "p3",
+          "label": "5-бет",
+          "size": "",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "joinPrev": false,
+        "contPrev": false
+       }
+      },
+      {
+       "street": "preflop",
+       "pos": "HJ",
+       "action": "call",
+       "size": ""
+      }
+     ],
+     "cards": {
+      "SB": [
+       "Ks",
+       "Kd"
+      ],
+      "HJ": [
+       "8h",
+       "9h"
+      ],
+      "UTG+2": [
+       "Qh",
+       "Qd"
+      ]
+     },
+     "unit": "chips",
+     "bbChips": "2000"
+    },
+    {
+     "pack": "wsopme",
      "title": "Блеф Фоксона по риверу",
      "players": 9,
      "heroPos": "CO",
@@ -12806,5 +12958,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784756652218
+ "publishedAt": 1784756658270
 }
