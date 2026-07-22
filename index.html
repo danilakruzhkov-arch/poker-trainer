@@ -117,7 +117,12 @@
   .qr-opt.g-best{border-color:rgba(70,177,123,.45)}
   .qr-opt.g-ok{border-color:rgba(224,163,46,.35)}
   .qr-opt.g-mistake{border-color:rgba(226,80,78,.3)}
-  .qr-opt.picked{box-shadow:0 0 0 2px rgba(198,161,91,.35)}
+  /* "your pick" ring matches the verdict colour (green/amber/red) — no second, differently-coloured outline */
+  .qr-opt.picked.g-best{box-shadow:0 0 0 2px rgba(70,177,123,.55)}
+  .qr-opt.picked.g-ok{box-shadow:0 0 0 2px rgba(224,163,46,.5)}
+  .qr-opt.picked.g-mistake{box-shadow:0 0 0 2px rgba(226,80,78,.55)}
+  .qr-lbl .num .pct{color:var(--muted);font-weight:600;font-size:.92em}
+  .btn .u .pct,.pvActs .pct{opacity:.72;font-weight:600}
   .qr-top{display:flex;flex-direction:column;align-items:center;gap:2px}
   .qr-mark{font-weight:800;font-size:13px;line-height:1;flex:none}
   .qr-opt.g-best .qr-mark{color:var(--good)}.qr-opt.g-ok .qr-mark{color:var(--edge)}.qr-opt.g-mistake .qr-mark{color:var(--bad)}
@@ -138,6 +143,12 @@
   .play{width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.6);display:grid;place-items:center;z-index:2;transition:.15s}
   .vfacade:hover .play{transform:scale(1.07)}
   .play::after{content:"";border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+  /* clip countdown overlay (time left until the segment auto-pauses) */
+  .vtimer{position:absolute;left:8px;bottom:8px;z-index:3;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 10px 3px 8px;color:#ffe4a3;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none}
+  .vtimer .vt-dot{width:7px;height:7px;border-radius:50%;background:#f0b43c;box-shadow:0 0 0 3px rgba(240,180,60,.22);animation:vtpulse 1s ease-in-out infinite}
+  .vtimer.done{color:#9aa39e}.vtimer.done .vt-dot{background:#9aa39e;box-shadow:none;animation:none}
+  @keyframes vtpulse{50%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){.vtimer .vt-dot{animation:none}}
   .vmeta{position:absolute;left:10px;bottom:9px;right:10px;display:flex;align-items:center;gap:8px;z-index:2}
   .avatar{width:23px;height:23px;border-radius:50%;background:linear-gradient(150deg,var(--brass),var(--brass-d));display:grid;place-items:center;font-size:11px;color:#1b1200;font-weight:900;flex:none}
   .vmeta .ch{color:#eef4f0;font-size:11px;font-weight:700}.vmeta .ch small{display:block;color:#a9b7af;font-weight:500;font-size:9px}
@@ -308,6 +319,10 @@
   .pack .part::before{transform:translate(-68%,-52%) rotate(-11deg)}
   .pack .part::after{transform:translate(-26%,-46%) rotate(11deg)}
   .pack .pemoji{position:absolute;inset:0;display:grid;place-items:center;font-size:38px;z-index:1;filter:drop-shadow(0 3px 8px rgba(0,0,0,.6))}
+  /* a real cover photo replaces the generated felt-art: drop the card silhouettes + emoji, add a scrim so the seam into the body stays soft */
+  .pack .part.has-cover{background-size:cover;background-position:center}
+  .pack .part.has-cover::before{content:"";inset:0;top:0;left:0;width:100%;height:100%;transform:none;border:0;border-radius:0;background:linear-gradient(90deg,rgba(0,0,0,.12),rgba(10,14,13,.55))}
+  .pack .part.has-cover::after,.pack .part.has-cover .pemoji{display:none}
   .pack .pbody{flex:1;min-width:0;padding:12px 14px;display:flex;flex-direction:column;gap:5px;justify-content:center}
   .pack .ptitle{font-weight:800;font-size:15px;line-height:1.15;color:var(--text)}
   .pack .psub{color:var(--muted);font-size:11.5px;line-height:1.35}
@@ -345,6 +360,9 @@
   /* villains' cards, revealed on the solution reveal only */
   .villaincards{display:flex;gap:2px;margin-bottom:2px;filter:drop-shadow(0 4px 7px rgba(0,0,0,.5))}
   .villaincards .card{transform:scale(.82)}
+  /* face-down card back for opponents still in the hand (shown while the question is posed) */
+  .cback{width:22px;height:31px;border-radius:5px;border:1px solid rgba(255,255,255,.16);background:repeating-linear-gradient(45deg,#7a1d22 0 3px,#5e161a 3px 6px);box-shadow:0 3px 7px rgba(0,0,0,.45)}
+  .villaincards .cback:first-child{transform:rotate(-5deg)}.villaincards .cback:last-child{transform:rotate(5deg)}
   /* filled brass checkbox (collection intro / joinPrev / continue toggles) */
   .chk input{-webkit-appearance:none;appearance:none;width:19px;height:19px;border:2px solid var(--brass);border-radius:5px;background:transparent;position:relative;transition:background .12s}
   .chk input:checked{background:var(--brass)}
@@ -365,6 +383,7 @@
   .colchip small{color:var(--muted);font-weight:600;background:rgba(127,145,136,.18);border-radius:5px;padding:0 5px}
   .colchip.on{border-color:var(--brass);background:rgba(198,161,91,.16)}
   .colchip.on small{color:var(--brass)}
+  .colchip.hid{opacity:.5;border-style:dashed}   /* pack hidden from the home library */
   .colbar .fld{flex:1}
   .colbar .newbtn{white-space:nowrap;padding:9px 11px}
   .pubbar{margin-top:9px;padding:10px;border:1px solid var(--stroke);border-radius:12px;background:rgba(198,161,91,.05);display:flex;flex-direction:column;gap:8px}
@@ -603,14 +622,15 @@ function qView(h,k){
     vStart,vEnd,depth:q.depth,explain,deferred};
 }
 function seatState(v){
-  const order=POS[v.players], hIdx=order.indexOf(v.heroPos), last={};
-  STREETS.forEach(st=>(v.history?.[st]||[]).forEach(a=>{if(a.pos)last[a.pos]=a;}));
+  const order=POS[v.players], hIdx=order.indexOf(v.heroPos), last={}, cur={};
+  STREETS.forEach(st=>(v.history?.[st]||[]).forEach(a=>{if(a.pos){last[a.pos]=a;if(st===v.street)cur[a.pos]=a;}}));   // last = any street (for folded); cur = THIS street only (for the pill)
   const state={};
-  order.forEach(p=>{const pi=order.indexOf(p),a=last[p];let folded=false;
+  order.forEach(p=>{const pi=order.indexOf(p),a=last[p],c=cur[p];let folded=false;
     if(a&&a.action==='fold')folded=true;
     if(!a&&v.street==='preflop'&&pi<hIdx)folded=true;
     if(!a&&v.street!=='preflop'&&p!==v.heroPos){const acted=STREETS.some(st=>(v.history?.[st]||[]).some(x=>x.pos===p&&x.action!=='fold'));if(!acted)folded=true;}
-    state[p]={folded,act:a&&a.action!=='fold'&&p!==v.heroPos?a:null};});
+    // pill shows only what the player did on the CURRENT street; prior-round actions live in the «Ход розыгрыша» log
+    state[p]={folded,act:c&&c.action!=='fold'&&p!==v.heroPos?c:null};});
   return state;
 }
 // pot: blinds + contributions; % sizes = fraction of current pot; bb/plain = absolute bb (multipliers ignored — they only appear in answer options, never in the resolved timeline)
@@ -636,8 +656,9 @@ function renderTable(container,v,reveal){
     const stk=v.stacks[pos], rem=(stk!=null&&stk!=='')?Math.max(0,Math.round((stk-((v.contrib||{})[pos]||0))*10)/10):stk, stkHtml=(rem!=null&&rem!=='')?`<span class="stk num">${rem} bb</span>`:'';
     const actPill=s.act?`<div class="act ${s.act.action}">${ACT_RU[s.act.action]}${s.act.size?' '+s.act.size:''}</div>`:'';
     if(isHero)html+=`<div class="seat hero" style="left:${x}%;top:${y}%"><div class="hero-cards">${(v.heroCards||[]).map(c=>cardHTML(c,'big')).join('')}</div><div class="plate"><span class="you">Ты</span><span class="pos">${pos}</span>${stkHtml||'<span class="stk">·</span>'}</div>${tagsHtml}</div>`;
-    else{const vc=reveal&&cards[pos]&&(cards[pos][0]||cards[pos][1])?cards[pos]:null;   // villains' cards shown only during the solution reveal, never while the question is posed
-      const vcHtml=vc?`<div class="villaincards">${vc.map(c=>cardHTML(c,'sm')).join('')}</div>`:'';
+    else{const vc=reveal&&cards[pos]&&(cards[pos][0]||cards[pos][1])?cards[pos]:null;   // villains' real cards shown only on the solution reveal (and only if authored)
+      const vcHtml=vc?`<div class="villaincards">${vc.map(c=>cardHTML(c,'sm')).join('')}</div>`
+        :(!s.folded?`<div class="villaincards"><span class="cback"></span><span class="cback"></span></div>`:'');   // still in the hand → face-down backs so it's clear who's live
       html+=`<div class="seat" style="left:${x}%;top:${y}%">${vcHtml}<div class="plate ${s.folded?'folded':''}"><span class="pos">${pos}</span>${stkHtml}</div>${actPill}${tagsHtml}</div>`;}
     if(pos==='BTN'){const dx=x+(x<50?7:x>50?-7:0),dy=y-(y<50?-11:11);html+=`<div class="dealer" style="left:${dx}%;top:${dy}%">D</div>`;}
   }
@@ -664,6 +685,20 @@ let HANDS=[], PLAY=[], i=0, score=0, streak=0, answered=[], picks=[];   // picks
 let AUTOPLAY=(()=>{try{return localStorage.getItem('pk_autoplay')!=='0';}catch(e){return true;}})();
 function setAutoplay(on){AUTOPLAY=!!on;try{localStorage.setItem('pk_autoplay',on?'1':'0');}catch(e){}updateAutoBtn();}
 function updateAutoBtn(){const b=$('autoToggle');if(b)b.innerHTML=`Автовидео: <b>${AUTOPLAY?'вкл':'выкл'}</b>`;}
+// clip countdown: YouTube's scrubber shows the whole source video, so we overlay a timer that counts down to the
+// segment's end (where &end auto-pauses). It's a wall-clock estimate from press-play — may drift a second on buffering.
+let TIMERON=(()=>{try{return localStorage.getItem('pk_timer')!=='0';}catch(e){return true;}})();
+function setTimerOn(on){TIMERON=!!on;try{localStorage.setItem('pk_timer',on?'1':'0');}catch(e){}}
+let VTIMERS=[];
+function fmtCountdown(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
+function startClipTimer(wrap,dur){if(!TIMERON||!(dur>0)||!wrap)return;
+  const el=document.createElement('div');el.className='vtimer';el.innerHTML='<span class="vt-dot"></span><span class="vt-rem">'+fmtCountdown(dur)+'</span>';
+  wrap.appendChild(el);const rem=el.querySelector('.vt-rem'),t0=Date.now();
+  const iv=setInterval(()=>{const left=dur-(Date.now()-t0)/1000;
+    if(left<=0){rem.textContent='конец отрезка';el.classList.add('done');clearInterval(iv);}
+    else rem.textContent=fmtCountdown(left);},250);
+  VTIMERS.push(iv);}
+function clearClipTimers(){VTIMERS.forEach(clearInterval);VTIMERS=[];document.querySelectorAll('.vtimer').forEach(n=>n.remove());}
 function shuffledIdx(n){const a=[...Array(n).keys()];for(let j=n-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[a[j],a[r]]=[a[r],a[j]];}return a;}
 function buildPlay(){PLAY=[];HANDS.forEach((h,hi)=>{const qs=questionsOf(h);qs.forEach((q,k)=>PLAY.push({hi,k,stepNo:k+1,stepCount:qs.length,order:shuffledIdx((q.q||q).options.length)}));});}
 function coachBest(opts){return opts.filter(o=>o.grade==='best');}
@@ -699,13 +734,14 @@ function choose(btn,v){
   renderPips();showSheet(v,{grade,id,pts});
 }
 function opt(opts,id){return opts.find(o=>o.id===id);}
-// one answer option as a recap row: the option itself, its verdict colour, and chips for who chose it (ты / герой / тренер)
-function optRecapRow(o,pickId,heroId){const who=[];
+// one answer option as a recap row: the option itself, its verdict colour, and chips for who chose it (ты / герой).
+// The "correct" answer is conveyed by the green colour + ✓ mark, so no separate «Тренер» chip is needed.
+function optRecapRow(o,pickId,heroId,potBB,street){const who=[];
   if(o.id===pickId)who.push('<span class="qc you">Ты</span>');
   if(o.id===heroId)who.push('<span class="qc hero">Герой</span>');
-  if(o.grade==='best')who.push('<span class="qc coach">Тренер</span>');
   const mark=o.grade==='best'?'✓':o.grade==='mistake'?'✕':'≈';
-  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${o.label||'—'}${o.size?' <span class="num">'+o.size+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
+  const szT=o.size?sizeBBpct(o.size,potBB||0,street!=='preflop'):'';
+  return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${o.label||'—'}${szT?' <span class="num">'+szT+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
 function videoBlockHTML(v){
   const id=ytId(v.video&&v.video.url), watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(v.vStart||0)}s`:null;
   return `<div class="video"><div class="vfacade" ${id?`data-embed="${id}" data-s="${Math.floor(v.vStart||0)}" data-e="${Math.floor(v.vEnd||0)}"`:''}>
@@ -719,7 +755,7 @@ function showSheet(v,res){
   const hq=questionsOf(HANDS[p.hi]);let gs=p.k;while(gs>0&&hq[gs]&&hq[gs].q.joinPrev)gs--;
   const recapKs=[];if(v.deferred)recapKs.push(p.k);else for(let kk=gs;kk<=p.k;kk++)recapKs.push(kk);
   const recap=recapKs.map(kk=>{const pidx=i-(p.k-kk),vv=(kk===p.k)?v:qView(HANDS[p.hi],kk);
-    return {n:kk+1,street:vv.street,options:vv.options,heroId:vv.heroPick,pickId:picks[pidx],grade:answered[pidx]};});
+    return {n:kk+1,street:vv.street,options:vv.options,heroId:vv.heroPick,pickId:picks[pidx],grade:answered[pidx],pot:potNum(vv)};});
   const isGroup=recap.length>1;
   const worst=recap.reduce((w,r)=>GRADE_RANK[r.grade]>GRADE_RANK[w]?r.grade:w,'best');
   const grpPts=recap.reduce((s,r)=>s+(PTS[r.grade]||0),0);
@@ -731,9 +767,9 @@ function showSheet(v,res){
   $('sheet').innerHTML=`<div class="verdict"><div class="vbadge v-${topGrade}">${topGrade==='best'?'✓':topGrade==='ok'?'≈':'✕'}</div>
     <div class="vtext"><div class="vt g-${topGrade}">${vt}</div><div class="vs">${vs}</div></div>
     <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
-    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId)).join('')}</div></div>`).join('')}</div>
+    <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
-    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
+    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${TIMERON?'on':''}" id="sheetTimer" aria-pressed="${TIMERON}">Таймер отреза: ${TIMERON?'вкл':'выкл'}</button><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
     <div class="hint">${v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'Видео стартует автоматически. В артефакте embed режет CSP — открой по ссылке ↗.':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.'}</div>`;
   const sh=$('sheet');sh.scrollTop=0;void sh.offsetHeight;sh.classList.add('up');
@@ -743,14 +779,20 @@ function showSheet(v,res){
     // basic autoplay of the review clip; disabled where YouTube embeds are blocked (sandboxed artifact) so the facade stays clean
     if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac);},420);}
   const sa=$('sheetAuto');if(sa)sa.onclick=()=>{setAutoplay(!AUTOPLAY);sa.className='vauto '+(AUTOPLAY?'on':'');sa.setAttribute('aria-pressed',AUTOPLAY);sa.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
+  const stg=$('sheetTimer');if(stg)stg.onclick=()=>{setTimerOn(!TIMERON);stg.className='vauto '+(TIMERON?'on':'');stg.setAttribute('aria-pressed',TIMERON);stg.textContent='Таймер отреза: '+(TIMERON?'вкл':'выкл');
+    const wrap=$('sheet').querySelector('.video');
+    if(!TIMERON)clearClipTimers();else if(wrap&&wrap.querySelector('iframe')&&+wrap.dataset.dur>0){clearClipTimers();startClipTimer(wrap,+wrap.dataset.dur);}};
   $('next').onclick=next;
 }
 function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
-  let q='?autoplay=1&rel=0&playsinline=1';if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
-  fac.parentElement.innerHTML=`<iframe width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;}
+  // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT and can't be removed via params
+  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1';if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;
+  const wrap=fac.parentElement;
+  wrap.innerHTML=`<iframe width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
+  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);}}
 function canAutoEmbed(){try{return window.self===window.top;}catch(e){return false;}}
 // kill any playing YouTube iframe (sheet review clip or intro clip) so audio stops the moment we move on
-function stopVideos(){document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
+function stopVideos(){clearClipTimers();document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
 function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-1)setTimeout(()=>{i++;renderHand();},300);else setTimeout(showEnd,300);}
 function showEnd(){
   const best=answered.filter(g=>g==='best').length,ok=answered.filter(g=>g==='ok').length,bad=answered.filter(g=>g==='mistake').length;
@@ -918,15 +960,15 @@ function secClass(key){return _ui.collapsed[key]?' collapsed':'';}
 function activeCol(){if(curCol<0)curCol=0;if(curCol>=COLS.length)curCol=COLS.length-1;return COLS[curCol]||COLS[0];}
 function findCol(id){return COLS.find(c=>c.id===id);}
 // unified list for the home screen: demo packs (library) + user collections
-function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,isUser:true}));}
+function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
 function packHands(id){const c=findCol(id);return c?c.hands.filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill
 function packStats(id){const c=findCol(id),hs=c?c.hands:[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}
 function renderHome(){
-  const cards=allPacks().map(p=>{const st=packStats(p.id),empty=st.questions===0;
+  const cards=allPacks().filter(p=>!p.hidden).map(p=>{const st=packStats(p.id),empty=st.questions===0;   // hidden packs are curated out of the home library (still editable in редактор)
     const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
     const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
     return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
-      <div class="part" style="${partStyle}"><div class="pemoji">${p.emoji}</div></div>
+      <div class="part ${p.cover?'has-cover':''}" style="${partStyle}"><div class="pemoji">${p.emoji}</div></div>
       <div class="pbody">
         <div class="ptitle">${p.title}</div>
         ${tags}
@@ -975,9 +1017,10 @@ const esc=s=>String(s==null?'':s).replace(/"/g,'&quot;').replace(/</g,'&lt;');
 function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name);
   return `<div class="fs${secClass('col')}" data-sec="col"><div class="h"><span class="n">0</span>Подборка<span class="r">что редактируем</span></div>
     <div class="fld"><label>Подборки — нажми, чтобы редактировать · порядок меняется стрелками ↑↓</label>
-      <div class="colchips" id="col-chips">${COLS.map((x,i)=>`<button class="colchip ${i===curCol?'on':''}" data-col="${i}">${x.emoji||'✎'} ${esc(x.name||'Без названия')}<small>${(x.hands||[]).length}</small></button>`).join('')}</div></div>
+      <div class="colchips" id="col-chips">${COLS.map((x,i)=>`<button class="colchip ${i===curCol?'on':''} ${x.hidden?'hid':''}" data-col="${i}">${x.emoji||'✎'} ${esc(x.name||'Без названия')}<small>${(x.hands||[]).length}${x.hidden?' · скрыт':''}</small></button>`).join('')}</div></div>
     <div class="colbar" style="margin-top:8px;align-items:center">
       <span class="mini" style="flex:1">Активная: <b style="color:var(--text)">${esc(activeCol().name)}</b> · ${curCol+1} из ${COLS.length}</span>
+      <button class="ghost newbtn" id="col-hide" title="${activeCol().hidden?'Показать в библиотеке':'Скрыть из библиотеки'}">${activeCol().hidden?'👁 показать':'🙈 скрыть'}</button>
       <button class="ghost newbtn" id="col-up" title="Переместить выше" ${curCol<=0?'disabled':''}>↑ выше</button>
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
@@ -1262,6 +1305,7 @@ function wireForm(){
   if($('col-publish'))$('col-publish').onclick=async()=>{const b=$('col-publish');const f=$('gh-token');if(f&&f.value.trim())setGhToken(f.value.trim());b.disabled=true;b.textContent='Публикую…';const ok=await publishPacks();if(ok){_syncedStr=pubStr();persist(true);}b.disabled=false;buildForm();if(ok)updSync('cloud');};
   if($('col-pull'))$('col-pull').onclick=async()=>{const pub=await loadPublished();if(!pub){toast('В облаке пусто или недоступно',1);return;}if(!confirm('Заменить подборки версией из облака? Несохранённые локальные правки пропадут («Мой набор» останется).'))return;adoptFromCloud(pub.cols);F=blankHand();persist(true);buildForm();renderSet();updSync('synced');toast('Загружено из облака');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
+  if($('col-hide'))$('col-hide').onclick=()=>{readForm();activeCol().hidden=!activeCol().hidden;buildForm();persist();toast(activeCol().hidden?'Набор скрыт из библиотеки':'Набор снова в библиотеке');};
   if($('col-up'))$('col-up').onclick=()=>{if(curCol<=0)return;readForm();[COLS[curCol-1],COLS[curCol]]=[COLS[curCol],COLS[curCol-1]];useCol(curCol-1);buildForm();renderSet();persist();};
   if($('col-down'))$('col-down').onclick=()=>{if(curCol>=COLS.length-1)return;readForm();[COLS[curCol+1],COLS[curCol]]=[COLS[curCol],COLS[curCol+1]];useCol(curCol+1);buildForm();renderSet();persist();};
   ['col-name','col-emoji','col-cover','col-host','col-hero','ci-title','ci-text','ci-vurl','ci-vstart','ci-vend'].forEach(id=>$(id)&&$(id).addEventListener('input',()=>{readForm();persistSoon();syncPreview();}));
@@ -1336,7 +1380,18 @@ function syncPreview(){
   $('pvActs').innerHTML=(v.options||[]).map(o=>`<button class="btn ${o.type}" disabled><span class="t">${o.label||'—'}</span>${optSizeHTML(o,v)}</button>`).join('');
 }
 // answer-option size, with postflop bb↔% cross-display ("9 bb · 75%"). Preflop stays as-is (bb or multiplier).
-function optSizeHTML(o,v){if(!o||!o.size)return '';return `<span class="u num">${o.size}</span>`;}   // show the size exactly as authored (bb or %); no auto bb↔% cross-display
+// answer-option size, normalized to blinds with % of pot in parens: "9 bb (75%)". Multipliers (Nx) become N bb.
+// % is shown only postflop (preflop pot is ~1.5bb, so "% of pot" there is misleading) — preflop stays bb-only.
+function sizeBBpct(size,potBB,showPct){const s=String(size==null?'':size).trim();if(!s)return '';
+  if(isAllinSize(s))return 'олл‑ин';
+  let bb=null;
+  if(isPctSize(s)){const p=numOf(s);if(p!=null&&potBB>0)bb=Math.round(potBB*p/100*10)/10;}
+  else if(isMultSize(s)){const m=numOf(s);if(m!=null)bb=m;}   // Nx ≈ N bb (preflop open sizing)
+  else {const n=numOf(s);if(n!=null)bb=n;}
+  if(bb==null)return s;
+  const pct=(showPct&&potBB>0)?Math.round(bb/potBB*100):null;
+  return `${bb} bb${pct!=null?` <span class="pct">(${pct}%)</span>`:''}`;}
+function optSizeHTML(o,v){if(!o||!o.size)return '';const t=sizeBBpct(o.size,v?potNum(v):0,v&&v.street!=='preflop');return t?`<span class="u num">${t}</span>`:'';}
 function toast(msg,err){const t=$('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.classList.remove('show'),2000);}
 function showModal(issues){$('modalList').innerHTML=issues.map(x=>`<li>${x}</li>`).join('');$('modal').classList.add('show');}
 $('modalOk').onclick=()=>$('modal').classList.remove('show');
