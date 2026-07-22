@@ -1893,7 +1893,13 @@
      "stacks": {
       "BB": 50,
       "UTG": 50,
-      "CO": 50
+      "CO": 50,
+      "SB": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "BTN": null
      },
      "profiles": {
       "UTG": {
@@ -1901,8 +1907,36 @@
        "style": "aggr"
       },
       "CO": {
-       "status": "reg",
+       "status": "",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "BTN": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
@@ -1938,33 +1972,35 @@
         "vStart": 1164,
         "vEnd": 1196,
         "depth": "подробно",
-        "explain": "<b>Маленький сквиз K9s не решает никакой задачи и явно минусовый.</b> Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
+        "explain": "Маленький сквиз K9s не решает никакой задачи и явно минусовый. Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
         "options": [
          {
           "id": "p1",
           "label": "Пас",
+          "size": "",
           "type": "fold",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
           "id": "p2",
           "label": "Колл",
+          "size": "",
           "type": "call",
           "grade": "ok",
-          "size": "",
           "hero": false
          },
          {
           "id": "p3",
-          "label": "3-бет",
+          "label": "Рейз",
           "type": "raise",
           "grade": "mistake",
           "size": "6 bb",
           "hero": true
          }
-        ]
+        ],
+        "joinPrev": false,
+        "contPrev": false
        }
       },
       {
@@ -1991,7 +2027,9 @@
        "Kc",
        "9c"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "2000"
     },
     {
      "pack": "wsopme",
@@ -12710,5 +12748,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784753746530
+ "publishedAt": 1784753756725
 }
