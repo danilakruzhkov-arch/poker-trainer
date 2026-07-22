@@ -2157,8 +2157,8 @@
           "hero": false
          }
         ],
-        "vStart": 0,
-        "vEnd": 0,
+        "vStart": 1189,
+        "vEnd": 1283,
         "depth": "подробно",
         "explain": null,
         "joinPrev": false,
@@ -12906,5 +12906,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784754459096
+ "publishedAt": 1784754543378
 }
