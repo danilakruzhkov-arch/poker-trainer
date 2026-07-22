@@ -1883,94 +1883,6 @@
     },
     {
      "pack": "wsopme",
-     "title": "Хельмут пасует Туз-Даму на 4-бет",
-     "players": 9,
-     "heroPos": "BTN",
-     "heroCards": [
-      "Ah",
-      "Qh"
-     ],
-     "stacks": {
-      "BTN": 60,
-      "HJ": 60
-     },
-     "profiles": {
-      "HJ": {
-       "status": "reg",
-       "style": "tight"
-      }
-     },
-     "board": [
-      "",
-      "",
-      "",
-      "",
-      ""
-     ],
-     "video": {
-      "url": "https://youtu.be/yATrt1addik"
-     },
-     "channel": "Андрей Козленко",
-     "actions": [
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "raise",
-       "size": "2.5 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "raise",
-       "size": "8 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "HJ",
-       "action": "raise",
-       "size": "20 bb"
-      },
-      {
-       "street": "preflop",
-       "pos": "BTN",
-       "action": "fold",
-       "size": "",
-       "q": {
-        "vStart": 1110,
-        "vEnd": 1140,
-        "depth": "подробно",
-        "explain": "<b>Туз-Дама против 4-бет-диапазона стоит плохо — фолд стандартен.</b> Альтернатива — вообще коллить префлоп, а не 3-бетить и фолдить, иначе сам становишься мишенью для 4-бет-блефа.",
-        "options": [
-         {
-          "id": "p1",
-          "label": "Пас",
-          "type": "fold",
-          "grade": "best",
-          "size": "",
-          "hero": true
-         },
-         {
-          "id": "p2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "mistake",
-          "size": "",
-          "hero": false
-         }
-        ]
-       }
-      }
-     ],
-     "cards": {
-      "BTN": [
-       "Ah",
-       "Qh"
-      ]
-     },
-     "hidden": false
-    },
-    {
-     "pack": "wsopme",
      "title": "Бессмысленный сквиз Король-9",
      "players": 9,
      "heroPos": "BB",
@@ -12667,5 +12579,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784753611733
+ "publishedAt": 1784753739882
 }
