@@ -1460,67 +1460,160 @@
     },
     {
      "pack": "wsopme",
+     "title": "Гроссмейстерский фолд Туз-Король",
+     "players": 9,
+     "heroPos": "BTN",
+     "heroCards": [
+      "As",
+      "Kd"
+     ],
+     "stacks": {
+      "BTN": 60,
+      "UTG": 60
+     },
+     "profiles": {
+      "UTG": {
+       "status": "rec",
+       "style": "aggr"
+      }
+     },
+     "board": [
+      "Qd",
+      "8c",
+      "5s",
+      "6d",
+      "Kh"
+     ],
+     "video": {
+      "url": "https://youtu.be/yATrt1addik"
+     },
+     "channel": "Андрей Козленко",
+     "actions": [
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "raise",
+       "size": "2.2 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "BTN",
+       "action": "raise",
+       "size": "6 bb"
+      },
+      {
+       "street": "preflop",
+       "pos": "UTG",
+       "action": "call",
+       "size": "6 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "flop",
+       "pos": "BTN",
+       "action": "bet",
+       "size": "7.9 bb"
+      },
+      {
+       "street": "flop",
+       "pos": "UTG",
+       "action": "call",
+       "size": "11.8 bb"
+      },
+      {
+       "street": "turn",
+       "pos": "UTG",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "turn",
+       "pos": "BTN",
+       "action": "check",
+       "size": ""
+      },
+      {
+       "street": "river",
+       "pos": "UTG",
+       "action": "bet",
+       "size": "21.2 bb"
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "fold",
+       "size": "",
+       "q": {
+        "vStart": 875,
+        "vEnd": 905,
+        "depth": "подробно",
+        "explain": "<b>Донк в короля больше похож на слабость: валет-10, 9-10, флеш-дро.</b> По-хорошему это стандартный колл; фолд оправдан лишь против абсолютно прямолинейного соперника, иначе — ошибка.",
+        "options": [
+         {
+          "id": "r1",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "",
+          "hero": false
+         },
+         {
+          "id": "r2",
+          "label": "Пас",
+          "type": "fold",
+          "grade": "mistake",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "r3",
+          "label": "Рейз",
+          "type": "raise",
+          "grade": "mistake",
+          "size": "",
+          "hero": false
+         }
+        ]
+       }
+      }
+     ],
+     "cards": {
+      "BTN": [
+       "As",
+       "Kd"
+      ]
+     },
+     "hidden": true
+    },
+    {
+     "pack": "wsopme",
      "title": "Не смог отдать Туз-Король",
      "players": 9,
      "heroPos": "BB",
      "heroCards": [
       "Ad",
-      "Kh"
+      "Kc"
      ],
      "stacks": {
-      "BB": 82.5,
-      "UTG": 80,
-      "SB": null,
-      "UTG+1": null,
-      "UTG+2": null,
-      "LJ": null,
-      "HJ": null,
-      "CO": null,
-      "BTN": null
+      "BB": 70,
+      "UTG": 70
      },
      "profiles": {
       "UTG": {
-       "status": "",
+       "status": "reg",
        "style": "tight"
-      },
-      "SB": {
-       "status": "",
-       "style": ""
-      },
-      "BB": {
-       "status": "",
-       "style": ""
-      },
-      "UTG+1": {
-       "status": "",
-       "style": ""
-      },
-      "UTG+2": {
-       "status": "",
-       "style": ""
-      },
-      "LJ": {
-       "status": "",
-       "style": ""
-      },
-      "HJ": {
-       "status": "",
-       "style": ""
-      },
-      "CO": {
-       "status": "",
-       "style": ""
-      },
-      "BTN": {
-       "status": "",
-       "style": ""
       }
      },
      "board": [
-      "Kc",
-      "5d",
-      "3d",
-      "6c",
+      "Kd",
+      "6d",
+      "3s",
+      "2c",
       ""
      ],
      "video": {
@@ -1538,41 +1631,7 @@
        "street": "preflop",
        "pos": "BB",
        "action": "call",
-       "size": "2.2 bb",
-       "q": {
-        "options": [
-         {
-          "id": "o2",
-          "label": "Колл",
-          "type": "call",
-          "grade": "ok",
-          "size": "2.2 bb",
-          "hero": true
-         },
-         {
-          "id": "o1",
-          "label": "Пас",
-          "size": "",
-          "type": "fold",
-          "grade": "mistake",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "size": "8 bb",
-          "type": "raise",
-          "grade": "best",
-          "hero": false
-         }
-        ],
-        "vStart": 917,
-        "vEnd": 1082,
-        "depth": "подробно",
-        "explain": null,
-        "joinPrev": false,
-        "contPrev": false
-       }
+       "size": "2.2 bb"
       },
       {
        "street": "flop",
@@ -1590,41 +1649,7 @@
        "street": "flop",
        "pos": "BB",
        "action": "raise",
-       "size": "9 bb",
-       "q": {
-        "options": [
-         {
-          "id": "o3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "best",
-          "size": "9 bb",
-          "hero": true
-         },
-         {
-          "id": "o1",
-          "label": "Пас",
-          "size": "",
-          "type": "fold",
-          "grade": "mistake",
-          "hero": false
-         },
-         {
-          "id": "o2",
-          "label": "Колл",
-          "size": "",
-          "type": "call",
-          "grade": "mistake",
-          "hero": false
-         }
-        ],
-        "vStart": 0,
-        "vEnd": 0,
-        "depth": "подробно",
-        "explain": null,
-        "joinPrev": true,
-        "contPrev": false
-       }
+       "size": "9 bb"
       },
       {
        "street": "flop",
@@ -1636,41 +1661,7 @@
        "street": "turn",
        "pos": "BB",
        "action": "bet",
-       "size": "13.5 bb",
-       "q": {
-        "options": [
-         {
-          "id": "o2",
-          "label": "Бет",
-          "type": "bet",
-          "grade": "ok",
-          "size": "13.5 bb",
-          "hero": true
-         },
-         {
-          "id": "o1",
-          "label": "Чек",
-          "size": "",
-          "type": "check",
-          "grade": "mistake",
-          "hero": false
-         },
-         {
-          "id": "o3",
-          "label": "Бет",
-          "size": "75%",
-          "type": "bet",
-          "grade": "best",
-          "hero": false
-         }
-        ],
-        "vStart": 0,
-        "vEnd": 0,
-        "depth": "подробно",
-        "explain": null,
-        "joinPrev": true,
-        "contPrev": false
-       }
+       "size": "13.5 bb"
       },
       {
        "street": "turn",
@@ -1684,17 +1675,17 @@
        "action": "call",
        "size": "60 bb",
        "q": {
-        "vStart": 0,
-        "vEnd": 0,
+        "vStart": 1045,
+        "vEnd": 1075,
         "depth": "подробно",
-        "explain": "Наш туз бубновый блокирует основные Ax-блефы флеш-дро, в диапазоне пуша — сеты и две пары. Блефов недостаточно, 70бб надо пасовать: классическая ошибка — влюбился в карту и вылетел на сет троек.",
+        "explain": "<b>Наш туз бубновый блокирует основные Ax-блефы флеш-дро, в диапазоне пуша — сеты и две пары.</b> Блефов недостаточно, 70бб надо пасовать: классическая ошибка — влюбился в карту и вылетел на сет троек.",
         "options": [
          {
           "id": "t1",
           "label": "Пас",
-          "size": "",
           "type": "fold",
           "grade": "best",
+          "size": "",
           "hero": false
          },
          {
@@ -1702,24 +1693,20 @@
           "label": "Колл",
           "type": "call",
           "grade": "mistake",
-          "size": "60 bb",
+          "size": "",
           "hero": true
          }
-        ],
-        "joinPrev": true,
-        "contPrev": false
+        ]
        }
       }
      ],
      "cards": {
       "BB": [
        "Ad",
-       "Kh"
+       "Kc"
       ]
      },
-     "hidden": false,
-     "unit": "chips",
-     "bbChips": "2000"
+     "hidden": false
     },
     {
      "pack": "wsopme",
@@ -8989,23 +8976,23 @@
   },
   {
    "id": "mtt16k",
-   "name": "С $3 до $16 000",
-   "emoji": "◆",
+   "name": "WSOP Main Event $10K",
+   "emoji": "★",
    "accent": "#1C8FA8",
    "tag": "Онлайн MTT",
-   "host": "Разбор: Baby Shark",
-   "hero": "Бай‑ин $3 · занос $16 000",
-   "cover": "https://img.youtube.com/vi/qMW6mOd7m6Q/hqdefault.jpg",
+   "host": "Разбор: Андрей Козленко",
+   "hero": "Мейн Ивент WSOP · дни 2–3",
+   "cover": "https://img.youtube.com/vi/yATrt1addik/hqdefault.jpg",
    "sub": "Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.",
    "intro": {
-    "title": "С $3 до $16 000",
-    "text": "Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.",
+    "title": "WSOP Main Event — 10 000$",
+    "text": "Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.",
     "video": {
-     "url": "https://youtu.be/qMW6mOd7m6Q"
+     "url": "https://youtu.be/yATrt1addik"
     },
-    "vStart": 48,
-    "vEnd": 80,
-    "channel": "С $3 до $16 000"
+    "vStart": 0,
+    "vEnd": 30,
+    "channel": "WSOP Main Event $10K"
    },
    "hands": [
     {
@@ -12598,9 +12585,9 @@
      }
     }
    ],
-   "format": "online",
+   "format": "offline",
    "gate": "free"
   }
  ],
- "publishedAt": 1784748795248
+ "publishedAt": 1784748847505
 }
