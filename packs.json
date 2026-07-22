@@ -2043,10 +2043,10 @@
      "pack": "wsopme",
      "title": "Бессмысленный сквиз Король-9 (копия)",
      "players": 9,
-     "heroPos": "BB",
+     "heroPos": "LJ",
      "heroCards": [
-      "Kc",
-      "6c"
+      "As",
+      "Jc"
      ],
      "stacks": {
       "BB": 150,
@@ -2125,41 +2125,7 @@
        "street": "preflop",
        "pos": "BB",
        "action": "raise",
-       "size": "5.4 bb",
-       "q": {
-        "vStart": 1157,
-        "vEnd": 1182,
-        "depth": "подробно",
-        "explain": "Маленький сквиз K9s не решает никакой задачи и явно минусовый. Он не выбивает более сильные руки, раздувает банк без позиции с доминируемой рукой и напрашивается на ре-джем — чистый спью, надо просто фолдить.",
-        "options": [
-         {
-          "id": "p1",
-          "label": "Пас",
-          "size": "",
-          "type": "fold",
-          "grade": "best",
-          "hero": false
-         },
-         {
-          "id": "p2",
-          "label": "Колл",
-          "size": "",
-          "type": "call",
-          "grade": "ok",
-          "hero": false
-         },
-         {
-          "id": "p3",
-          "label": "Рейз",
-          "type": "raise",
-          "grade": "mistake",
-          "size": "5.4 bb",
-          "hero": true
-         }
-        ],
-        "joinPrev": false,
-        "contPrev": false
-       }
+       "size": "5.4 bb"
       },
       {
        "street": "preflop",
@@ -2171,7 +2137,33 @@
        "street": "preflop",
        "pos": "LJ",
        "action": "call",
-       "size": ""
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "ok",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "preflop",
@@ -12914,5 +12906,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784754311649
+ "publishedAt": 1784754431362
 }
