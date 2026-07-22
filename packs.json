@@ -1203,25 +1203,64 @@
      "players": 9,
      "heroPos": "UTG",
      "heroCards": [
-      "8h",
-      "7h"
+      "8s",
+      "7s"
      ],
      "stacks": {
       "UTG": 60,
-      "BTN": 60
+      "BTN": 60,
+      "SB": null,
+      "BB": null,
+      "UTG+1": null,
+      "UTG+2": null,
+      "LJ": null,
+      "HJ": null,
+      "CO": null
      },
      "profiles": {
       "BTN": {
-       "status": "reg",
+       "status": "",
        "style": "aggr"
+      },
+      "SB": {
+       "status": "",
+       "style": ""
+      },
+      "BB": {
+       "status": "",
+       "style": ""
+      },
+      "UTG": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+1": {
+       "status": "",
+       "style": ""
+      },
+      "UTG+2": {
+       "status": "",
+       "style": ""
+      },
+      "LJ": {
+       "status": "",
+       "style": ""
+      },
+      "HJ": {
+       "status": "",
+       "style": ""
+      },
+      "CO": {
+       "status": "",
+       "style": ""
       }
      },
      "board": [
-      "Qd",
+      "Qc",
       "8c",
-      "5s",
-      "6d",
-      "Kh"
+      "5h",
+      "7h",
+      "Kd"
      ],
      "video": {
       "url": "https://youtu.be/yATrt1addik"
@@ -1232,7 +1271,7 @@
        "street": "preflop",
        "pos": "UTG",
        "action": "raise",
-       "size": "2.2 bb"
+       "size": "2 bb"
       },
       {
        "street": "preflop",
@@ -1244,7 +1283,41 @@
        "street": "preflop",
        "pos": "UTG",
        "action": "call",
-       "size": "6 bb"
+       "size": "6 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "6 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "ok",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "4-бет",
+          "size": "15 bb",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 619,
+        "vEnd": 917,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": false,
+        "contPrev": false
+       }
       },
       {
        "street": "flop",
@@ -1256,19 +1329,79 @@
        "street": "flop",
        "pos": "BTN",
        "action": "bet",
-       "size": "7.9 bb"
+       "size": "5.5 bb"
       },
       {
        "street": "flop",
        "pos": "UTG",
        "action": "call",
-       "size": "11.8 bb"
+       "size": "11.8 bb",
+       "q": {
+        "options": [
+         {
+          "id": "o2",
+          "label": "Колл",
+          "type": "call",
+          "grade": "best",
+          "size": "11.8 bb",
+          "hero": true
+         },
+         {
+          "id": "o1",
+          "label": "Пас",
+          "size": "",
+          "type": "fold",
+          "grade": "mistake",
+          "hero": false
+         },
+         {
+          "id": "o3",
+          "label": "Рейз",
+          "size": "75%",
+          "type": "raise",
+          "grade": "mistake",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "turn",
        "pos": "UTG",
        "action": "check",
-       "size": ""
+       "size": "",
+       "q": {
+        "options": [
+         {
+          "id": "o1",
+          "label": "Чек",
+          "type": "check",
+          "grade": "ok",
+          "size": "",
+          "hero": true
+         },
+         {
+          "id": "o2",
+          "label": "Бет",
+          "size": "33%",
+          "type": "bet",
+          "grade": "best",
+          "hero": false
+         }
+        ],
+        "vStart": 0,
+        "vEnd": 0,
+        "depth": "подробно",
+        "explain": null,
+        "joinPrev": true,
+        "contPrev": false
+       }
       },
       {
        "street": "turn",
@@ -1280,39 +1413,50 @@
        "street": "river",
        "pos": "UTG",
        "action": "bet",
-       "size": "21.2 bb",
+       "size": "18 bb",
        "q": {
-        "vStart": 735,
-        "vEnd": 765,
+        "vStart": 0,
+        "vEnd": 0,
         "depth": "подробно",
-        "explain": "<b>В короля лучше чек: Туз-Король и Туз-Валет доставят блеф или тонкое валью, а на чек-рейз доберём ещё больше.</b> Донк 36k понятен как добор с валетов, но чек-колл извлёк бы больше — у баттона хватает блефов.",
+        "explain": "В короля лучше чек: Туз-Король и Туз-Валет доставят блеф или тонкое валью, а на чек-рейз доберём ещё больше. Донк 36k понятен как добор с валетов, но чек-колл извлёк бы больше — у баттона хватает блефов.",
         "options": [
          {
           "id": "r1",
           "label": "Чек",
+          "size": "",
           "type": "check",
           "grade": "best",
-          "size": "",
           "hero": false
          },
          {
           "id": "r2",
           "label": "Бет",
           "type": "bet",
-          "grade": "ok",
-          "size": "18.9 bb",
+          "grade": "mistake",
+          "size": "18 bb",
           "hero": true
          }
-        ]
+        ],
+        "joinPrev": true,
+        "contPrev": false
        }
+      },
+      {
+       "street": "river",
+       "pos": "BTN",
+       "action": "fold",
+       "size": ""
       }
      ],
      "cards": {
       "UTG": [
-       "8h",
-       "7h"
+       "8s",
+       "7s"
       ]
-     }
+     },
+     "unit": "chips",
+     "bbChips": "2000",
+     "_addStreet": null
     },
     {
      "pack": "wsopme",
@@ -12443,5 +12587,5 @@
    "gate": "free"
   }
  ],
- "publishedAt": 1784746598519
+ "publishedAt": 1784747605555
 }
