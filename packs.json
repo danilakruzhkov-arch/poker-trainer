@@ -909,8 +909,8 @@
          {
           "id": "o2",
           "label": "Рейз",
-          "size": "25%",
-          "type": "bet",
+          "size": "20%",
+          "type": "raise",
           "grade": "mistake",
           "hero": false
          }
@@ -12275,5 +12275,5 @@
    "format": "online"
   }
  ],
- "publishedAt": 1784733413231
+ "publishedAt": 1784738266959
 }
