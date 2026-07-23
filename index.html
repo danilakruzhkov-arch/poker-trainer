@@ -1098,7 +1098,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.17';
+const APP_VER='2026-07-23.18';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1976,7 +1976,7 @@ function copyText(text){
 }
 const LS_KEY='pokerTrainerV4';
 let _persistT;
-// cloud-sync state. packs.json on GitHub is the source of truth for the shared packs; 'Мой набор' stays personal to this browser and never leaves it.
+// cloud-sync state. The Supabase `pack` table is the source of truth for the shared packs; 'Мой набор' stays personal to this browser and never leaves it.
 let _dirty=false,_syncedStr='',_pubT=null;
 function pubCols(){return COLS.filter(c=>c&&c.id!=='mine');}   // packs that belong in the cloud
 function pubStr(){try{return JSON.stringify(pubCols());}catch(e){return '';}}
@@ -1987,7 +1987,7 @@ function persist(clean){
   if(clean!==true&&_dirty)schedulePublish();
 }
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(()=>persist(),400);}
-// debounced auto-push to GitHub. Fires ~2.5s after the last edit; skips a no-op if nothing that goes to the cloud actually changed.
+// debounced auto-push to the DB. Fires ~2.5s after the last edit; skips a no-op if nothing that goes to the cloud actually changed.
 function schedulePublish(){
   if(!CURUSER){updSync('unpushed');return;}   // not signed in → can't publish; edits stay local until Google login
   clearTimeout(_pubT);_pubT=setTimeout(async()=>{
@@ -2002,11 +2002,10 @@ function updSync(state){const el=document.getElementById('syncStat');if(!el)retu
     unpushed:['⚠ Не записано — войди через Google','warn'],
     error:['⚠ Не ушло в БД — нажми, чтобы повторить','bad']};
   const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='inline-block';}
-// ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
-const GH_OWNER='danilakruzhkov-arch',GH_REPO='poker-trainer',GH_FILE='packs.json',GH_BRANCH='main',TOKEN_KEY='pk_gh_token';
 let lastPub='',lastPubOk=false;
 // ===== Supabase is the single source of truth. Reads go via direct REST (no CDN SDK) so a blocked/slow CDN
-// can't stop content loading; the SDK is used only for admin auth + publish. packs.json is gone. =====
+// can't stop content loading; the SDK is used only for admin auth + publish. packs.json is a read-only,
+// same-origin fallback auto-synced from the DB (see PACKS_JSON below) — never written to from the app. =====
 const PACK_EP=SUPA_URL+'/rest/v1/pack';
 const CACHE_KEY='pk_packs_cache';                                    // last good cloud snapshot (this browser's)
 const PACKS_JSON='packs.json';                                       // same-origin snapshot auto-synced from the DB by a scheduled Action; READ-ONLY fallback for when REST is blocked (ad-blocker rubbing supabase.co) / offline / DB paused — github.io isn't blockable the way the Supabase host is
@@ -2016,9 +2015,6 @@ let _syncedMap={},_syncedSig='';                                    // the cloud
 function setSyncBaseline(sig){_syncedStr=pubStr();_syncedMap=colsMap(pubCols());if(sig!=null)_syncedSig=sig;_dirty=false;}
 // status that survives a buildForm() re-render (toasts vanish in 2s; the panel keeps the last result)
 function pubSay(msg,err){lastPub=msg;lastPubOk=!err;toast(msg,err?1:0);const m=document.getElementById('pubMsg');if(m){m.style.display='block';m.textContent=msg;m.className='pubmsg '+(err?'bad':'ok');}}
-function ghToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
-function setGhToken(t){try{t?localStorage.setItem(TOKEN_KEY,t):localStorage.removeItem(TOKEN_KEY);}catch(e){}}
-function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
 // take a plain cols array (from the cloud) and make it a live, migrated COLS
 function adoptCols(cols){const prevId=COLS[curCol]&&COLS[curCol].id;COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});const keep=prevId?COLS.findIndex(c=>c.id===prevId):-1;curCol=keep>=0?keep:COLS.length-1;useCol(curCol);}
 // adopt the cloud packs as the shared truth, but keep this browser's personal 'Мой набор' (it never goes to the cloud)
