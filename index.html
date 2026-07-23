@@ -1087,6 +1087,8 @@ function embedFacade(fac,auto,play){const id=fac.dataset.embed,s=+fac.dataset.s|
   const wrap=fac.parentElement,slot='ytf'+(++_ytSeq);
   if(!wrap)return;   // facade already detached from the DOM (re-rendered before this fired) → nothing to embed into
   const scope=wrap.closest('#sheet,#introScreen');const timerSlot=scope?scope.querySelector('.clip-slot'):null;   // #3 countdown row UNDER the video on sheet/intro; editor preview keeps the overlay fallback
+  // keep the poster behind the player: the iframe takes ~1-2s to paint and a black box in its place looks broken
+  wrap.style.cssText+=`;background:#000 url(https://i.ytimg.com/vi/${id}/hqdefault.jpg) center/cover no-repeat`;
   wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
   if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s,timerSlot);}   // countdown survives the API swap (renders into the sibling row, or overlays the video as a fallback)
   const wantPlay=(play===undefined?!!auto:!!play);
