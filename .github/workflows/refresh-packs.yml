@@ -1,0 +1,35 @@
+name: refresh-packs
+
+# Rebuilds packs.json from the Supabase `pack` table so the same-origin fallback the app uses
+# (when Supabase REST is blocked/offline) always mirrors the DB. The scheduled DB read ALSO keeps
+# the free-tier Supabase project awake, so it never auto-pauses after ~7 idle days.
+on:
+  schedule:
+    - cron: '13,43 * * * *'   # twice hourly (off-peak minutes); best-effort per GitHub's scheduler
+  workflow_dispatch: {}        # manual "Run workflow" button / gh workflow run
+
+permissions:
+  contents: write              # lets the default GITHUB_TOKEN push the auto-sync commit
+
+concurrency:
+  group: refresh-packs
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild packs.json from the Supabase pack table (also pings the DB)
+        run: node .github/build-packs.js
+      - name: Commit only if packs.json actually changed
+        run: |
+          if git diff --quiet -- packs.json; then
+            echo "packs.json unchanged — keepalive ping only"
+          else
+            git config user.name "packs-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add packs.json
+            git commit -m "chore(packs.json): auto-sync from DB [skip ci]"
+            git push
+          fi
