@@ -1,0 +1,24 @@
+# Whitelist repo: everything is ignored, then the source we WANT backed up is re-added.
+# Rationale: this folder holds ~130 one-off pipeline scripts, JSON dumps and private strategy docs.
+# An allow-list is the only way a future `git add -A` cannot leak something by accident.
+*
+
+# --- the app itself ---
+!poker-trainer.html
+!wrap.js
+!package.json
+!package-lock.json
+
+# --- tests ---
+!test-*.js
+
+# --- context for Claude ---
+!CLAUDE.md
+!SOURCE-BRANCH.md
+!.gitignore
+
+# NEVER un-ignore these, they are private and live in the vault instead:
+#   Q1-* Q2-* Q3-*            monetization / anti-copy / extraction strategy
+#   WINDOW-*                  per-window kickoff docs
+#   *-contract.md             hand-extraction methodology
+#   deploy/                   nested clone of the same repo (branch main)
