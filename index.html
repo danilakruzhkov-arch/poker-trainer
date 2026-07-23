@@ -139,7 +139,8 @@
   .expl{margin-top:13px;background:#0c1310;border:1px solid var(--stroke);border-radius:13px;overflow:hidden}
   .video{position:relative;aspect-ratio:16/9;background:#000;display:grid;place-items:center;overflow:hidden}
   .vfacade{position:absolute;inset:0;background:linear-gradient(135deg,#173a2d,#0e241c 60%,#0a1712);display:grid;place-items:center;cursor:pointer}
-  .vfacade::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 20px)}
+  .vfacade::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 20px);z-index:1}
+  .vposter{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.72)}
   .play{width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.6);display:grid;place-items:center;z-index:2;transition:.15s}
   .vfacade:hover .play{transform:scale(1.07)}
   .play::after{content:"";border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
@@ -516,7 +517,7 @@
   <div id="view-train">
     <div id="homeScreen"></div>
     <div id="drillWrap" style="display:none">
-    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div><button class="backbtn auto" id="replayToggle" style="margin-left:auto">Анимация: вкл</button><button class="backbtn auto" id="autoToggle">Автовидео: вкл</button></div>
+    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div><button class="backbtn auto" id="autoToggle" style="margin-left:auto">Автовидео: вкл</button></div>
     <div id="introScreen" style="display:none"></div>
     <div class="app" id="trainApp">
       <header><div class="mark">♠</div><div class="brand">Покер<span>·</span>Разбор</div>
@@ -807,7 +808,7 @@ function setAutoplay(on){AUTOPLAY=!!on;try{localStorage.setItem('pk_autoplay',on
 function updateAutoBtn(){const b=$('autoToggle');if(b)b.innerHTML=`Автовидео: <b>${AUTOPLAY?'вкл':'выкл'}</b>`;}
 // #10 fast replay: on each question, quickly deal through the prior actions (from hand start) before the decision.
 // v1 — kept deliberately simple; toggleable, off-switch persists. If a player answers mid-replay, timers are cleared.
-let REPLAY=(()=>{try{return localStorage.getItem('pk_replay')!=='0';}catch(e){return true;}})();
+let REPLAY=false;   // hand-replay animation off for now (toggle removed per request)
 function setReplay(on){REPLAY=!!on;try{localStorage.setItem('pk_replay',on?'1':'0');}catch(e){}updateReplayBtn();}
 function updateReplayBtn(){const b=$('replayToggle');if(b)b.innerHTML=`Анимация: <b>${REPLAY?'вкл':'выкл'}</b>`;}
 let _replayTimers=[];
@@ -887,9 +888,11 @@ function optRecapRow(o,pickId,heroId,potBB,street,preflopHist){const who=[];
   const mark=o.grade==='best'?'✓':o.grade==='mistake'?'✕':'≈';
   const szT=o.size?sizeBBpct(o.size,potBB||0,street!=='preflop'):'';
   return `<div class="qr-opt g-${o.grade} ${o.id===pickId?'picked':''}"><div class="qr-top"><span class="qr-mark">${mark}</span><span class="qr-lbl">${optLabelDisp(o,street,preflopHist)}${szT?' <span class="num">'+szT+'</span>':''}</span></div><div class="qr-who">${who.join('')}</div></div>`;}
+// YouTube auto-thumbnail as the facade cover; maxres when the upload has it, hqdefault otherwise (always exists)
+function ytPoster(id){return id?`<img class="vposter" src="https://i.ytimg.com/vi/${id}/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${id}/hqdefault.jpg'" alt="" loading="lazy">`:'';}
 function videoBlockHTML(v){
   const id=ytId(v.video&&v.video.url), watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(v.vStart||0)}s`:null;
-  return `<div class="video"><div class="vfacade" ${id?`data-embed="${id}" data-s="${Math.floor(v.vStart||0)}" data-e="${Math.floor(v.vEnd||0)}"`:''}>
+  return `<div class="video"><div class="vfacade" ${id?`data-embed="${id}" data-s="${Math.floor(v.vStart||0)}" data-e="${Math.floor(v.vEnd||0)}"`:''}>${ytPoster(id)}
     <div class="depth">Разбор${v.depth?' · '+v.depth:''}</div>${watch?`<a class="vlink" href="${watch}" target="_blank" rel="noopener">↗ YouTube</a>`:''}
     <div class="play"></div><div class="vmeta"><div class="avatar">P</div><div class="ch">${v.channel||'PokerLab'}<small>${id?'клип с ютуба · нажми play':'видео не задано'}</small></div>
     ${v.video&&(v.vStart||v.vEnd)?`<div class="tc num">${sec2mmss(v.vStart)}</div>`:''}</div></div></div>`;
@@ -996,7 +999,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.4';
+const APP_VER='2026-07-23.5';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1311,13 +1314,16 @@ function showIntro(intro){$('trainApp').style.display='none';const el=$('introSc
     <div class="intro-cap">Вступление к подборке</div>
     <h2>${intro.title||'Тренировка'}</h2>
     ${intro.text?`<p>${intro.text}</p>`:''}
-    ${id?`<div class="video intro-v"><div class="vfacade" data-embed="${id}" data-s="${Math.floor(intro.vStart||0)}" data-e="${Math.floor(intro.vEnd||0)}">
+    ${id?`<div class="video intro-v"><div class="vfacade" data-embed="${id}" data-s="${Math.floor(intro.vStart||0)}" data-e="${Math.floor(intro.vEnd||0)}">${ytPoster(id)}
       <div class="depth">Вступление</div>${watch?`<a class="vlink" href="${watch}" target="_blank" rel="noopener">↗ YouTube</a>`:''}
       <div class="play"></div><div class="vmeta"><div class="avatar">P</div><div class="ch">${intro.channel||'Разбор'}<small>клип с ютуба · нажми play</small></div>
       ${(intro.vStart||intro.vEnd)?`<div class="tc num">${sec2mmss(intro.vStart)}</div>`:''}</div></div></div>`:''}
     <button class="next" id="introStart">Начать тренировку →</button>
   </div>`;
-  const fac=el.querySelector('.vfacade[data-embed]');if(fac)fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
+  const fac=el.querySelector('.vfacade[data-embed]');
+  if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
+    // #2 autostart the intro clip when Автовидео is on (same guard as the review sheet: only where embeds aren't CSP-blocked)
+    if(AUTOPLAY&&canAutoEmbed())setTimeout(()=>{if($('introScreen').style.display!=='none'&&el.querySelector('.vfacade[data-embed]'))embedFacade(fac);},420);}
   $('introStart').onclick=beginDrill;}
 function showHome(){stopVideos();$('drillWrap').style.display='none';$('introScreen').style.display='none';$('homeScreen').style.display='block';renderHome();}
 
@@ -1954,7 +1960,6 @@ if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('sta
 $('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('train'));else switchView('train');};$('tab-admin').onclick=openEditor;
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
-if($('replayToggle'))$('replayToggle').onclick=()=>{setReplay(!REPLAY);toast('Анимация раздачи '+(REPLAY?'включена':'выключена'));};updateReplayBtn();
 // ---- auth: Google sign-in via Supabase (SDK loaded on demand, so the base app stays dependency-free) ----
 let CURUSER=null,_sb=null;
 // editor access = admin identity. Keep this list in sync with the packs RLS policy in Supabase (same emails).
