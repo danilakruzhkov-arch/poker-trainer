@@ -1043,6 +1043,7 @@ function onClipState(e,wrap,player,s,en){const st=e&&e.data;
     if(t>=en-0.8)showReplayBar(wrap,player,s,en);}}                           // paused/ended AT the segment end → offer replay (not on a normal mid-clip pause)
 function clipTick(player,s,en,lo){                      // one watchdog step; returns which zone we were in (for tests)
   if(!player||typeof player.getCurrentTime!=='function')return;
+  try{if(!player.isMuted||!player.isMuted()){const w=playerWrap(player);const b=w&&w.querySelector('.vunmute');if(b)b.remove();}}catch(e){}   // sound is on (our pill OR YouTube's own control) → drop the unmute pill
   let t;try{t=player.getCurrentTime();}catch(e){return;}
   if(typeof t!=='number'||isNaN(t))return;
   if(en>0&&t>en+0.5){try{player.pauseVideo();player.seekTo(en,true);}catch(e){}
@@ -1064,28 +1065,42 @@ function embedFacade(fac,auto){const id=fac.dataset.embed,s=+fac.dataset.s||0,en
   // Let the IFrame API BUILD the player from a placeholder div (host=nocookie). Attaching to a pre-made
   // youtube-nocookie iframe silently fails, so this div-first path is what makes the spoiler guard actually work.
   const wrap=fac.parentElement,slot='ytf'+(++_ytSeq);
-  const muteAuto=!!auto&&IS_MOBILE;   // iOS Safari refuses AUDIBLE autoplay without a user gesture; a MUTED autostart is allowed, then one tap unmutes. A manual tap (auto=false) plays audible.
+  if(!wrap)return;   // facade already detached from the DOM (re-rendered before this fired) → nothing to embed into
   const scope=wrap.closest('#sheet,#introScreen');const timerSlot=scope?scope.querySelector('.clip-slot'):null;   // #3 countdown row UNDER the video on sheet/intro; editor preview keeps the overlay fallback
   wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
   if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s,timerSlot);}   // countdown survives the API swap (renders into the sibling row, or overlays the video as a fallback)
   loadYTAPI().then(YT=>{
-    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,muteAuto);return;}   // no API → dumb embed, countdown-only
+    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,!!auto&&IS_MOBILE);return;}   // no API → dumb embed; only this path still needs a mobile muted-autostart (no player object to detect the block or offer unmute)
     // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT
     const pv={autoplay:1,rel:0,playsinline:1,modestbranding:1,iv_load_policy:3,disablekb:1,start:s||0,origin:location.origin};
-    if(muteAuto)pv.mute=1;
+    // Do NOT pre-mute. ATTEMPT audible autoplay — browsers that allow it (many phone browsers) just play with sound, no pill.
+    // Only if the browser BLOCKS audible autoplay do we fall back to a muted autostart + unmute pill (armAutoplayFallback).
     if(en>s)pv.end=en;
     let player;
     try{player=new YT.Player(slot,{host:'https://www.youtube-nocookie.com',videoId:id,playerVars:pv,
-      events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}if(muteAuto)showUnmute(wrap,player);},
-              onStateChange:(e)=>onClipState(e,wrap,player,s,en)}});}
-    catch(e){plainEmbed(slot,id,s,en,muteAuto);return;}
+      events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}if(auto)armAutoplayFallback(wrap,player);},
+              onStateChange:(e)=>{onClipState(e,wrap,player,s,en);if(auto)maybeShowUnmute(wrap,player,e&&e.data);}}});}
+    catch(e){plainEmbed(slot,id,s,en,!!auto&&IS_MOBILE);return;}
     _ytPlayers.push(player);
   });}
-// mobile muted-autostart escape hatch: one tap re-enables sound (a user gesture → iOS allows audio) and guarantees playback
+// --- audible-first autoplay: try sound; fall back to muted + an unmute pill ONLY when the browser blocks audible autoplay ---
+// Shortly after the clip is ready, if it isn't PLAYING/BUFFERING the browser refused audible autoplay → force a MUTED
+// autostart (allowed everywhere) so it plays at all, then surface the pill. Browsers that autoplayed WITH sound never trip this.
+function armAutoplayFallback(wrap,player){
+  const t=setTimeout(()=>{try{const st=player.getPlayerState&&player.getPlayerState();
+    if(st!==1&&st!==3){player.mute();player.playVideo();showUnmute(wrap,player);}   // -1/5/2/0 = not playing → muted autostart + pill
+  }catch(e){}},1400);
+  VTIMERS.push(t);   // cleared with the other clip timers on teardown
+}
+// react to real playback: while auto-started AND actually muted, show the pill; the instant sound is on, drop it.
+function maybeShowUnmute(wrap,player,state){try{if(state!==1)return;   // decide only once actually PLAYING
+  if(player.isMuted&&player.isMuted())showUnmute(wrap,player);else removeUnmute(wrap);}catch(e){}}
+function removeUnmute(wrap){try{const b=wrap&&wrap.querySelector('.vunmute');if(b)b.remove();}catch(e){}}
+// muted-autostart escape hatch: one tap re-enables sound (a user gesture → the browser allows audio) and guarantees playback
 function showUnmute(wrap,player){
   if(!wrap||wrap.querySelector('.vunmute'))return;
   const b=document.createElement('button');b.type='button';b.className='vunmute';b.textContent='🔊 Включить звук';
-  b.onclick=()=>{try{player.unMute();player.setVolume(100);player.playVideo();}catch(e){}b.remove();};
+  b.onclick=()=>{try{player.unMute();player.setVolume(100);player.playVideo();}catch(e){}removeUnmute(wrap);};
   wrap.appendChild(b);}
 const IS_MOBILE=(()=>{try{return (window.matchMedia&&matchMedia('(pointer:coarse)').matches)||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent||'');}catch(e){return false;}})();
 function canAutoEmbed(){try{return window.self===window.top;}catch(e){return false;}}
@@ -1098,7 +1113,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.21';
+const APP_VER='2026-07-23.22';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
