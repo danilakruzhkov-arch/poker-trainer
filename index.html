@@ -1098,7 +1098,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.16';
+const APP_VER='2026-07-23.17';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -2008,7 +2008,8 @@ let lastPub='',lastPubOk=false;
 // ===== Supabase is the single source of truth. Reads go via direct REST (no CDN SDK) so a blocked/slow CDN
 // can't stop content loading; the SDK is used only for admin auth + publish. packs.json is gone. =====
 const PACK_EP=SUPA_URL+'/rest/v1/pack';
-const CACHE_KEY='pk_packs_cache';                                    // last good cloud snapshot — the ONLY read fallback (never a stale static file)
+const CACHE_KEY='pk_packs_cache';                                    // last good cloud snapshot (this browser's)
+const PACKS_JSON='packs.json';                                       // same-origin snapshot auto-synced from the DB by a scheduled Action; READ-ONLY fallback for when REST is blocked (ad-blocker rubbing supabase.co) / offline / DB paused — github.io isn't blockable the way the Supabase host is
 function packHeaders(){return {apikey:SUPA_ANON,Authorization:'Bearer '+SUPA_ANON};}
 function colsMap(cols){const m={};(cols||[]).forEach((c,i)=>{if(c&&c.id)m[c.id]=i+''+JSON.stringify(c);});return m;}   // slug -> position+content, for per-pack change detection
 let _syncedMap={},_syncedSig='';                                    // the cloud baseline this browser matches: per-pack map + a slug:version signature
@@ -2032,6 +2033,18 @@ async function loadPublished(){
         const sig=rows.map(x=>x.slug+':'+x.version).join('|');
         try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,ts:Date.now()}));}catch(e){}
         return {cols,sig,source:'db'};
+      }
+    }
+  }catch(e){}
+  // REST failed (offline / DB paused / a content blocker rubbing supabase.co). Try the SAME-ORIGIN snapshot
+  // next — it's auto-synced from the DB (scheduled Action), so it's current, and github.io isn't blockable
+  // like the Supabase host. STRICTLY read-only: we adopt it, but publishing always writes to the DB, never here.
+  try{const r=await fetch(PACKS_JSON+'?_='+Date.now(),{cache:'no-store'});
+    if(r.ok){const j=await r.json();const cols=(j&&(j.cols||j))||[];
+      if(Array.isArray(cols)&&cols.length){
+        const sig=(j&&j.sig)?j.sig:('pj:'+((j&&j.publishedAt)||''));
+        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,ts:Date.now()}));}catch(e){}
+        return {cols,sig,source:'static'};
       }
     }
   }catch(e){}
