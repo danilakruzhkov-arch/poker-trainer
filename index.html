@@ -511,7 +511,7 @@
   <div class="authslot" id="authSlot"></div>
   <div class="tabs">
     <button class="tab on" id="tab-train"><span class="em">🎮</span> Тренажёр</button>
-    <button class="tab" id="tab-admin"><span class="em">⚙️</span> Редактор раздач</button>
+    <button class="tab" id="tab-admin" style="display:none"><span class="em">⚙️</span> Редактор раздач</button>
   </div>
   <div id="view-train">
     <div id="homeScreen"></div>
@@ -560,9 +560,7 @@
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="box"><h4 id="modalTitle">Заполни поля</h4><ul id="modalList"></ul><button id="modalOk">Понятно</button></div></div>
 <div class="modal" id="editGuard"><div class="box guardbox"><h4>Раздача не обновлена</h4><p class="gtxt">В открытой раздаче есть изменения, которые ты не сохранил. Что сделать?</p><div class="gbtns"><button class="gsave" id="egSave">Сохранить и продолжить</button><button class="gdiscard" id="egDiscard">Закрыть без сохранения</button><button class="gcancel" id="egCancel">Продолжить редактирование</button></div></div></div>
-<div class="modal" id="authGate"><div class="box authbox"><h4>Редактор раздач</h4><p class="authp">Доступ к редактору защищён паролем. Тренажёр открыт всем.</p>
-  <input id="authPass" type="password" placeholder="Пароль" autocomplete="off"><div class="autherr" id="authErr"></div>
-  <div class="authrow"><button class="ghost" id="authCancel">Отмена</button><button class="primary" id="authOk">Войти</button></div></div></div>
+<!-- editor is admin-only via Google login (Supabase RLS is the real lock); no password modal -->
 
 <div class="modal" id="statsGate"><div class="box statbox"><button class="statclose" id="statClose" aria-label="Закрыть">×</button><h4>Моя статистика</h4>
   <div id="statsBody"></div></div></div>
@@ -998,7 +996,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.1';
+const APP_VER='2026-07-23.2';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1338,18 +1336,8 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <button class="ghost newbtn" id="col-up" title="Переместить выше" ${curCol<=0?'disabled':''}>↑ выше</button>
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
-    <div class="pubbar">
-      <div class="pubtop"><span class="publbl">☁ Облако · Supabase</span><span class="pubstate ${CURUSER?'ok':''}">${CURUSER?'вход выполнен':'нужен вход через Google'}</span></div>
-      ${CURUSER?'':`<div class="pubhint" style="margin-top:0;margin-bottom:8px">Публикация привязана к твоему Google‑аккаунту — нажми «Войти» вверху справа. Токен больше не нужен: любой браузер видит паки сразу, публиковать можешь только ты после входа.</div>`}
-      <div class="pubrow"><button class="pubbtn" id="col-publish">⬆ Опубликовать сейчас</button><button class="ghost newbtn" id="col-pull">⬇ Загрузить из облака</button></div>
-      <div class="syncstat" id="syncStat" style="display:none"></div>
-      ${lastPub?`<div class="pubmsg ${lastPubOk?'ok':'bad'}" id="pubMsg">${esc(lastPub)}</div>`:`<div class="pubmsg" id="pubMsg" style="display:none"></div>`}
-      <div class="pubhint">Правки уходят в облако (Supabase) сами при каждом сохранении — если ты вошёл через Google. Зрители видят их при обновлении страницы. «Мой набор» остаётся личным и в облако не уходит. Внутри артефакта не работает (CSP) — только на github‑версии.</div>
-    </div>
-    <div class="pubbar">
-      <div class="pubtop"><span class="publbl">🗄 Отзывы · Supabase</span><span class="pubstate ok">пишутся в базу</span></div>
-      ${fbQueueGet().length?`<div class="pubrow"><span class="mini" style="flex:1">Не ушло (нет сети): <b id="fbCount">${fbQueueGet().length}</b></span><button class="ghost newbtn" id="fb-flush">↑ в базу</button><button class="ghost newbtn" id="fb-copy">📋</button><button class="ghost newbtn" id="fb-clearq">Очистить</button></div>`:''}
-      <div class="pubhint">Отзывы игроков («Сообщить об ошибке») уходят прямо в Supabase (проект <code>mydnywzn…</code>, отдельный от clippoint). Ключ и адрес зашиты в сборке — вводить ничего не нужно. Смотреть отзывы: Supabase → Table Editor → <b>feedback</b>.</div>
+    <div class="pubbar" id="cloudBar" style="padding:9px 11px">
+      <span class="syncstat ${_dirty?'':'ok'}" id="syncStat" title="Синхронизация с базой — нажми, чтобы записать сейчас" style="display:inline-block;cursor:pointer">${_dirty?'⟳ Сохраняю в БД…':'☁ Всё записано в БД'}</span>
     </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
@@ -1657,14 +1645,12 @@ function wireForm(){
   // block 0 — collection selector / create / delete / display settings
   if($('col-chips'))$('col-chips').querySelectorAll('.colchip').forEach(b=>b.onclick=()=>{readForm();useCol(+b.dataset.col);F=blankHand();buildForm();renderSet();persist();});
   if($('col-new'))$('col-new').onclick=()=>{readForm();const name=(prompt('Название новой подборки:','Новая подборка')||'').trim();if(!name)return;COLS.push({id:'u'+Date.now(),name,emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'',intro:blankIntro(name),hands:[]});useCol(COLS.length-1);F=blankHand();buildForm();renderSet();persist();toast('Подборка создана: '+name);};
-  if($('gh-save'))$('gh-save').onclick=()=>{const v=$('gh-token').value.trim();if(!v){toast('Вставь токен',1);return;}setGhToken(v);toast('Токен сохранён в этом браузере');buildForm();schedulePublish();};
-  if($('gh-clear'))$('gh-clear').onclick=()=>{setGhToken('');toast('Токен удалён');buildForm();};
+  // GitHub-token UI removed — publishing is via Supabase login (see publishPacks / schedulePublish / the syncStat click above).
   if($('fb-copy'))$('fb-copy').onclick=async()=>{const q=fbQueueGet();if(!q.length){toast('Очередь пуста');return;}
     const txt=JSON.stringify(q,null,2);try{await navigator.clipboard.writeText(txt);toast('Скопировано: '+q.length+' отз.');}catch(e){toast('Не удалось скопировать',1);}};
   if($('fb-flush'))$('fb-flush').onclick=async()=>{if(!supaEnabled()){toast('Сначала подключи базу',1);return;}const ok=await flushFbQueue();toast(ok?'Отправлено в базу ✓':'Не удалось отправить',ok?0:1);buildForm();};
   if($('fb-clearq'))$('fb-clearq').onclick=()=>{if(confirm('Удалить локальную очередь отзывов? Это не затронет уже отправленные в базу.')){fbQueueSet([]);toast('Очередь очищена');buildForm();}};
-  if($('col-publish'))$('col-publish').onclick=async()=>{const b=$('col-publish');const f=$('gh-token');if(f&&f.value.trim())setGhToken(f.value.trim());b.disabled=true;b.textContent='Публикую…';const ok=await publishPacks();if(ok){_syncedStr=pubStr();persist(true);}b.disabled=false;buildForm();if(ok)updSync('cloud');};
-  if($('col-pull'))$('col-pull').onclick=async()=>{const pub=await loadPublished();if(!pub){toast('В облаке пусто или недоступно',1);return;}if(!confirm('Заменить подборки версией из облака? Несохранённые локальные правки пропадут («Мой набор» останется).'))return;adoptFromCloud(pub.cols);F=blankHand();persist(true);buildForm();renderSet();updSync('synced');toast('Загружено из облака');};
+  if($('syncStat'))$('syncStat').onclick=async()=>{if(!isAdmin())return;updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);}updSync(ok?'cloud':'error');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
   if($('col-hide'))$('col-hide').onclick=()=>{readForm();activeCol().hidden=!activeCol().hidden;buildForm();persist();toast(activeCol().hidden?'Набор скрыт из библиотеки':'Набор снова в библиотеке');};
   if($('col-up'))$('col-up').onclick=()=>{if(curCol<=0)return;readForm();[COLS[curCol-1],COLS[curCol]]=[COLS[curCol],COLS[curCol-1]];useCol(curCol-1);buildForm();renderSet();persist();};
@@ -1886,10 +1872,10 @@ function schedulePublish(){
   },2500);
 }
 function updSync(state){const el=document.getElementById('syncStat');if(!el)return;
-  const M={cloud:['☁ Сохранено в облако','ok'],saving:['⟳ Сохраняю…','dim'],synced:['☁ Синхронизировано с облаком','dim'],
-    unpushed:['● Правки только в этом браузере — войди через Google (вверху справа), чтобы опубликовать','warn'],
-    error:['⚠ Не ушло в облако — правки пока сохранены только локально','bad']};
-  const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='block';}
+  const M={cloud:['☁ Всё записано в БД','ok'],saving:['⟳ Сохраняю в БД…','dim'],synced:['☁ Всё записано в БД','ok'],
+    unpushed:['⚠ Не записано — войди через Google','warn'],
+    error:['⚠ Не ушло в БД — нажми, чтобы повторить','bad']};
+  const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='inline-block';}
 // ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
 const GH_OWNER='danilakruzhkov-arch',GH_REPO='poker-trainer',GH_FILE='packs.json',GH_BRANCH='main',TOKEN_KEY='pk_gh_token';
 let PUBLISHED=null,lastPub='',lastPubOk=false;
@@ -1961,21 +1947,23 @@ function initAdmin(){
   document.querySelectorAll('#view-admin [data-sec]').forEach(sec=>sec.classList.toggle('collapsed',!!_ui.collapsed[sec.getAttribute('data-sec')]));
 }
 function switchView(v){const train=v==='train';stopVideos();$('view-train').style.display=train?'block':'none';$('view-admin').style.display=train?'none':'block';$('tab-train').classList.toggle('on',train);$('tab-admin').classList.toggle('on',!train);$('wrap').classList.toggle('wide',!train);}
-// editor password gate — a soft lock for sharing (client-side; NOT real security: the password lives in the page source)
-const EDITOR_PASS='admin123';
-let editorAuthed=(()=>{try{return sessionStorage.getItem('pk_editor_ok')==='1';}catch(e){return false;}})();
-function openEditor(){if(editorAuthed){switchView('admin');return;}$('authErr').textContent='';$('authPass').value='';$('authGate').classList.add('show');setTimeout(()=>{try{$('authPass').focus();}catch(e){}},50);}
-function tryAuth(){if($('authPass').value===EDITOR_PASS){editorAuthed=true;try{sessionStorage.setItem('pk_editor_ok','1');}catch(e){}$('authGate').classList.remove('show');switchView('admin');}else{$('authErr').textContent='Неверный пароль';$('authPass').value='';try{$('authPass').focus();}catch(e){}}}
-$('authOk').onclick=tryAuth;$('authCancel').onclick=()=>$('authGate').classList.remove('show');
+// editor is admin-only: the «Редактор раздач» tab shows only when an admin email is signed in (Supabase RLS is the real lock on writes). No password.
+function openEditor(){if(!isAdmin()){toast('Редактор — только для админа. Войди через Google (вверху справа).',1);return;}switchView('admin');}
 if($('statClose'))$('statClose').onclick=()=>$('statsGate').classList.remove('show');
 if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('statsGate').classList.remove('show');};
-$('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth();});
 $('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('train'));else switchView('train');};$('tab-admin').onclick=openEditor;
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
 if($('replayToggle'))$('replayToggle').onclick=()=>{setReplay(!REPLAY);toast('Анимация раздачи '+(REPLAY?'включена':'выключена'));};updateReplayBtn();
 // ---- auth: Google sign-in via Supabase (SDK loaded on demand, so the base app stays dependency-free) ----
 let CURUSER=null,_sb=null;
+// editor access = admin identity. Keep this list in sync with the packs RLS policy in Supabase (same emails).
+const ADMIN_EMAILS=['danilakruzhkov@gmail.com','daanilka@gmail.com'];
+function isAdmin(){return !!(CURUSER&&CURUSER.email&&ADMIN_EMAILS.indexOf(String(CURUSER.email).toLowerCase())>=0);}
+function renderAdminAccess(){const t=$('tab-admin');if(!t)return;
+  const admin=isAdmin();t.style.display=admin?'':'none';
+  if(!admin&&$('view-admin')&&$('view-admin').style.display!=='none')switchView('train');   // session dropped while in editor → back to trainer
+}
 function loadSupaSDK(){return new Promise(res=>{
   if(window.supabase)return res(window.supabase);
   const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
@@ -1990,6 +1978,7 @@ function userName(u){const m=(u&&u.user_metadata)||{};return m.full_name||m.name
 function userAvatar(u){const m=(u&&u.user_metadata)||{};return m.avatar_url||m.picture||'';}
 const GOOGLE_SVG='<svg class="gic" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.5-5.2l-6.2-5.3C29.2 34.9 26.7 36 24 36c-5.3 0-9.6-2.6-11.3-6.9l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.1 5.5l6.2 5.3C40.9 35.7 44 30.4 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>';
 function renderAuth(){
+  renderAdminAccess();                                              // show/hide the «Редактор раздач» tab by admin identity
   const slot=$('authSlot');if(!slot)return;
   if(!authClient()){slot.innerHTML='';return;}                     // SDK not ready — no control shown
   if(CURUSER){
