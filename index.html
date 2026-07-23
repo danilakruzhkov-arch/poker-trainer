@@ -1087,7 +1087,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.13';
+const APP_VER='2026-07-23.14';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1413,9 +1413,10 @@ function playPack(id){const hs=packHands(id);if(!hs.length){toast('В подбо
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
   $('drillTitle').innerHTML=meta?`${meta.emoji} ${meta.title}`:'';
   const intro=packIntro(id);if(intro)showIntro(intro);else beginDrill();}
-function beginDrill(){stopVideos();$('introScreen').style.display='none';$('trainApp').style.display='';startTrainer();$('trainApp').scrollIntoView?0:0;}
+function beginDrill(){stopVideos();$('introScreen').style.display='none';$('trainApp').style.display='';{const at=$('autoToggle');if(at)at.style.display='';}startTrainer();$('trainApp').scrollIntoView?0:0;}
 function showIntro(intro){$('trainApp').style.display='none';const el=$('introScreen');el.style.display='block';
   const id=ytId(intro.video&&intro.video.url),watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(intro.vStart||0)}s`:null;
+  {const at=$('autoToggle');if(at)at.style.display=id?'none':'';}   // intro moves «Автовидео» down into the clip row; the backrow toggle returns for the drill (or stays if the intro has no video)
   el.innerHTML=`<div class="intro">
     <div class="intro-cap">Вступление к подборке</div>
     <h2>${intro.title||'Тренировка'}</h2>
@@ -1424,13 +1425,14 @@ function showIntro(intro){$('trainApp').style.display='none';const el=$('introSc
       <div class="depth">Вступление</div>${watch?`<a class="vlink" href="${watch}" target="_blank" rel="noopener">↗ YouTube</a>`:''}
       <div class="play"></div><div class="vmeta"><div class="avatar">P</div><div class="ch">${intro.channel||'Разбор'}<small>клип с ютуба · нажми play</small></div>
       ${(intro.vStart||intro.vEnd)?`<div class="tc num">${sec2mmss(intro.vStart)}</div>`:''}</div></div></div>`:''}
-    ${id?`<div class="cliprow"><span class="clip-slot"></span></div>`:''}
+    ${id?`<div class="cliprow"><span class="clip-slot"></span><button class="vauto ${AUTOPLAY?'on':''}" id="introAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="introStart">Начать тренировку →</button>
   </div>`;
   const fac=el.querySelector('.vfacade[data-embed]');
   if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
     // #2 autostart the intro clip when Автовидео is on (same guard as the review sheet: only where embeds aren't CSP-blocked)
     if(AUTOPLAY&&canAutoEmbed())setTimeout(()=>{if($('introScreen').style.display!=='none'&&el.querySelector('.vfacade[data-embed]'))embedFacade(fac);},420);}
+  const ia=$('introAuto');if(ia)ia.onclick=()=>{setAutoplay(!AUTOPLAY);ia.className='vauto '+(AUTOPLAY?'on':'');ia.setAttribute('aria-pressed',AUTOPLAY);ia.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
   $('introStart').onclick=beginDrill;}
 function showHome(){stopVideos();$('drillWrap').style.display='none';$('introScreen').style.display='none';$('homeScreen').style.display='block';renderHome();}
 
