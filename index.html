@@ -1098,7 +1098,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.18';
+const APP_VER='2026-07-23.19';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1319,12 +1319,12 @@ const PACKS=[
    intro:{title:'Онлайн‑занос: путь известного игрока',text:'Разбираем ключевые руки одной большой онлайн‑сессии: как про строит линии на несколько улиц и ловит тонкие коллы.',video:{url:DV},vStart:1740,vEnd:1770,channel:'Онлайн‑занос'}},
   {id:'final',emoji:'♣', tag:'Финалка', format:'online', accent:'#2E8B57', host:'Разбор: Академия Покера', hero:'Финалист · борьба за титул', title:'Финальный стол онлайн', sub:'Короткие стеки и ICM: пуши, защита BB, борьба за титул.',
    intro:{title:'Финальный стол онлайн‑турнира',text:'Короткие стеки, давление ICM, борьба за титул. Проверь свои пуши, защиту большого блайнда и решения на баблах.',video:{url:DV},vStart:1780,vEnd:1810,channel:'Финалка онлайн'}},
-  {id:'ft10k',emoji:'♛', tag:'Реконструкция', format:'online', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'72oooo · с $10 сателлита в чемпионы', title:'Финалка $10K — путь 72oooo', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
-   intro:{title:'История одной победы',text:'72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.',video:{url:'https://youtu.be/0lh7nVLfmMo'},vStart:600,vEnd:625,channel:'Андрей Козленко'}},
-  {id:'wsopme',emoji:'★', tag:'Мейн Ивент', format:'offline', accent:'#C79A2E', host:'Разбор: Андрей Козленко', hero:'Мейн Ивент WSOP · дни 2–3', title:'WSOP Main Event $10K', sub:'Живые раздачи главного турнира мира: Хельмут, Фоксон и другие. Дисциплина, чтения, великие фолды.',
-   intro:{title:'WSOP Main Event — 10 000$',text:'Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.',video:{url:'https://youtu.be/yATrt1addik'},vStart:0,vEnd:30,channel:'Андрей Козленко'}},
-  {id:'mtt16k',emoji:'◆', tag:'Онлайн MTT', format:'online', accent:'#1C8FA8', host:'Разбор: Baby Shark', hero:'Бай‑ин $3 · занос $16 000', title:'С $3 до $16 000', sub:'Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.',
-   intro:{title:'С $3 до $16 000',text:'Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.',video:{url:'https://youtu.be/qMW6mOd7m6Q'},vStart:48,vEnd:80,channel:'Baby Shark'}}
+  {id:'ft10k',emoji:'♛', tag:'Реконструкция', format:'online', accent:'#7B4FC9', host:'Разбор: Андрей Козленко', hero:'микс игроков (регуляры и любители)', title:'Финальный стол GG $10,000', sub:'Ключевые раздачи финального стола GG $10,000, собранные по видео‑разбору Козленко.',
+   intro:{title:'Любитель обыграл профессионалов в GG $10к и выиграл $400к.',text:'72oooo прошёл квалификацию с $10 сателлита и обыграл мировых чемпионов на финалке GG $10,000. Разбираем его ключевые решения: сначала играешь спот сам, потом смотришь вердикт Андрея Козленко и рекомендацию GTO Wizard.',video:{url:'https://youtu.be/0lh7nVLfmMo'},vStart:600,vEnd:625,channel:'Финальный стол GG $10,000'}},
+  {id:'wsopme',emoji:'★', tag:'Мейн Ивент', format:'offline', accent:'#C79A2E', host:'Разбор: Андрей Козленко', hero:'микс игроков (регуляры и любители)', title:'WSOP Main Event $10K (Day 2)', sub:'Живые раздачи главного турнира мира: Хельмут, Фоксон и другие. Дисциплина, чтения, великие фолды.',
+   intro:{title:'WSOP Main Event — 10 000$ (Day 2)',text:'Разбираем самые интересные раздачи второго и третьего игровых дней Мейн Ивента WSOP. Сначала принимаешь решение сам, потом смотришь вердикт автора.',video:{url:'https://youtu.be/yATrt1addik'},vStart:0,vEnd:30,channel:'WSOP Main Event $10K (Day 2)'}},
+  {id:'mtt16k',emoji:'◆', tag:'Онлайн MTT', format:'online', accent:'#1C8FA8', host:'Разбор: Андрей Козленко', hero:'регуляр (микро лимиты)', title:'Путь к ТОП-1 и $16 000 в турнире за $3', sub:'Победный разбор фазового MTT: проход дня 1, защита BB, сайзинги в 3‑бет‑потах, дожим финалки.',
+   intro:{title:'Путь к ТОП-1 и $16 000 в турнире за $3',text:'Фазовый турнир с бай‑ином $3, который превратился в занос на $16 000. Разбираем ключевые раздачи, которые привели к победе: сначала твоё решение, потом разбор автора.',video:{url:'https://youtu.be/qMW6mOd7m6Q'},vStart:48,vEnd:80,channel:'Путь к ТОП-1 и $16 000 в турнире за $3'}}
 ];
 function blankIntro(name){return {title:'',text:'',video:{url:''},vStart:0,vEnd:0,channel:name||'Мой набор'};}
 // collections — EVERY collection is editable in the редактор (its own hands + display settings), including the
@@ -2187,13 +2187,19 @@ function renderStats(rows){
     `<div class="stbreak"><div class="stb"><span class="num g-best">${best}</span><span class="l">Верно</span></div><div class="stb"><span class="num g-ok">${okc}</span><span class="l">Погранич.</span></div><div class="stb"><span class="num g-mistake">${bad}</span><span class="l">Ошибки</span></div></div>`+
     `<div class="stsec">По подборкам</div>${packRows}`;
 }
-initAdmin();showHome();
+initAdmin();showHome();buildStamp('…');
 try{flushFbQueue();}catch(e){}   // if a Supabase sink is configured, push any feedback queued while it was offline
 try{if(/[?&]v=/.test(location.search))history.replaceState({},'',location.pathname+location.hash);}catch(e){}  // drop the ?v= cache-buster from the URL once the fresh build is loaded
 // --- live sync: packs.json is the source of truth for shared packs; version.json flags a newer app build ---
 let _lastSync=0;
+// tiny build+sync stamp (bottom-left). src ∈ db|static|cache|offline — tells us instantly, on any device, whether a fresh
+// build loaded and how far the pack sync got. Diagnostic for stale in-app-browser caches (Telegram etc.).
+function buildStamp(src){try{let el=document.getElementById('buildStamp');
+  if(!el){el=document.createElement('div');el.id='buildStamp';el.style.cssText='position:fixed;left:7px;bottom:5px;font:10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;opacity:.42;color:#9a9a9a;z-index:6;pointer-events:none;letter-spacing:.02em';document.body.appendChild(el);}
+  el.textContent='v'+APP_VER+(src?(' · '+src):'');}catch(e){}}
 async function syncPacks(){                                           // adopt fresh cloud packs unless THIS browser has unpublished edits
   try{const pub=await loadPublished();
+    buildStamp((pub&&pub.source)||'offline');                         // reflect the real sync source (or offline) on every sync
     if(!pub){if(_dirty)schedulePublish();return;}                     // DB unreachable and no cache yet: keep local, retry the push if we have unsynced edits
     const changed=pub.sig!==_syncedSig;                              // any pack's version moved → cloud differs from our baseline
     if(!_dirty){                                                      // clean browser: the cloud wins (personal 'Мой набор' is preserved)
