@@ -550,7 +550,7 @@
   <div id="view-train">
     <div id="homeScreen"></div>
     <div id="drillWrap" style="display:none">
-    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div><button class="backbtn auto" id="autoToggle" style="margin-left:auto">Автовидео: вкл</button></div>
+    <div class="backrow"><button class="backbtn" id="toHome">← Подборки</button><div class="bt" id="drillTitle"></div></div>
     <div id="introScreen" style="display:none"></div>
     <div class="app" id="trainApp">
       <header><div class="mark">♠</div><div class="brand">Покер<span>·</span>Разбор</div>
@@ -856,8 +856,19 @@ function ctxText(v){
 /* ===== TRAINER ===== */
 let HANDS=[], PLAY=[], i=0, score=0, streak=0, answered=[], picks=[];   // picks[i] = id of the option the player chose (for the solution recap)
 let AUTOPLAY=(()=>{try{return localStorage.getItem('pk_autoplay')!=='0';}catch(e){return true;}})();
+// Browsers that refuse AUDIBLE autoplay (iOS WebKit + Chrome Android by platform policy; Telegram's WebView is the
+// exception). Remembered so we don't re-probe on every visit: there Автовидео stays off and tapping it explains why.
+let NOAUTOSOUND=(()=>{try{return localStorage.getItem('pk_noautosound')==='1';}catch(e){return false;}})();
+const NOSOUND_MSG='В этом браузере Автовидео недоступно — для моб. устройств доступно во встроенном Telegram браузере (открыть ссылку в чате), либо на любом ПК.';
 function setAutoplay(on){AUTOPLAY=!!on;try{localStorage.setItem('pk_autoplay',on?'1':'0');}catch(e){}updateAutoBtn();}
-function updateAutoBtn(){const b=$('autoToggle');if(b)b.innerHTML=`Автовидео: <b>${AUTOPLAY?'вкл':'выкл'}</b>`;}
+function updateAutoBtn(){['sheetAuto','introAuto'].forEach(id=>{const b=$(id);if(!b)return;   // the toggle lives ONLY under the video: review sheet + intro
+  b.className='vauto '+(AUTOPLAY?'on':'');b.setAttribute('aria-pressed',AUTOPLAY);b.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');});}
+function toggleAutoplay(){if(NOAUTOSOUND&&!AUTOPLAY){toast(NOSOUND_MSG);return;}   // can't be switched on where the browser blocks audible autoplay — explain instead
+  setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));}
+// The browser refused audible autoplay → remember it, drop the toggle to «выкл», explain once. No muted pre-roll and no
+// pill: the clip just stays paused, and ONE tap plays it WITH sound (a tap is a user gesture, which every browser honours).
+function markNoAutoSound(){if(NOAUTOSOUND)return;NOAUTOSOUND=true;try{localStorage.setItem('pk_noautosound','1');}catch(e){}
+  setAutoplay(false);toast(NOSOUND_MSG);}
 // #10 fast replay: on each question, quickly deal through the prior actions (from hand start) before the decision.
 // v1 — kept deliberately simple; toggleable, off-switch persists. If a player answers mid-replay, timers are cleared.
 let REPLAY=false;   // hand-replay animation off for now (toggle removed per request)
@@ -1005,7 +1016,7 @@ function showSheet(v,res){
   if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
     // basic autoplay of the review clip; disabled where YouTube embeds are blocked (sandboxed artifact) so the facade stays clean
     if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac,true);},420);}
-  const sa=$('sheetAuto');if(sa)sa.onclick=()=>{setAutoplay(!AUTOPLAY);sa.className='vauto '+(AUTOPLAY?'on':'');sa.setAttribute('aria-pressed',AUTOPLAY);sa.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
+  const sa=$('sheetAuto');if(sa)sa.onclick=toggleAutoplay;   // toggleAutoplay repaints every visible toggle via updateAutoBtn()
   $('next').onclick=next;
   // #4 collapse/expand: only toggles a class — the video is NEVER torn down, so its audio keeps playing while minimised
   const smin=$('sheetMin');if(smin)smin.onclick=()=>{const c=sh.classList.toggle('collapsed');smin.textContent=c?'▴':'▾';smin.setAttribute('aria-label',c?'Развернуть результат':'Свернуть результат');smin.title=c?'Развернуть результат и плеер':'Свернуть — стол видно, звук разбора продолжит играть';if(c)sh.scrollTop=0;};
@@ -1070,7 +1081,7 @@ function embedFacade(fac,auto){const id=fac.dataset.embed,s=+fac.dataset.s||0,en
   wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
   if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s,timerSlot);}   // countdown survives the API swap (renders into the sibling row, or overlays the video as a fallback)
   loadYTAPI().then(YT=>{
-    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,!!auto&&IS_MOBILE);return;}   // no API → dumb embed; only this path still needs a mobile muted-autostart (no player object to detect the block or offer unmute)
+    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,false);return;}   // no API → dumb embed, still audible-first: without a player object we can't detect a block, and a silent autostart is worse than a paused clip the user taps
     // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT
     const pv={autoplay:1,rel:0,playsinline:1,modestbranding:1,iv_load_policy:3,disablekb:1,start:s||0,origin:location.origin};
     // Do NOT pre-mute. ATTEMPT audible autoplay — browsers that allow it (many phone browsers) just play with sound, no pill.
@@ -1078,17 +1089,17 @@ function embedFacade(fac,auto){const id=fac.dataset.embed,s=+fac.dataset.s||0,en
     if(en>s)pv.end=en;
     let player;
     try{player=new YT.Player(slot,{host:'https://www.youtube-nocookie.com',videoId:id,playerVars:pv,
-      events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}if(auto)armAutoplayFallback(wrap,player);},
+      events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}if(auto)armAutoplayFallback(player);},
               onStateChange:(e)=>{onClipState(e,wrap,player,s,en);if(auto)maybeShowUnmute(wrap,player,e&&e.data);}}});}
-    catch(e){plainEmbed(slot,id,s,en,!!auto&&IS_MOBILE);return;}
+    catch(e){plainEmbed(slot,id,s,en,false);return;}
     _ytPlayers.push(player);
   });}
-// --- audible-first autoplay: try sound; fall back to muted + an unmute pill ONLY when the browser blocks audible autoplay ---
-// Shortly after the clip is ready, if it isn't PLAYING/BUFFERING the browser refused audible autoplay → force a MUTED
-// autostart (allowed everywhere) so it plays at all, then surface the pill. Browsers that autoplayed WITH sound never trip this.
-function armAutoplayFallback(wrap,player){
+// --- audible-first autoplay: try sound; if the browser refuses, switch THIS browser to tap-to-play (never muted playback) ---
+// Shortly after the clip is ready, if it isn't PLAYING/BUFFERING the browser refused audible autoplay → remember that,
+// drop Автовидео to «выкл» and explain once. Browsers that autoplay WITH sound (desktop, Telegram WebView) never trip this.
+function armAutoplayFallback(player){
   const t=setTimeout(()=>{try{const st=player.getPlayerState&&player.getPlayerState();
-    if(st!==1&&st!==3){player.mute();player.playVideo();showUnmute(wrap,player);}   // -1/5/2/0 = not playing → muted autostart + pill
+    if(st!==1&&st!==3)markNoAutoSound();   // -1/5/2/0 = audible autoplay refused → this browser is tap-to-play from now on
   }catch(e){}},1400);
   VTIMERS.push(t);   // cleared with the other clip timers on teardown
 }
@@ -1102,7 +1113,7 @@ function showUnmute(wrap,player){
   const b=document.createElement('button');b.type='button';b.className='vunmute';b.textContent='🔊 Включить звук';
   b.onclick=()=>{try{player.unMute();player.setVolume(100);player.playVideo();}catch(e){}removeUnmute(wrap);};
   wrap.appendChild(b);}
-const IS_MOBILE=(()=>{try{return (window.matchMedia&&matchMedia('(pointer:coarse)').matches)||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent||'');}catch(e){return false;}})();
+// (no UA/pointer sniffing any more: we detect the browser's ACTUAL autoplay behaviour via armAutoplayFallback instead of guessing «mobile»)
 function canAutoEmbed(){try{return window.self===window.top;}catch(e){return false;}}
 // kill any playing YouTube iframe (sheet review clip or intro clip) so audio stops the moment we move on
 function stopVideos(){clearClipTimers();_ytPlayers.forEach(p=>{try{p&&p.destroy&&p.destroy();}catch(e){}});_ytPlayers=[];document.querySelectorAll('#sheet iframe,#introScreen iframe').forEach(f=>{try{f.src='about:blank';}catch(e){}f.remove();});}
@@ -1113,7 +1124,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.22';
+const APP_VER='2026-07-23.23';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1439,10 +1450,9 @@ function playPack(id){const hs=packHands(id);if(!hs.length){toast('В подбо
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
   $('drillTitle').innerHTML=meta?`${meta.emoji} ${meta.title}`:'';
   const intro=packIntro(id);if(intro)showIntro(intro);else beginDrill();}
-function beginDrill(){stopVideos();$('introScreen').style.display='none';$('trainApp').style.display='';{const at=$('autoToggle');if(at)at.style.display='';}startTrainer();$('trainApp').scrollIntoView?0:0;}
+function beginDrill(){stopVideos();$('introScreen').style.display='none';$('trainApp').style.display='';startTrainer();$('trainApp').scrollIntoView?0:0;}
 function showIntro(intro){$('trainApp').style.display='none';const el=$('introScreen');el.style.display='block';
   const id=ytId(intro.video&&intro.video.url),watch=id?`https://www.youtube.com/watch?v=${id}&t=${Math.floor(intro.vStart||0)}s`:null;
-  {const at=$('autoToggle');if(at)at.style.display=id?'none':'';}   // intro moves «Автовидео» down into the clip row; the backrow toggle returns for the drill (or stays if the intro has no video)
   el.innerHTML=`<div class="intro">
     <div class="intro-cap">Вступление к подборке</div>
     <h2>${intro.title||'Тренировка'}</h2>
@@ -1458,7 +1468,7 @@ function showIntro(intro){$('trainApp').style.display='none';const el=$('introSc
   if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
     // #2 autostart the intro clip when Автовидео is on (same guard as the review sheet: only where embeds aren't CSP-blocked)
     if(AUTOPLAY&&canAutoEmbed())setTimeout(()=>{if($('introScreen').style.display!=='none'&&el.querySelector('.vfacade[data-embed]'))embedFacade(fac,true);},420);}
-  const ia=$('introAuto');if(ia)ia.onclick=()=>{setAutoplay(!AUTOPLAY);ia.className='vauto '+(AUTOPLAY?'on':'');ia.setAttribute('aria-pressed',AUTOPLAY);ia.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
+  const ia=$('introAuto');if(ia)ia.onclick=toggleAutoplay;
   $('introStart').onclick=beginDrill;}
 function showHome(){stopVideos();$('drillWrap').style.display='none';$('introScreen').style.display='none';$('homeScreen').style.display='block';renderHome();}
 
@@ -2126,8 +2136,7 @@ function openEditor(){if(!isAdmin()){toast('Редактор — только д
 if($('statClose'))$('statClose').onclick=()=>$('statsGate').classList.remove('show');
 if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('statsGate').classList.remove('show');};
 $('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('train'));else switchView('train');};$('tab-admin').onclick=openEditor;
-$('toHome').onclick=showHome;
-$('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
+$('toHome').onclick=showHome;   // «Автовидео» is no longer in the back row — it lives under the video on the review sheet + intro, wired on render
 // ---- auth: Google sign-in via Supabase (SDK loaded on demand, so the base app stays dependency-free) ----
 let CURUSER=null,_sb=null,_authReady=false;   // _authReady: true once auth has settled (session known, or SDK/login unavailable) → sync may then let the cloud win for non-admins
 // editor access = admin identity. Keep this list in sync with the packs RLS policy in Supabase (same emails).
