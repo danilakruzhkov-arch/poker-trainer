@@ -1087,7 +1087,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.14';
+const APP_VER='2026-07-23.15';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1972,7 +1972,7 @@ function pubStr(){try{return JSON.stringify(pubCols());}catch(e){return '';}}
 function persist(clean){
   const ps=pubStr();
   if(clean===true){_dirty=false;_syncedStr=ps;}else _dirty=(ps!==_syncedStr);
-  try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty}));}catch(e){}
+  try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty,sig:_syncedSig}));}catch(e){}
   if(clean!==true&&_dirty)schedulePublish();
 }
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(()=>persist(),400);}
@@ -1993,7 +1993,15 @@ function updSync(state){const el=document.getElementById('syncStat');if(!el)retu
   const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='inline-block';}
 // ===== cloud publish/backup via GitHub (packs.json in the repo). Works on the deployed site; inside the artifact CSP blocks it and everything falls back to localStorage. =====
 const GH_OWNER='danilakruzhkov-arch',GH_REPO='poker-trainer',GH_FILE='packs.json',GH_BRANCH='main',TOKEN_KEY='pk_gh_token';
-let PUBLISHED=null,lastPub='',lastPubOk=false;
+let lastPub='',lastPubOk=false;
+// ===== Supabase is the single source of truth. Reads go via direct REST (no CDN SDK) so a blocked/slow CDN
+// can't stop content loading; the SDK is used only for admin auth + publish. packs.json is gone. =====
+const PACK_EP=SUPA_URL+'/rest/v1/pack';
+const CACHE_KEY='pk_packs_cache';                                    // last good cloud snapshot — the ONLY read fallback (never a stale static file)
+function packHeaders(){return {apikey:SUPA_ANON,Authorization:'Bearer '+SUPA_ANON};}
+function colsMap(cols){const m={};(cols||[]).forEach((c,i)=>{if(c&&c.id)m[c.id]=i+''+JSON.stringify(c);});return m;}   // slug -> position+content, for per-pack change detection
+let _syncedMap={},_syncedSig='';                                    // the cloud baseline this browser matches: per-pack map + a slug:version signature
+function setSyncBaseline(sig){_syncedStr=pubStr();_syncedMap=colsMap(pubCols());if(sig!=null)_syncedSig=sig;_dirty=false;}
 // status that survives a buildForm() re-render (toasts vanish in 2s; the panel keeps the last result)
 function pubSay(msg,err){lastPub=msg;lastPubOk=!err;toast(msg,err?1:0);const m=document.getElementById('pubMsg');if(m){m.style.display='block';m.textContent=msg;m.className='pubmsg '+(err?'bad':'ok');}}
 function ghToken(){try{return localStorage.getItem(TOKEN_KEY)||'';}catch(e){return '';}}
@@ -2003,27 +2011,43 @@ function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
 function adoptCols(cols){const prevId=COLS[curCol]&&COLS[curCol].id;COLS=cols.map((c,ci)=>{if(!c.hands)c.hands=[];c.hands=c.hands.map(migrateCards);if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';return c;});const keep=prevId?COLS.findIndex(c=>c.id===prevId):-1;curCol=keep>=0?keep:COLS.length-1;useCol(curCol);}
 // adopt the cloud packs as the shared truth, but keep this browser's personal 'Мой набор' (it never goes to the cloud)
 function adoptFromCloud(serverCols){const mine=COLS.find(c=>c&&c.id==='mine');const cols=serverCols.filter(c=>c&&c.id!=='mine');if(mine)cols.push(mine);adoptCols(cols);}
-// Supabase is the source of truth for shared packs; packs.json is a static fallback used only if the DB is unreachable.
+// Read shared packs from the per-pack table via direct REST (no CDN dependency). Fallback = this browser's last good
+// snapshot in localStorage, NEVER a static file — so a stale fallback can't be adopted or republished over good data.
 async function loadPublished(){
-  try{await loadSupaSDK();const c=authClient();
-    if(c){const {data,error}=await c.from('packs').select('cols,published_at').eq('id',1).maybeSingle();
-      if(!error&&data&&Array.isArray(data.cols))return {cols:data.cols,publishedAt:Number(data.published_at)||0};}
+  try{const r=await fetch(PACK_EP+'?select=slug,position,data,version&order=position.asc',{headers:packHeaders(),cache:'no-store'});
+    if(r.ok){const rows=await r.json();
+      if(Array.isArray(rows)&&rows.length){
+        const cols=rows.map(x=>x&&x.data).filter(Boolean);
+        const sig=rows.map(x=>x.slug+':'+x.version).join('|');
+        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,ts:Date.now()}));}catch(e){}
+        return {cols,sig,source:'db'};
+      }
+    }
   }catch(e){}
-  try{const r=await fetch(GH_FILE+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return null;const j=await r.json();if(j&&Array.isArray(j.cols))return j;}catch(e){}
+  try{const cch=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+    if(cch&&Array.isArray(cch.cols)&&cch.cols.length)return {cols:cch.cols,sig:cch.sig||'',source:'cache'};}catch(e){}
   return null;
 }
-// publish the shared packs to Supabase; writes are RLS-gated to the admin Google account, so no token lives in the browser.
+// Publish per-pack: only changed rows are written and removed packs deleted. RLS gates writes to the admin Google account.
+// The DB trigger versions every write (last 100 kept), so a bad write hits one pack and stays recoverable.
 async function publishPacks(auto){
   await loadSupaSDK();const c=authClient();
   if(!c){if(!auto)pubSay('Облако недоступно (нет сети или клиент не загрузился)',1);return false;}
   if(!CURUSER){if(!auto)pubSay('Войди через Google (кнопка вверху справа), чтобы публиковать',1);return false;}
   if(!auto)readForm();
-  const at=Date.now(),cols=pubCols();
-  try{const {error}=await c.from('packs').upsert({id:1,cols:cols,published_at:at,updated_at:new Date(at).toISOString()},{onConflict:'id'});
-    if(error){const m=error.message||'';pubSay(/row-level|policy|permission|denied|403/i.test(m)?'Нет прав на публикацию — этот Google‑аккаунт не админ':'Не вышло: '+(m||'ошибка'),1);return false;}
-    PUBLISHED={cols:cols,publishedAt:at};try{localStorage.setItem('pk_pub_at',String(at));}catch(e){}
-    if(!auto)pubSay('Опубликовано ✓ — зрители увидят при обновлении страницы');return true;
-  }catch(e){pubSay('Запрос не прошёл — проверь сеть',1);return false;}
+  const cols=pubCols();
+  if(!cols.length){if(!auto)pubSay('Пусто — публиковать нечего',1);return false;}   // guard: never wipe the whole set
+  const cur=colsMap(cols);
+  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id])changed.push({slug:p.id,position:i,data:p});});
+  const deleted=Object.keys(_syncedMap).filter(s=>!(s in cur));
+  try{
+    if(changed.length){const {error}=await c.from('pack').upsert(changed,{onConflict:'slug'});if(error)throw error;}
+    for(const s of deleted){const {error}=await c.from('pack').delete().eq('slug',s);if(error)throw error;}
+    _syncedMap=cur;
+    const fresh=await loadPublished();if(fresh&&fresh.sig)_syncedSig=fresh.sig;   // rebase freshness on the trigger-bumped versions so our own write isn't re-adopted next sync
+    if(!auto)pubSay('Опубликовано ✓ — зрители увидят при обновлении страницы');
+    return true;
+  }catch(e){const m=(e&&e.message)||'';pubSay(/row-level|policy|permission|denied|403/i.test(m)?'Нет прав на публикацию — этот Google‑аккаунт не админ':'Не вышло: '+(m||'ошибка'),1);return false;}
 }
 function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(!s)return;
   let cols=Array.isArray(s.cols)&&s.cols.length?s.cols.slice()
@@ -2033,7 +2057,7 @@ function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');
   COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';c.hands.forEach(migrateCards);});
   curCol=(typeof s.curCol==='number'&&s.curCol>=0&&s.curCol<COLS.length)?s.curCol:COLS.length-1;useCol(curCol);
   if(s.draft&&Array.isArray(s.draft.actions)){F=s.draft;migrateCards(F);}
-  _dirty=!!s.dirty;_syncedStr=_dirty?'':pubStr();   // clean local == last synced; dirty means unpushed edits the boot fetch must not overwrite
+  _dirty=!!s.dirty;_syncedStr=_dirty?'':pubStr();_syncedSig=s.sig||'';_syncedMap=_dirty?{}:colsMap(pubCols());   // clean == matches cloud baseline; dirty == unpushed edits (empty map → first publish pushes all)
 }catch(e){}}
 function initAdmin(){
   restore();if(!F)F=blankHand();else migrateCards(F);buildForm();renderSet();markDraftSaved();backupSnapshot();   // snapshot the just-restored state before any cloud sync can touch it
@@ -2150,21 +2174,20 @@ try{if(/[?&]v=/.test(location.search))history.replaceState({},'',location.pathna
 let _lastSync=0;
 async function syncPacks(){                                           // adopt fresh cloud packs unless THIS browser has unpublished edits
   try{const pub=await loadPublished();
-    if(!pub){if(_dirty)schedulePublish();return;}                     // offline / no cloud yet: keep local, retry the push if we have unsynced edits
-    const fresher=!PUBLISHED||((pub.publishedAt||0)>(PUBLISHED.publishedAt||0));
+    if(!pub){if(_dirty)schedulePublish();return;}                     // DB unreachable and no cache yet: keep local, retry the push if we have unsynced edits
+    const changed=pub.sig!==_syncedSig;                              // any pack's version moved → cloud differs from our baseline
     if(!_dirty){                                                      // clean browser: the cloud wins (personal 'Мой набор' is preserved)
-      // NEVER rebuild COLS / curCol / SET while the editor is open or a draft is unsaved — doing so used to move the
-      // active pack out from under an in-progress edit, so the next save landed in (and overwrote) the wrong pack.
-      // Defer: leave PUBLISHED stale so a later sync adopts once the editor is idle.
+      if(!changed){updSync('synced');return;}
+      if(!pub.cols||!pub.cols.length){updSync('synced');return;}      // downgrade guard: never replace a non-empty local with an empty/broken read
+      // NEVER rebuild COLS while the editor is open or a draft is unsaved — that used to move the active pack out from
+      // under an in-progress edit, so the next save overwrote the wrong pack. Defer: a later idle sync adopts.
       const editing=($('view-admin')&&$('view-admin').style.display!=='none')||isDirtyDraft();
-      if(fresher&&editing){updSync('synced');return;}
-      PUBLISHED=pub;
-      if(fresher){adoptFromCloud(pub.cols);persist(true);
-        if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
-        if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}}
+      if(editing){updSync('synced');return;}
+      adoptFromCloud(pub.cols);setSyncBaseline(pub.sig);persist(true);
+      if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
+      if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}
       updSync('synced');
     }else{                                                            // this browser has edits the cloud doesn't — keep them and push up
-      PUBLISHED=pub;
       schedulePublish();                                            // self-gates on CURUSER; shows 'unpushed' if not signed in
     }
   }catch(e){}
