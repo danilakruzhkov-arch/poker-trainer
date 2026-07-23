@@ -183,6 +183,14 @@
   .next{margin-top:13px;width:100%;border:none;cursor:pointer;background:linear-gradient(180deg,var(--brass),var(--brass-d));color:#1c1300;font-weight:800;font-size:15px;padding:13px;border-radius:13px}
   .hint{text-align:center;color:#6f8178;font-size:10.5px;margin-top:8px;line-height:1.4}
   .fbwrap{margin-top:10px;padding-top:10px;border-top:1px solid var(--stroke)}
+  /* #2 rate-the-question: 👍/👎 above «Сообщить об ошибке», one anon row per click into the ratings table */
+  .rateq{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .rateq-l{font-size:12px;font-weight:700;color:var(--muted)}
+  .rateb{width:38px;height:32px;border-radius:10px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);font-size:16px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:.14s;filter:grayscale(.35)}
+  .rateb:hover{background:rgba(255,255,255,.09);filter:none;transform:translateY(-1px)}
+  .rateb.up.on{background:rgba(70,177,123,.2);border-color:rgba(70,177,123,.6);filter:none}
+  .rateb.down.on{background:rgba(226,80,78,.18);border-color:rgba(226,80,78,.55);filter:none}
+  .rateq-done{font-size:11.5px;color:var(--muted);margin-left:2px}
   .fbtoggle{width:100%;background:none;border:1px dashed var(--stroke);color:var(--muted);border-radius:11px;padding:9px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
   .fbtoggle:hover{color:var(--text);border-color:var(--muted)}
   .fbform{margin-top:8px;background:var(--field);border:1px solid var(--stroke);border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:8px}
@@ -977,7 +985,11 @@ function showSheet(v,res){
     ${!v.deferred&&hasVid?`<div class="cliprow"><span class="clip-slot" id="clipSlot"></span><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
     ${(()=>{const h=v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.';return h?`<div class="hint">${h}</div>`:'';})()}
-    <div class="fbwrap"><button class="fbtoggle" id="fbToggle">⚑ Сообщить об ошибке</button>
+    <div class="fbwrap"><div class="rateq" id="rateRow"><span class="rateq-l">Оцени вопрос:</span>
+        <button class="rateb up" id="rateUp" data-dir="up" aria-label="Хороший вопрос" title="Хороший вопрос">👍</button>
+        <button class="rateb down" id="rateDown" data-dir="down" aria-label="Так себе вопрос" title="Так себе вопрос">👎</button>
+        <span class="rateq-done" id="rateDone"></span></div>
+      <button class="fbtoggle" id="fbToggle">⚑ Сообщить об ошибке</button>
       <div class="fbform" id="fbForm" hidden>
         <div class="fblbl">Что не так?</div>
         <div class="fbcats">${FB_CATS.map((c,ix)=>`<button class="fbcat${ix===0?' on':''}" data-cat="${c.k}">${c.t}</button>`).join('')}</div>
@@ -995,7 +1007,7 @@ function showSheet(v,res){
   $('next').onclick=next;
   // #4 collapse/expand: only toggles a class — the video is NEVER torn down, so its audio keeps playing while minimised
   const smin=$('sheetMin');if(smin)smin.onclick=()=>{const c=sh.classList.toggle('collapsed');smin.textContent=c?'▴':'▾';smin.setAttribute('aria-label',c?'Развернуть результат':'Свернуть результат');smin.title=c?'Развернуть результат и плеер':'Свернуть — стол видно, звук разбора продолжит играть';if(c)sh.scrollTop=0;};
-  wireFeedback();
+  wireFeedback();wireRating();
 }
 /* ===== spoiler guard (C): the YouTube scrubber exposes the WHOLE source video, so a player can drag past the
    clip's end and see the author reveal the next street / next decision. With enablejsapi we watch playback time
@@ -1075,7 +1087,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.12';
+const APP_VER='2026-07-23.13';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1104,6 +1116,24 @@ function fbContext(){const p=PLAY[i],h=HANDS[p.hi],v=qView(h,p.k);const pk=opt(v
   return {pack:CURPACK.id,pack_title:CURPACK.title,hand:h.title||('#'+(p.hi+1)),street:v.street,q_index:p.k+1,q_total:p.stepCount||questionsOf(h).length,
     pick_label:optLabelDisp(pk,v.street,v.history&&v.history.preflop)||pk.label||'',pick_grade:answered[i]||'',
     hero_label:(opt(v.options,v.heroPick)||{}).label||''};}
+// --- #2 question rating (👍/👎). Anonymous, insert-only into `ratings` via the same public anon key as feedback.
+//     One localStorage flag per question mirrors the chosen side and stops re-sending the SAME vote twice. ---
+function ratingRow(dir){const c=fbContext();
+  return {pack:c.pack,pack_title:c.pack_title,hand:c.hand,street:c.street,q_index:c.q_index,q_total:c.q_total,
+    rating:dir,app_ver:APP_VER,ua:(navigator.userAgent||'').slice(0,180),client_ts:new Date().toISOString()};}
+function rateKey(){const c=fbContext();return 'pk_rated:'+c.pack+'|'+c.hand+'|'+c.q_index;}
+function ratedGet(){try{return localStorage.getItem(rateKey())||'';}catch(e){return '';}}
+function ratedSet(d){try{localStorage.setItem(rateKey(),d);}catch(e){}}
+function paintRating(){const d=ratedGet(),u=$('rateUp'),dn=$('rateDown'),done=$('rateDone');
+  if(u)u.classList.toggle('on',d==='up');if(dn)dn.classList.toggle('on',d==='down');
+  if(done)done.textContent=d?'спасибо!':'';}
+async function rateQuestion(dir){
+  if(ratedGet()===dir)return;                       // same vote already sent for this question — ignore
+  ratedSet(dir);paintRating();
+  toast(dir==='up'?'Спасибо за оценку 👍':'Принято, учтём 👎');
+  if(supaEnabled()){try{await supaInsert('ratings',[ratingRow(dir)]);}catch(e){}}   // fire-and-forget; stats are best-effort
+}
+function wireRating(){const u=$('rateUp'),dn=$('rateDown');if(u)u.onclick=()=>rateQuestion('up');if(dn)dn.onclick=()=>rateQuestion('down');paintRating();}
 // --- progress log: one row per answered question, for signed-in users (Stage 3b). Writes via the
 //     supabase-js client so PostgREST sees the user's token (RLS: auth.uid() = user_id), NOT the anon key. ---
 function attemptRow(){const c=fbContext();
