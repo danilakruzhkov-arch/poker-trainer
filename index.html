@@ -147,8 +147,13 @@
   .play{width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.6);display:grid;place-items:center;z-index:2;transition:.15s}
   .vfacade:hover .play{transform:scale(1.07)}
   .play::after{content:"";border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
-  /* clip countdown overlay (time left until the segment auto-pauses) */
-  .vtimer{position:absolute;left:8px;bottom:8px;z-index:3;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 10px 3px 8px;color:#ffe4a3;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none}
+  /* clip countdown (time left until the segment auto-pauses) — sits in a row UNDER the video, next to «Автовидео» */
+  .vtimer{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 10px 3px 8px;color:#ffe4a3;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none}
+  .video>.vtimer{position:absolute;left:8px;bottom:8px;z-index:3}   /* fallback overlay when there is no row slot */
+  .vtimer .vt-cap{color:#9aa39e;font-weight:600;font-size:11px}
+  .cliprow{display:flex;align-items:center;gap:9px;margin-top:9px;flex-wrap:wrap}
+  .cliprow .clip-slot{display:inline-flex;align-items:center;min-height:22px}
+  .cliprow .vauto{margin-left:auto}
   .vtimer .vt-dot{width:7px;height:7px;border-radius:50%;background:#f0b43c;box-shadow:0 0 0 3px rgba(240,180,60,.22);animation:vtpulse 1s ease-in-out infinite}
   .vtimer.done{color:#9aa39e}.vtimer.done .vt-dot{background:#9aa39e;box-shadow:none;animation:none}
   .vtimer.paused .vt-dot{animation:none;background:#9aa39e;box-shadow:none}
@@ -860,16 +865,18 @@ function replayInto(container,v,onDone){clearReplay();
 const TIMERON=true;   // the segment timer always lives over the video (no toggle) — it's what keeps players inside the clip
 let VTIMERS=[];
 function fmtCountdown(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
-function startClipTimer(wrap,dur){if(!TIMERON||!(dur>0)||!wrap)return;
-  const el=document.createElement('div');el.className='vtimer';el.innerHTML='<span class="vt-dot"></span><span class="vt-rem">'+fmtCountdown(dur)+'</span>';
-  wrap.appendChild(el);const rem=el.querySelector('.vt-rem'),t0=Date.now();
+function startClipTimer(wrap,dur,slot){if(!TIMERON||!(dur>0)||!wrap)return;
+  const host=slot||wrap;                                                            // #3 prefer the row slot UNDER the video; overlay only as a fallback
+  const el=document.createElement('div');el.className='vtimer';
+  el.innerHTML='<span class="vt-dot"></span><span class="vt-rem">'+fmtCountdown(dur)+'</span>'+(slot?'<span class="vt-cap">до конца отрезка</span>':'');
+  host.appendChild(el);const rem=el.querySelector('.vt-rem'),t0=Date.now();
   const iv=setInterval(()=>{const left=dur-(Date.now()-t0)/1000;                    // wall-clock fallback until the real player attaches (or when the API can't load)
     if(left<=0){rem.textContent='конец отрезка';el.classList.add('done');clearInterval(iv);}
     else rem.textContent=fmtCountdown(left);},250);
   el._iv=iv;VTIMERS.push(iv);}
 // #4 once the real YouTube player exists, drive the countdown from ITS clock: pause freezes it, 2× speed halves it
 function bindTimerToPlayer(wrap,player,en){
-  const el=wrap&&wrap.querySelector('.vtimer');if(!el||!player||typeof player.getCurrentTime!=='function')return;
+  const el=document.querySelector('.vtimer');if(!el||!player||typeof player.getCurrentTime!=='function')return;   // the timer now lives in a sibling row slot, not inside the video wrap
   const rem=el.querySelector('.vt-rem');if(el._iv)clearInterval(el._iv);            // drop the wall-clock estimate; the player is now the source of truth
   const upd=()=>{let t,st;try{t=player.getCurrentTime();st=player.getPlayerState?player.getPlayerState():1;}catch(e){return;}
     if(typeof t!=='number'||isNaN(t))return;const left=en-t;
@@ -957,9 +964,9 @@ function showSheet(v,res){
     <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
     <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street,r.pf)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
-    ${!v.deferred&&hasVid?`<div class="vauto-row"><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
+    ${!v.deferred&&hasVid?`<div class="cliprow"><span class="clip-slot" id="clipSlot"></span><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
-    <div class="hint">${v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'Видео стартует автоматически. В артефакте embed режет CSP — открой по ссылке ↗.':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.'}</div>
+    ${(()=>{const h=v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.';return h?`<div class="hint">${h}</div>`:'';})()}
     <div class="fbwrap"><button class="fbtoggle" id="fbToggle">⚑ Сообщить об ошибке</button>
       <div class="fbform" id="fbForm" hidden>
         <div class="fblbl">Что не так?</div>
@@ -1031,8 +1038,9 @@ function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac
   // Let the IFrame API BUILD the player from a placeholder div (host=nocookie). Attaching to a pre-made
   // youtube-nocookie iframe silently fails, so this div-first path is what makes the spoiler guard actually work.
   const wrap=fac.parentElement,slot='ytf'+(++_ytSeq);
+  const scope=wrap.closest('#sheet,#introScreen');const timerSlot=scope?scope.querySelector('.clip-slot'):null;   // #3 countdown row UNDER the video on sheet/intro; editor preview keeps the overlay fallback
   wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
-  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s);}   // countdown overlay is a sibling of the div → survives the API swap
+  if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s,timerSlot);}   // countdown survives the API swap (renders into the sibling row, or overlays the video as a fallback)
   loadYTAPI().then(YT=>{
     if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en);return;}   // no API → dumb embed, countdown-only
     // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT
@@ -1055,7 +1063,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.10';
+const APP_VER='2026-07-23.11';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1374,6 +1382,7 @@ function showIntro(intro){$('trainApp').style.display='none';const el=$('introSc
       <div class="depth">Вступление</div>${watch?`<a class="vlink" href="${watch}" target="_blank" rel="noopener">↗ YouTube</a>`:''}
       <div class="play"></div><div class="vmeta"><div class="avatar">P</div><div class="ch">${intro.channel||'Разбор'}<small>клип с ютуба · нажми play</small></div>
       ${(intro.vStart||intro.vEnd)?`<div class="tc num">${sec2mmss(intro.vStart)}</div>`:''}</div></div></div>`:''}
+    ${id?`<div class="cliprow"><span class="clip-slot"></span></div>`:''}
     <button class="next" id="introStart">Начать тренировку →</button>
   </div>`;
   const fac=el.querySelector('.vfacade[data-embed]');
