@@ -67,16 +67,18 @@
   .plate .stk{color:#cdd8d1;font-size:11px;font-weight:600}
   .tags{display:flex;gap:3px;margin-top:2px}
   .tg{font-size:8px;font-weight:800;padding:1px 4px;border-radius:4px;text-transform:uppercase}
-  .tg.rec{background:rgba(70,177,123,.16);color:#7fd8a8;border:1px solid rgba(70,177,123,.4)}
-  .tg.fish{background:rgba(226,80,78,.16);color:#f0a0a0;border:1px solid rgba(226,80,78,.4)}
-  .tg.aggr{background:rgba(224,163,46,.16);color:#eac877;border:1px solid rgba(224,163,46,.4)}
-  .tg.tight{background:rgba(38,104,196,.18);color:#9dc0f0;border:1px solid rgba(38,104,196,.45)}
-  .tg.std{background:rgba(255,255,255,.08);color:#c2ccc6}
+  /* profile tags: Люб(amateur)=green, Рег=neutral (NOT green), Агр=red, Тайт=blue */
+  .tg.rec{background:rgba(150,161,156,.16);color:#c7d0ca;border:1px solid rgba(150,161,156,.42)}
+  .tg.fish{background:rgba(70,177,123,.18);color:#86dcac;border:1px solid rgba(70,177,123,.45)}
+  .tg.aggr{background:rgba(226,80,78,.18);color:#f0a0a0;border:1px solid rgba(226,80,78,.45)}
+  .tg.tight{background:rgba(38,104,196,.2);color:#9dc0f0;border:1px solid rgba(38,104,196,.5)}
+  .tg.std{background:rgba(255,255,255,.08);color:#c2ccc6;border:1px solid rgba(255,255,255,.14)}
   .act{font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
-  .act.raise,.act.bet{color:#ffdf9b;background:rgba(198,161,91,.16);border-color:rgba(198,161,91,.5)}
-  .act.call{color:#bfe6d1;background:rgba(70,177,123,.14);border-color:rgba(70,177,123,.4)}
+  /* every money-on-table chip (bet/raise/call/blind) shares ONE design */
+  .act.raise,.act.bet,.act.call{color:#ffdf9b;background:rgba(198,161,91,.18);border-color:rgba(198,161,91,.55)}
   .act.check{color:#c9d3cd;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
   .act.fold{color:#9aa39e;background:rgba(255,255,255,.05)}
+  .act.ask{color:#1a1200;background:#e7c04a;border-color:#f0cf6a;font-weight:900;min-width:16px;text-align:center}
   .dealer{position:absolute;width:18px;height:18px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#fff,#d8cdae);color:#5a4a1e;font-weight:900;font-size:9px;display:grid;place-items:center;box-shadow:0 2px 5px rgba(0,0,0,.5);z-index:5}
   .hero .plate{border-color:rgba(198,161,91,.5);box-shadow:0 0 0 3px rgba(198,161,91,.1);flex-direction:row;gap:7px;align-items:center;border-radius:999px}
   .hero .you{font-size:8.5px;letter-spacing:.12em;color:#7f9188;text-transform:uppercase}
@@ -581,7 +583,7 @@ const STREETS=['preflop','flop','turn','river'], STREET_RU={preflop:'Префл�
 const ACT_RU={fold:'Пас',check:'Чек',call:'Колл',bet:'Бет',raise:'Рейз'};   // канон: пас/чек/колл/бет/рейз (олл-ин детектится по размеру; 3-бет+ различаются на кнопках опций)
 const GRADE_LABEL={best:'Верно',ok:'Приемлемо',mistake:'Ошибка'}, GRADE_RANK={best:0,ok:1,mistake:2}, PTS={best:100,ok:60,mistake:0};
 const STATUS={'':'статус —',rec:'регуляр',fish:'любитель'}, STYLE={'':'стиль —',aggr:'агрессивный',tight:'тайтовый',std:'стандартный'};
-const STATUS_TAG={rec:{t:'Рег',c:'rec'},fish:{t:'Люб',c:'fish'}}, STYLE_TAG={aggr:{t:'Агр',c:'aggr'},tight:{t:'Тайт',c:'tight'},std:{t:'Std',c:'std'}};
+const STATUS_TAG={rec:{t:'Рег',c:'rec'},reg:{t:'Рег',c:'rec'},fish:{t:'Люб',c:'fish'}}, STYLE_TAG={aggr:{t:'Агр',c:'aggr'},tight:{t:'Тайт',c:'tight'},std:{t:'Std',c:'std'}};   // 'reg' is a data alias for 'rec'
 function dispOrder(n){const o=POS[n];return ['SB','BB',...o.filter(p=>p!=='SB'&&p!=='BB')].filter(p=>o.includes(p));}
 function cardHTML(code,cls){if(!code)return `<div class="card ${cls}" style="opacity:.25"></div>`;const su=SUIT[code[1]];return `<div class="card ${cls} ${su.c}"><span class="r">${RDISP[code[0]]||code[0]}</span><span class="s">${su.g}</span></div>`;}
 function cardText(code){return (RDISP[code[0]]||code[0])+SUIT[code[1]].g;}
@@ -1031,7 +1033,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.7';
+const APP_VER='2026-07-23.8';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
