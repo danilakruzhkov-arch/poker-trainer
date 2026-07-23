@@ -1098,7 +1098,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.20';
+const APP_VER='2026-07-23.21';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -2114,7 +2114,7 @@ $('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsav
 $('toHome').onclick=showHome;
 $('autoToggle').onclick=()=>{setAutoplay(!AUTOPLAY);toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};updateAutoBtn();
 // ---- auth: Google sign-in via Supabase (SDK loaded on demand, so the base app stays dependency-free) ----
-let CURUSER=null,_sb=null;
+let CURUSER=null,_sb=null,_authReady=false;   // _authReady: true once auth has settled (session known, or SDK/login unavailable) → sync may then let the cloud win for non-admins
 // editor access = admin identity. Keep this list in sync with the packs RLS policy in Supabase (same emails).
 const ADMIN_EMAILS=['danilakruzhkov@gmail.com','daanilka@gmail.com'];
 function isAdmin(){return !!(CURUSER&&CURUSER.email&&ADMIN_EMAILS.indexOf(String(CURUSER.email).toLowerCase())>=0);}
@@ -2161,10 +2161,11 @@ async function authSignOut(){
 async function initAuth(){
   await loadSupaSDK();
   const c=authClient();
-  if(!c){const s=$('authSlot');if(s)s.innerHTML='';return;}         // SDK unavailable (offline / artifact mode) — hide the control
+  if(!c){const s=$('authSlot');if(s)s.innerHTML='';_authReady=true;try{syncPacks();}catch(e){}return;}   // SDK unavailable (offline / artifact mode): hide the control, but let sync adopt the cloud — a browser with no SDK can never be admin
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
-  renderAuth();if(CURUSER)flushAttempts();                    // push any progress queued while signed-out/offline
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;renderAuth();if(CURUSER){flushAttempts();refreshGate();}});}catch(e){}
+  _authReady=true;                                            // session resolved (or errored) → admin identity is now known
+  renderAuth();if(CURUSER)flushAttempts();try{syncPacks();}catch(e){}   // re-sync: a non-admin's stale 'dirty' packs now get overwritten by the cloud instead of shadowing it
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();refreshGate();}try{syncPacks();}catch(e){}});}catch(e){}
 }
 // --- Stage 3c: personal stats, read from attempts (RLS returns only this user's rows) ---
 async function openStats(){
@@ -2202,7 +2203,7 @@ async function syncPacks(){                                           // adopt f
     buildStamp((pub&&pub.source)||'offline');                         // reflect the real sync source (or offline) on every sync
     if(!pub){if(_dirty)schedulePublish();return;}                     // DB unreachable and no cache yet: keep local, retry the push if we have unsynced edits
     const changed=pub.sig!==_syncedSig;                              // any pack's version moved → cloud differs from our baseline
-    if(!_dirty){                                                      // clean browser: the cloud wins (personal 'Мой набор' is preserved)
+    if(!_dirty||(_authReady&&!isAdmin())){                            // cloud wins when clean, OR when this browser can't publish (non-admin, auth resolved): its unpublishable 'dirty' shared-pack edits must not shadow a fresher cloud. Personal 'Мой набор' is preserved by adoptFromCloud
       if(!changed){updSync('synced');return;}
       if(!pub.cols||!pub.cols.length){updSync('synced');return;}      // downgrade guard: never replace a non-empty local with an empty/broken read
       // NEVER rebuild COLS while the editor is open or a draft is unsaved — that used to move the active pack out from
