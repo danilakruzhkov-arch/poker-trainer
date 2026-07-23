@@ -407,7 +407,10 @@
   .io{display:flex;gap:8px;margin-top:8px}
   textarea{min-height:78px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;resize:vertical}
   .pv-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.45;text-align:center}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#12241b;color:#dff3e7;border:1px solid var(--good);padding:10px 16px;border-radius:11px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:99;pointer-events:none;max-width:90%}
+  /* width:max-content is load-bearing: a fixed element at left:50% shrink-to-fits into the REMAINING 50% of the
+     viewport, so a long toast turned into a narrow vertical column on phones. max-content + max-width lets it use
+     the real width and wrap only at the clamp. */
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);width:max-content;max-width:min(92vw,560px);background:#12241b;color:#dff3e7;border:1px solid var(--good);padding:11px 16px;border-radius:11px;font-size:13px;font-weight:600;line-height:1.4;text-align:center;opacity:0;transition:.25s;z-index:99;pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.err{background:#241413;border-color:var(--bad);color:#f3d7d7}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
@@ -908,8 +911,9 @@ function startClipTimer(wrap,dur,slot){if(!TIMERON||!(dur>0)||!wrap)return;
 function bindTimerToPlayer(wrap,player,en){
   const el=document.querySelector('.vtimer');if(!el||!player||typeof player.getCurrentTime!=='function')return;   // the timer now lives in a sibling row slot, not inside the video wrap
   const rem=el.querySelector('.vt-rem');if(el._iv)clearInterval(el._iv);            // drop the wall-clock estimate; the player is now the source of truth
+  const dur=+wrap.dataset.dur||0;                                                   // a not-yet-started player reports t=0, not `start` — clamp so a paused clip shows its own length, not en
   const upd=()=>{let t,st;try{t=player.getCurrentTime();st=player.getPlayerState?player.getPlayerState():1;}catch(e){return;}
-    if(typeof t!=='number'||isNaN(t))return;const left=en-t;
+    if(typeof t!=='number'||isNaN(t))return;const left=dur?Math.min(en-t,dur):en-t;
     el.classList.toggle('paused',st===2||st===0);                                   // stop the dot pulse while playback isn't advancing
     if(left<=0.4){rem.textContent='конец отрезка';el.classList.add('done');}
     else{rem.textContent=fmtCountdown(left);el.classList.remove('done');}};
@@ -997,7 +1001,7 @@ function showSheet(v,res){
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
     ${!v.deferred&&hasVid?`<div class="cliprow"><span class="clip-slot" id="clipSlot"></span><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
     <button class="next" id="next">${!more?'Показать результат':nextSame?'Продолжить раздачу →':'Следующая рука →'}</button>
-    ${(()=>{const h=v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?(AUTOPLAY?(canAutoEmbed()?'':'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.'):'Нажми play, чтобы посмотреть разбор (или ↗ на YouTube).'):'Прототип — данные демонстрационные.';return h?`<div class="hint">${h}</div>`:'';})()}
+    ${/* no «нажми play» hint: the play button under the video says that by itself */(()=>{const h=v.deferred?'Разбор покажется одним видео после следующего решения.':hasVid?((AUTOPLAY&&!canAutoEmbed())?'Автовидео вкл — сработает там, где встраивание не блокируется CSP. Здесь открой по ссылке ↗.':''):'Прототип — данные демонстрационные.';return h?`<div class="hint">${h}</div>`:'';})()}
     <div class="fbwrap"><div class="rateq" id="rateRow"><span class="rateq-l">Оцени вопрос:</span>
         <button class="rateb up" id="rateUp" data-dir="up" aria-label="Хороший вопрос" title="Хороший вопрос">👍</button>
         <button class="rateb down" id="rateDown" data-dir="down" aria-label="Так себе вопрос" title="Так себе вопрос">👎</button>
@@ -1013,9 +1017,11 @@ function showSheet(v,res){
   const sh=$('sheet');sh.scrollTop=0;sh.classList.remove('collapsed');void sh.offsetHeight;sh.classList.add('up');
   renderTable($('trainTable'),v,p.k===hq.length-1);   // reveal villains' cards only on the hand's LAST question — earlier reveals would spoil later questions
   const fac=sh.querySelector('.vfacade[data-embed]');
-  if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
-    // basic autoplay of the review clip; disabled where YouTube embeds are blocked (sandboxed artifact) so the facade stays clean
-    if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac,true);},420);}
+  if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac,false,true);};   // only reachable where embeds are blocked and the facade survives
+    // Always swap the facade for the real player (unless embeds are blocked): with Автовидео on it autoplays, with it off the
+    // player sits PAUSED so the user's single tap lands on YouTube's own play button. Tapping our facade could never start it —
+    // the gesture doesn't carry into a freshly created cross-origin iframe on iOS, which is what made it two taps.
+    if(!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac,AUTOPLAY);},420);}
   const sa=$('sheetAuto');if(sa)sa.onclick=toggleAutoplay;   // toggleAutoplay repaints every visible toggle via updateAutoBtn()
   $('next').onclick=next;
   // #4 collapse/expand: only toggles a class — the video is NEVER torn down, so its audio keeps playing while minimised
@@ -1067,12 +1073,15 @@ function armWatchdog(player,s,en){                       // poll the live player
   const iv=setInterval(()=>clipTick(player,s,en,lo),500);
   VTIMERS.push(iv);   // reuse the video-timer cleanup list so stopVideos() clears the watchdog too
 }
-function plainEmbed(slot,id,s,en,mute){                  // fallback when the IFrame API can't load (artifact CSP / offline): a dumb clip, no snap-back
+function plainEmbed(slot,id,s,en,play){                  // fallback when the IFrame API can't load (artifact CSP / offline): a dumb clip, no snap-back
   const el=document.getElementById(slot);if(!el)return;
-  let q='?autoplay=1&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1';if(mute)q+='&mute=1';if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;   // iOS allows autoplay ONLY when muted
+  let q='?rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&disablekb=1&autoplay='+(play?1:0);if(s>0)q+='&start='+s;if(en>0)q+='&end='+en;   // never force-muted: a silent autostart is worse than a paused clip one tap plays WITH sound
   el.outerHTML=`<iframe width="100%" height="100%" style="border:0;position:absolute;inset:0" allow="autoplay; encrypted-media" src="https://www.youtube-nocookie.com/embed/${id}${q}"></iframe>`;
 }
-function embedFacade(fac,auto){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
+// auto  = we are auto-starting → arm the no-autosound detection + the muted-anyway pill
+// play  = should the player start on its own (defaults to `auto`). A pre-embedded PAUSED player (play=false) is what makes
+//         the blocked-autoplay case one tap: the tap lands on YouTube's own button, inside the iframe, where it counts.
+function embedFacade(fac,auto,play){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac.dataset.e||0;
   // Let the IFrame API BUILD the player from a placeholder div (host=nocookie). Attaching to a pre-made
   // youtube-nocookie iframe silently fails, so this div-first path is what makes the spoiler guard actually work.
   const wrap=fac.parentElement,slot='ytf'+(++_ytSeq);
@@ -1080,18 +1089,19 @@ function embedFacade(fac,auto){const id=fac.dataset.embed,s=+fac.dataset.s||0,en
   const scope=wrap.closest('#sheet,#introScreen');const timerSlot=scope?scope.querySelector('.clip-slot'):null;   // #3 countdown row UNDER the video on sheet/intro; editor preview keeps the overlay fallback
   wrap.innerHTML=`<div id="${slot}" style="position:absolute;inset:0;width:100%;height:100%"></div>`;
   if(en>s){wrap.dataset.dur=String(en-s);startClipTimer(wrap,en-s,timerSlot);}   // countdown survives the API swap (renders into the sibling row, or overlays the video as a fallback)
+  const wantPlay=(play===undefined?!!auto:!!play);
   loadYTAPI().then(YT=>{
-    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,false);return;}   // no API → dumb embed, still audible-first: without a player object we can't detect a block, and a silent autostart is worse than a paused clip the user taps
+    if(!YT||!YT.Player||!document.getElementById(slot)){plainEmbed(slot,id,s,en,wantPlay);return;}   // no API → dumb embed (no player object, so no block detection here)
     // modestbranding+iv_load_policy+disablekb trim what YouTube lets us trim; the top title/share overlay is enforced by YT
-    const pv={autoplay:1,rel:0,playsinline:1,modestbranding:1,iv_load_policy:3,disablekb:1,start:s||0,origin:location.origin};
-    // Do NOT pre-mute. ATTEMPT audible autoplay — browsers that allow it (many phone browsers) just play with sound, no pill.
-    // Only if the browser BLOCKS audible autoplay do we fall back to a muted autostart + unmute pill (armAutoplayFallback).
+    const pv={autoplay:wantPlay?1:0,rel:0,playsinline:1,modestbranding:1,iv_load_policy:3,disablekb:1,start:s||0,origin:location.origin};
+    // Never pre-mute. When starting on our own we ATTEMPT audible autoplay; browsers that allow it just play with sound.
+    // Where it's refused, armAutoplayFallback switches this browser to tap-to-play instead of a silent muted roll.
     if(en>s)pv.end=en;
     let player;
     try{player=new YT.Player(slot,{host:'https://www.youtube-nocookie.com',videoId:id,playerVars:pv,
       events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}if(auto)armAutoplayFallback(player);},
               onStateChange:(e)=>{onClipState(e,wrap,player,s,en);if(auto)maybeShowUnmute(wrap,player,e&&e.data);}}});}
-    catch(e){plainEmbed(slot,id,s,en,false);return;}
+    catch(e){plainEmbed(slot,id,s,en,wantPlay);return;}
     _ytPlayers.push(player);
   });}
 // --- audible-first autoplay: try sound; if the browser refuses, switch THIS browser to tap-to-play (never muted playback) ---
@@ -1124,7 +1134,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.23';
+const APP_VER='2026-07-23.24';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1465,9 +1475,9 @@ function showIntro(intro){$('trainApp').style.display='none';const el=$('introSc
     <button class="next" id="introStart">Начать тренировку →</button>
   </div>`;
   const fac=el.querySelector('.vfacade[data-embed]');
-  if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
-    // #2 autostart the intro clip when Автовидео is on (same guard as the review sheet: only where embeds aren't CSP-blocked)
-    if(AUTOPLAY&&canAutoEmbed())setTimeout(()=>{if($('introScreen').style.display!=='none'&&el.querySelector('.vfacade[data-embed]'))embedFacade(fac,true);},420);}
+  if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac,false,true);};   // only reachable where embeds are blocked and the facade survives
+    // same as the review sheet: Автовидео on → autoplays, off → the player waits PAUSED so one tap on YouTube's own button plays it
+    if(canAutoEmbed())setTimeout(()=>{if($('introScreen').style.display!=='none'&&el.querySelector('.vfacade[data-embed]'))embedFacade(fac,AUTOPLAY);},420);}
   const ia=$('introAuto');if(ia)ia.onclick=toggleAutoplay;
   $('introStart').onclick=beginDrill;}
 function showHome(){stopVideos();$('drillWrap').style.display='none';$('introScreen').style.display='none';$('homeScreen').style.display='block';renderHome();}
@@ -1891,7 +1901,7 @@ function syncAnsPreview(v){
   const vid=hasVid?videoBlockHTML(v):'<div class="ans-empty">Видео не задано — впиши ссылку и таймкоды (блок 3), чтобы увидеть отрезок разбора.</div>';
   const expl=v.explain?`<div class="note">${v.explain}</div>`:'';
   box.innerHTML=`<div class="qr"><div class="qr-head"><span class="qr-n">Ответ</span><span class="qr-st">${STREET_RU[v.street]||''}</span></div><div class="qr-opts">${opts}</div></div>${vid}${expl}`;
-  const fac=box.querySelector('.vfacade[data-embed]');if(fac)fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
+  const fac=box.querySelector('.vfacade[data-embed]');if(fac)fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac,false,true);};
 }
 // answer-option size, with postflop bb↔% cross-display ("9 bb · 75%"). Preflop stays as-is (bb or multiplier).
 // answer-option size, normalized to blinds with % of pot in parens: "9 bb (75%)". Multipliers (Nx) become N bb.
