@@ -902,9 +902,11 @@ function renderHand(){
 function renderActionLog(v,elId){const el=$(elId||'alog');if(!el)return;
   const curIdx=STREETS.indexOf(v.street),parts=[];let total=0;
   STREETS.forEach((st,si)=>{if(si>curIdx)return;
-    const acts=(v.history[st]||[]).filter(a=>a.pos&&a.action!=='fold');   // skip folds — the log is about who bet/called/checked
+    const full=(v.history[st]||[]);let agg=0;const lbl=new Map();   // same 3-бет/4-бет/5-бет naming as the table chips
+    full.forEach(a=>{const isAgg=(a.action==='raise'||a.action==='bet');if(isAgg)agg++;lbl.set(a,betLabelFor(a.action,isAgg?agg:0,st));});
+    const acts=full.filter(a=>a.pos&&a.action!=='fold');   // skip folds — the log is about who bet/called/checked
     if(!acts.length)return;total+=acts.length;
-    const line=acts.map(a=>`<span class="ai"><b>${a.pos}</b> ${ACT_RU[a.action]||a.action}${a.size?' '+a.size:''}</span>`).join('<span class="asep">·</span>');
+    const line=acts.map(a=>`<span class="ai"><b>${a.pos}</b> ${lbl.get(a)||ACT_RU[a.action]||a.action}${a.size?' '+a.size:''}</span>`).join('<span class="asep">·</span>');
     parts.push(`<div class="alrow"><span class="alst">${STREET_RU[st]}</span><div class="alacts">${line}</div></div>`);});
   if(!parts.length||(v.street==='preflop'&&total<=1)){el.style.display='none';el.innerHTML='';return;}
   el.style.display='';el.innerHTML=`<div class="alh">Ход розыгрыша</div>${parts.join('')}`;}
@@ -1053,7 +1055,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.9';
+const APP_VER='2026-07-23.10';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
