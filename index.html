@@ -148,6 +148,12 @@
   .vtimer{position:absolute;left:8px;bottom:8px;z-index:3;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 10px 3px 8px;color:#ffe4a3;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none}
   .vtimer .vt-dot{width:7px;height:7px;border-radius:50%;background:#f0b43c;box-shadow:0 0 0 3px rgba(240,180,60,.22);animation:vtpulse 1s ease-in-out infinite}
   .vtimer.done{color:#9aa39e}.vtimer.done .vt-dot{background:#9aa39e;box-shadow:none;animation:none}
+  .vtimer.paused .vt-dot{animation:none;background:#9aa39e;box-shadow:none}
+  .vreplay{position:absolute;left:0;right:0;bottom:0;z-index:5;display:none;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;background:linear-gradient(0deg,rgba(0,0,0,.94),rgba(0,0,0,.74));border-top:1px solid rgba(255,255,255,.14)}
+  .vreplay.show{display:flex}
+  .vreplay .vr-txt{color:#ffe4a3;font-size:12px;font-weight:700;line-height:1.25}
+  .vreplay .vr-btn{flex:none;background:#C9A227;color:#1a1200;border:0;border-radius:8px;padding:7px 12px;font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap}
+  .vreplay .vr-btn:hover{filter:brightness(1.07)}
   @keyframes vtpulse{50%{opacity:.45}}
   @media (prefers-reduced-motion:reduce){.vtimer .vt-dot{animation:none}}
   .vmeta{position:absolute;left:10px;bottom:9px;right:10px;display:flex;align-items:center;gap:8px;z-index:2}
@@ -835,11 +841,21 @@ function fmtCountdown(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec
 function startClipTimer(wrap,dur){if(!TIMERON||!(dur>0)||!wrap)return;
   const el=document.createElement('div');el.className='vtimer';el.innerHTML='<span class="vt-dot"></span><span class="vt-rem">'+fmtCountdown(dur)+'</span>';
   wrap.appendChild(el);const rem=el.querySelector('.vt-rem'),t0=Date.now();
-  const iv=setInterval(()=>{const left=dur-(Date.now()-t0)/1000;
+  const iv=setInterval(()=>{const left=dur-(Date.now()-t0)/1000;                    // wall-clock fallback until the real player attaches (or when the API can't load)
     if(left<=0){rem.textContent='конец отрезка';el.classList.add('done');clearInterval(iv);}
     else rem.textContent=fmtCountdown(left);},250);
-  VTIMERS.push(iv);}
-function clearClipTimers(){VTIMERS.forEach(clearInterval);VTIMERS=[];document.querySelectorAll('.vtimer').forEach(n=>n.remove());}
+  el._iv=iv;VTIMERS.push(iv);}
+// #4 once the real YouTube player exists, drive the countdown from ITS clock: pause freezes it, 2× speed halves it
+function bindTimerToPlayer(wrap,player,en){
+  const el=wrap&&wrap.querySelector('.vtimer');if(!el||!player||typeof player.getCurrentTime!=='function')return;
+  const rem=el.querySelector('.vt-rem');if(el._iv)clearInterval(el._iv);            // drop the wall-clock estimate; the player is now the source of truth
+  const upd=()=>{let t,st;try{t=player.getCurrentTime();st=player.getPlayerState?player.getPlayerState():1;}catch(e){return;}
+    if(typeof t!=='number'||isNaN(t))return;const left=en-t;
+    el.classList.toggle('paused',st===2||st===0);                                   // stop the dot pulse while playback isn't advancing
+    if(left<=0.4){rem.textContent='конец отрезка';el.classList.add('done');}
+    else{rem.textContent=fmtCountdown(left);el.classList.remove('done');}};
+  upd();const iv=setInterval(upd,200);el._iv=iv;VTIMERS.push(iv);}
+function clearClipTimers(){VTIMERS.forEach(clearInterval);VTIMERS=[];document.querySelectorAll('.vtimer,.vreplay').forEach(n=>n.remove());}
 function shuffledIdx(n){const a=[...Array(n).keys()];for(let j=n-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[a[j],a[r]]=[a[r],a[j]];}return a;}
 function buildPlay(){PLAY=[];HANDS.forEach((h,hi)=>{const qs=questionsOf(h);qs.forEach((q,k)=>PLAY.push({hi,k,stepNo:k+1,stepCount:qs.length,order:shuffledIdx((q.q||q).options.length)}));});}
 function coachBest(opts){return opts.filter(o=>o.grade==='best');}
@@ -953,12 +969,27 @@ function loadYTAPI(){                                   // on-demand; present on
   });
   return _ytApi;
 }
-function spoilerNote(){const now=Date.now();if(now-_spoilAt<3000)return;_spoilAt=now;toast('Дальше — разбор следующего решения. Отрезок остановлен, чтобы не спойлить.');}
+function playerWrap(player){try{return player.getIframe().closest('.video');}catch(e){return null;}}
+// #5 persistent end-of-clip bar with a replay button — the YT scrubber can't locate our sub-segment, so we offer a one-tap re-run of [s,en]
+function showReplayBar(wrap,player,s,en,txt){
+  if(!wrap)return;let bar=wrap.querySelector('.vreplay');
+  if(!bar){bar=document.createElement('div');bar.className='vreplay';
+    bar.innerHTML='<span class="vr-txt"></span><button class="vr-btn" type="button">↻ Повторить отрезок</button>';
+    bar.querySelector('.vr-btn').onclick=()=>{try{player.seekTo(s,true);player.playVideo();}catch(e){}hideReplayBar(wrap);};
+    wrap.appendChild(bar);}
+  const tx=bar.querySelector('.vr-txt');if(txt)tx.textContent=txt;else if(!tx.textContent)tx.textContent='Отрезок закончился';
+  bar.classList.add('show');}
+function hideReplayBar(wrap){const b=wrap&&wrap.querySelector('.vreplay');if(b)b.classList.remove('show');}
+function onClipState(e,wrap,player,s,en){const st=e&&e.data;
+  if(st===1){hideReplayBar(wrap);return;}                                     // playing again → clear the bar
+  if((st===2||st===0)&&en>s){let t=en;try{t=player.getCurrentTime();}catch(_){}
+    if(t>=en-0.8)showReplayBar(wrap,player,s,en);}}                           // paused/ended AT the segment end → offer replay (not on a normal mid-clip pause)
 function clipTick(player,s,en,lo){                      // one watchdog step; returns which zone we were in (for tests)
   if(!player||typeof player.getCurrentTime!=='function')return;
   let t;try{t=player.getCurrentTime();}catch(e){return;}
   if(typeof t!=='number'||isNaN(t))return;
-  if(en>0&&t>en+0.5){try{player.pauseVideo();player.seekTo(en,true);}catch(e){}spoilerNote();return 'ahead';}   // scrubbed past the clip → pause at its end + warn
+  if(en>0&&t>en+0.5){try{player.pauseVideo();player.seekTo(en,true);}catch(e){}
+    showReplayBar(playerWrap(player),player,s,en,'Дальше — разбор следующего решения. Отрезок остановлен.');return 'ahead';}   // scrubbed past → pause at end + persistent replay bar
   if(t<lo){try{player.seekTo(s,true);}catch(e){}return 'behind';}                                              // scrubbed before the clip → nudge back to start
   return 'in';
 }
@@ -985,7 +1016,8 @@ function embedFacade(fac){const id=fac.dataset.embed,s=+fac.dataset.s||0,en=+fac
     if(en>s)pv.end=en;
     let player;
     try{player=new YT.Player(slot,{host:'https://www.youtube-nocookie.com',videoId:id,playerVars:pv,
-      events:{onReady:()=>{if(en>s)armWatchdog(player,s,en);}}});}
+      events:{onReady:()=>{if(en>s){armWatchdog(player,s,en);bindTimerToPlayer(wrap,player,en);}},
+              onStateChange:(e)=>onClipState(e,wrap,player,s,en)}});}
     catch(e){plainEmbed(slot,id,s,en);return;}
     _ytPlayers.push(player);
   });}
@@ -999,7 +1031,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.5';
+const APP_VER='2026-07-23.6';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
