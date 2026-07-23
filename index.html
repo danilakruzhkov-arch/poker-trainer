@@ -79,6 +79,7 @@
   .act.check{color:#c9d3cd;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
   .act.fold{color:#9aa39e;background:rgba(255,255,255,.05)}
   .act.ask{color:#1a1200;background:#e7c04a;border-color:#f0cf6a;font-weight:900;min-width:16px;text-align:center}
+  .acts-stack{display:flex;flex-direction:column;align-items:center;gap:2px}
   .dealer{position:absolute;width:18px;height:18px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#fff,#d8cdae);color:#5a4a1e;font-weight:900;font-size:9px;display:grid;place-items:center;box-shadow:0 2px 5px rgba(0,0,0,.5);z-index:5}
   .hero .plate{border-color:rgba(198,161,91,.5);box-shadow:0 0 0 3px rgba(198,161,91,.1);flex-direction:row;gap:7px;align-items:center;border-radius:999px}
   .hero .you{font-size:8.5px;letter-spacing:.12em;color:#7f9188;text-transform:uppercase}
@@ -753,6 +754,25 @@ function potNum(v){
   return Math.round(pot*10)/10;
 }
 function potText(v){return potNum(v)+' bb';}
+// name a raise by its level on the current street: preflop open→Рейз, then 3-бет/4-бет/5-бет; postflop Бет→Рейз→3-бет…
+function betLabelFor(action,aggN,street){
+  if(action==='check')return 'Чек';if(action==='call')return 'Колл';if(action==='bet')return 'Бет';if(action==='fold')return 'Пас';
+  if(action==='raise')return street==='preflop'?(aggN<=1?'Рейз':(aggN+1)+'-бет'):(aggN<=2?'Рейз':aggN+'-бет');
+  return ACT_RU[action]||action;}
+// chips shown over a seat for the CURRENT street: (#1) preflop blinds stay on the table even after a fold,
+// then (#3) that player's actions in order — layered — plus a «?» marker on the hero for the pending decision.
+function streetChips(v,pos,isHero){
+  const stt=v.street, hist=(v.history&&v.history[stt])||[], mine=[]; let agg=0;
+  hist.forEach(a=>{const isAgg=(a.action==='raise'||a.action==='bet');if(isAgg)agg++;
+    if(a.pos===pos&&a.action!=='fold')mine.push({action:a.action,size:a.size||'',aggN:isAgg?agg:0});});
+  const chips=[], blind=stt==='preflop'?(pos==='SB'?0.5:pos==='BB'?1:0):0;
+  const committed=mine.some(m=>m.action==='call'||m.action==='raise'||m.action==='bet');
+  if(blind>0&&!committed)chips.push({cls:'bet',label:'',size:blind+' bb'});                      // #1 blind money is on the table regardless of a later fold
+  mine.forEach(m=>{const money=(m.action==='call'||m.action==='raise'||m.action==='bet');
+    chips.push({cls:money?'bet':m.action,label:betLabelFor(m.action,m.aggN,stt),size:m.size});});  // #3a layered actions (e.g. Чек → 3-бет)
+  if(isHero&&v.options&&v.options.length)chips.push({cls:'ask',label:'?',size:''});               // #3b the decision this question asks about
+  return chips;}
+function seatChipsHTML(chips){return chips.length?`<div class="acts-stack">${chips.map(c=>`<div class="act ${c.cls}">${c.label}${(c.label&&c.size)?' ':''}${c.size||''}</div>`).join('')}</div>`:'';}
 function renderTable(container,v,reveal){
   const order=POS[v.players], hIdx=order.indexOf(v.heroPos), st=seatState(v), cards=v.cards||{};
   let html=`<div class="felt-mark"><div class="s">♠ ♥ ♦ ♣</div><div class="t">Hand Review</div></div>
@@ -764,12 +784,12 @@ function renderTable(container,v,reveal){
     if(prof.style&&STYLE_TAG[prof.style])tags.push(`<span class="tg ${STYLE_TAG[prof.style].c}">${STYLE_TAG[prof.style].t}</span>`);
     const tagsHtml=tags.length?`<div class="tags">${tags.join('')}</div>`:'';
     const stk=v.stacks[pos], rem=(stk!=null&&stk!=='')?Math.max(0,Math.round((stk-((v.contrib||{})[pos]||0))*10)/10):stk, stkHtml=(rem!=null&&rem!=='')?`<span class="stk num">${rem} bb</span>`:'';
-    const actPill=s.act?`<div class="act ${s.act.action}">${ACT_RU[s.act.action]}${s.act.size?' '+s.act.size:''}</div>`:'';
-    if(isHero)html+=`<div class="seat hero" style="left:${x}%;top:${y}%"><div class="hero-cards">${(v.heroCards||[]).map(c=>cardHTML(c,'big')).join('')}</div><div class="plate"><span class="you">Ты</span><span class="pos">${pos}</span>${stkHtml||'<span class="stk">·</span>'}</div>${tagsHtml}</div>`;
+    const chipsHtml=seatChipsHTML(streetChips(v,pos,isHero));   // #1/#3 blinds + layered street actions (+ hero «?» marker); tags now sit ABOVE the plate
+    if(isHero)html+=`<div class="seat hero" style="left:${x}%;top:${y}%"><div class="hero-cards">${(v.heroCards||[]).map(c=>cardHTML(c,'big')).join('')}</div>${tagsHtml}<div class="plate"><span class="you">Ты</span><span class="pos">${pos}</span>${stkHtml||'<span class="stk">·</span>'}</div>${chipsHtml}</div>`;
     else{const vc=reveal&&cards[pos]&&(cards[pos][0]||cards[pos][1])?cards[pos]:null;   // villains' real cards shown only on the solution reveal (and only if authored)
       const vcHtml=vc?`<div class="villaincards">${vc.map(c=>cardHTML(c,'sm')).join('')}</div>`
         :(!s.folded?`<div class="villaincards"><span class="cback"></span><span class="cback"></span></div>`:'');   // still in the hand → face-down backs so it's clear who's live
-      html+=`<div class="seat" style="left:${x}%;top:${y}%">${vcHtml}<div class="plate ${s.folded?'folded':''}"><span class="pos">${pos}</span>${stkHtml}</div>${actPill}${tagsHtml}</div>`;}
+      html+=`<div class="seat" style="left:${x}%;top:${y}%">${vcHtml}${tagsHtml}<div class="plate ${s.folded?'folded':''}"><span class="pos">${pos}</span>${stkHtml}</div>${chipsHtml}</div>`;}
     if(pos==='BTN'){const dx=x+(x<50?7:x>50?-7:0),dy=y-(y<50?-11:11);html+=`<div class="dealer" style="left:${dx}%;top:${dy}%">D</div>`;}
   }
   container.innerHTML=html;
@@ -1033,7 +1053,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.8';
+const APP_VER='2026-07-23.9';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
