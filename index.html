@@ -101,6 +101,15 @@
   .btn.reveal-best{border-color:var(--good)}.btn.dim{opacity:.4}
   .sheet{position:absolute;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(180deg,#0f1613,#0b100e);color:#eaf2ed;border-top:1px solid rgba(198,161,91,.25);border-radius:20px 20px 0 0;box-shadow:0 -20px 50px rgba(0,0,0,.5);padding:15px 15px 16px;max-height:86%;overflow-y:auto;transform:translateY(105%);transition:transform .34s cubic-bezier(.2,.8,.2,1)}
   .sheet.up{transform:translateY(0)}
+  /* #4 minimise: collapse the result + shrink the player to a sliver so the table shows through, but keep the
+     iframe in the render tree (height:0, NOT display:none) so the разбор audio keeps playing. */
+  .sheetmin{flex:none;margin-left:8px;width:30px;height:30px;border-radius:9px;border:1px solid var(--stroke);background:rgba(255,255,255,.05);color:#cbd6cf;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:.15s}
+  .sheetmin:hover{background:rgba(255,255,255,.1);color:#eaf2ed}
+  .sheet.collapsed{padding-bottom:12px}
+  .sheet.collapsed .vtext,.sheet.collapsed .vpts,.sheet.collapsed .qrecap,.sheet.collapsed .cliprow,.sheet.collapsed .hint,.sheet.collapsed .fbwrap,.sheet.collapsed .expl .note{display:none}
+  .sheet.collapsed .expl{height:0;min-height:0;margin:0;border:0}
+  .sheet.collapsed .verdict{gap:0}
+  .sheet.collapsed .vbadge{width:30px;height:30px;font-size:15px;border-radius:9px}
   .verdict{display:flex;align-items:center;gap:11px}
   .vbadge{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none}
   .v-best{background:rgba(70,177,123,.16);color:var(--good);border:1px solid rgba(70,177,123,.5)}
@@ -961,7 +970,8 @@ function showSheet(v,res){
   const more=i<PLAY.length-1, nextSame=more&&PLAY[i+1].hi===p.hi, hasVid=ytId(v.video&&v.video.url);
   $('sheet').innerHTML=`<div class="verdict"><div class="vbadge v-${topGrade}">${topGrade==='best'?'✓':topGrade==='ok'?'≈':'✕'}</div>
     <div class="vtext"><div class="vt g-${topGrade}">${vt}</div><div class="vs">${vs}</div></div>
-    <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div></div>
+    <div class="vpts"><div class="p ${topPts>0?'pos':'zero'} num">+${topPts}</div><div class="lbl" style="color:#7f9188">очков</div></div>
+    <button class="sheetmin" id="sheetMin" aria-label="Свернуть результат" title="Свернуть — стол видно, звук разбора продолжит играть">▾</button></div>
     <div class="qrecap">${recap.map(r=>`<div class="qr"><div class="qr-head"><span class="qr-n">Вопрос ${r.n}</span><span class="qr-st">${STREET_RU[r.street]||''}</span><span class="qr-grade g-${r.grade}">${GRADE_LABEL[r.grade]||''} +${PTS[r.grade]||0}</span></div><div class="qr-opts">${r.options.map(o=>optRecapRow(o,r.pickId,r.heroId,r.pot,r.street,r.pf)).join('')}</div></div>`).join('')}</div>
     <div class="expl">${v.deferred?`<div class="note" style="text-align:center;color:#cbd6cf">🎬 Видео‑разбор — после следующего решения (объединён с ним в один отрезок).</div>`:`${videoBlockHTML(v)}${v.explain?`<div class="note">${v.explain}</div>`:''}`}</div>
     ${!v.deferred&&hasVid?`<div class="cliprow"><span class="clip-slot" id="clipSlot"></span><button class="vauto ${AUTOPLAY?'on':''}" id="sheetAuto" aria-pressed="${AUTOPLAY}">Автовидео: ${AUTOPLAY?'вкл':'выкл'}</button></div>`:''}
@@ -975,7 +985,7 @@ function showSheet(v,res){
         <div class="fbrow"><button class="fbsend" id="fbSend">Отправить</button><button class="fbcancel" id="fbCancel">Отмена</button></div>
         <div class="fbnote" id="fbNote"></div>
       </div></div>`;
-  const sh=$('sheet');sh.scrollTop=0;void sh.offsetHeight;sh.classList.add('up');
+  const sh=$('sheet');sh.scrollTop=0;sh.classList.remove('collapsed');void sh.offsetHeight;sh.classList.add('up');
   renderTable($('trainTable'),v,p.k===hq.length-1);   // reveal villains' cards only on the hand's LAST question — earlier reveals would spoil later questions
   const fac=sh.querySelector('.vfacade[data-embed]');
   if(fac){fac.onclick=e=>{if(e.target.closest('.vlink'))return;embedFacade(fac);};
@@ -983,6 +993,8 @@ function showSheet(v,res){
     if(AUTOPLAY&&!v.deferred&&canAutoEmbed())setTimeout(()=>{if(sh.classList.contains('up'))embedFacade(fac);},420);}
   const sa=$('sheetAuto');if(sa)sa.onclick=()=>{setAutoplay(!AUTOPLAY);sa.className='vauto '+(AUTOPLAY?'on':'');sa.setAttribute('aria-pressed',AUTOPLAY);sa.textContent='Автовидео: '+(AUTOPLAY?'вкл':'выкл');toast('Автовидео '+(AUTOPLAY?'включено':'выключено'));};
   $('next').onclick=next;
+  // #4 collapse/expand: only toggles a class — the video is NEVER torn down, so its audio keeps playing while minimised
+  const smin=$('sheetMin');if(smin)smin.onclick=()=>{const c=sh.classList.toggle('collapsed');smin.textContent=c?'▴':'▾';smin.setAttribute('aria-label',c?'Развернуть результат':'Свернуть результат');smin.title=c?'Развернуть результат и плеер':'Свернуть — стол видно, звук разбора продолжит играть';if(c)sh.scrollTop=0;};
   wireFeedback();
 }
 /* ===== spoiler guard (C): the YouTube scrubber exposes the WHOLE source video, so a player can drag past the
@@ -1063,7 +1075,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.11';
+const APP_VER='2026-07-23.12';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
