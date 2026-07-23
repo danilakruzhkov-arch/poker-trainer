@@ -1098,7 +1098,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.19';
+const APP_VER='2026-07-23.20';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1331,7 +1331,7 @@ function blankIntro(name){return {title:'',text:'',video:{url:''},vStart:0,vEnd:
 // built-in demo packs. defaultCols() seeds the three demos (from PACKS meta + seed() hands) plus an empty "Мой набор".
 function defaultCols(){const hs=seed().map(migrateCards);
   const cols=PACKS.map(p=>({id:p.id,name:p.title,emoji:p.emoji,accent:p.accent,tag:p.tag,host:p.host,hero:p.hero,format:p.format||'',cover:'',sub:p.sub,intro:JSON.parse(JSON.stringify(p.intro)),hands:hs.filter(h=>h.pack===p.id).map(h=>JSON.parse(JSON.stringify(h)))}));
-  cols.push({id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',tag:'',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:blankIntro('Мой набор'),hands:[]});
+  cols.push({id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',tag:'',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:blankIntro('Мой набор'),hands:[],hidden:true});   // personal scratch pack: curated out of the home library by default, same hidden mechanic as any other pack (editable in редактор via col-chips)
   return cols;}
 let COLS=defaultCols();
 let curCol=COLS.length-1;   // open the editor on "Мой набор" by default
@@ -2071,10 +2071,10 @@ async function publishPacks(auto){
 }
 function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(!s)return;
   let cols=Array.isArray(s.cols)&&s.cols.length?s.cols.slice()
-    :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[]}];   // migrate old {set,mine} shape
+    :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[],hidden:true}];   // migrate old {set,mine} shape
   // no more seed re-sync here — packs.json is the source of truth. Whatever is in localStorage is this browser's current state; the boot fetch below reconciles it with the cloud.
   COLS=cols;
-  COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';c.hands.forEach(migrateCards);});
+  COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';if(c.id==='mine'&&c.hidden===undefined)c.hidden=true;c.hands.forEach(migrateCards);});   // migrate old saves: default 'Мой набор' to hidden (undefined only — respect an explicit unhide)
   curCol=(typeof s.curCol==='number'&&s.curCol>=0&&s.curCol<COLS.length)?s.curCol:COLS.length-1;useCol(curCol);
   if(s.draft&&Array.isArray(s.draft.actions)){F=s.draft;migrateCards(F);}
   _dirty=!!s.dirty;_syncedStr=_dirty?'':pubStr();_syncedSig=s.sig||'';_syncedMap=_dirty?{}:colsMap(pubCols());   // clean == matches cloud baseline; dirty == unpushed edits (empty map → first publish pushes all)
