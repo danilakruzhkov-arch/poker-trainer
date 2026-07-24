@@ -920,7 +920,11 @@ function bindTimerToPlayer(wrap,player,en){
   upd();const iv=setInterval(upd,200);el._iv=iv;VTIMERS.push(iv);}
 function clearClipTimers(){VTIMERS.forEach(clearInterval);VTIMERS=[];document.querySelectorAll('.vtimer,.vreplay,.vunmute').forEach(n=>n.remove());}
 function shuffledIdx(n){const a=[...Array(n).keys()];for(let j=n-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[a[j],a[r]]=[a[r],a[j]];}return a;}
-function buildPlay(){PLAY=[];HANDS.forEach((h,hi)=>{const qs=questionsOf(h);qs.forEach((q,k)=>PLAY.push({hi,k,stepNo:k+1,stepCount:qs.length,order:shuffledIdx((q.q||q).options.length)}));});}
+function buildPlay(){PLAY=[];HANDS.forEach((h,hi)=>{const qs=questionsOf(h);qs.forEach((q,k)=>PLAY.push({hi,k,stepNo:k+1,stepCount:qs.length,order:shuffledIdx((q.q||q).options.length)}));});
+  // one terminal paywall step when the pack has paid hands this account doesn't hold. hi:-1 so nothing ever
+  // indexes HANDS with it (renderHand/showEnd both bail on p.locked first).
+  const lk=CURPACK&&CURPACK.id?lockedCount(CURPACK.id):0;
+  if(lk>0)PLAY.push({hi:-1,k:0,stepNo:1,stepCount:1,order:[],locked:lk});}
 function coachBest(opts){return opts.filter(o=>o.grade==='best');}
 function renderPips(){$('pips').innerHTML=PLAY.map((_,k)=>{const a=answered[k];return `<div class="pip ${a?'on g-'+a:(k===i?'on':'')}"></div>`;}).join('');}
 function renderBand(){const p=PLAY[i];if(!p||p.stepCount<2){$('stepband').innerHTML='';return;}
@@ -930,6 +934,7 @@ function renderBand(){const p=PLAY[i];if(!p||p.stepCount<2){$('stepband').innerH
 function renderHand(){
   if(!PLAY.length){$('trainTable').innerHTML='';$('who').textContent='Нет раздач';$('ctx').textContent='Добавь раздачи в редакторе.';$('acts').innerHTML='';$('pips').innerHTML='';$('stepband').innerHTML='';return;}
   const p=PLAY[i];
+  if(p.locked){showPaywall(CURPACK.id,p.locked);return;}                      // paid tail: the hands themselves were never fetched
   if(handLocked(CURPACK.id,p.hi)){showGate(packGateOf(CURPACK.id));return;}   // E: login wall before the question renders
   const v=qView(HANDS[p.hi],p.k);
   replayInto($('trainTable'),v);renderBand();renderActionLog(v);   // #10 quick replay of prior streets, then settle on the decision
@@ -1136,7 +1141,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-23.24';
+const APP_VER='2026-07-24.25';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1217,11 +1222,12 @@ function wireFeedback(){const tog=$('fbToggle'),form=$('fbForm');if(!tog||!form)
     sendFeedback(Object.assign({ts:new Date().toISOString(),category,comment,ua:(navigator.userAgent||'').slice(0,180),ver:APP_VER},fbContext()));};}
 function showEnd(){
   const best=answered.filter(g=>g==='best').length,ok=answered.filter(g=>g==='ok').length,bad=answered.filter(g=>g==='mistake').length;
-  const beat=PLAY.reduce((n,p,k)=>{const v=qView(HANDS[p.hi],p.k);const yr=GRADE_RANK[answered[k]],hr=GRADE_RANK[opt(v.options,v.heroPick)?.grade];return n+(yr<hr?1:0);},0);
-  $('end').innerHTML=`<div class="cap">Разбор окончен</div><h2>${best+ok>=Math.ceil(PLAY.length*0.7)?'Крепкая игра':best+ok>=Math.ceil(PLAY.length/2)?'Неплохо':'Есть куда расти'}</h2>
-    <div class="big num">${score}</div><div class="sub num">из ${PLAY.length*100} очков</div>
+  const qn=PLAY.filter(p=>!p.locked).length;                                   // the paywall step is not a question: it scores nothing
+  const beat=PLAY.reduce((n,p,k)=>{if(p.locked)return n;const v=qView(HANDS[p.hi],p.k);const yr=GRADE_RANK[answered[k]],hr=GRADE_RANK[opt(v.options,v.heroPick)?.grade];return n+(yr<hr?1:0);},0);
+  $('end').innerHTML=`<div class="cap">Разбор окончен</div><h2>${best+ok>=Math.ceil(qn*0.7)?'Крепкая игра':best+ok>=Math.ceil(qn/2)?'Неплохо':'Есть куда расти'}</h2>
+    <div class="big num">${score}</div><div class="sub num">из ${qn*100} очков</div>
     <div class="breakd"><div class="bd"><div class="n num g-best">${best}</div><div class="l">Верно</div></div><div class="bd"><div class="n num g-ok">${ok}</div><div class="l">Погранич.</div></div><div class="bd"><div class="n num g-mistake">${bad}</div><div class="l">Ошибки</div></div></div>
-    <div class="hero-line">Ты сыграл лучше героя в <b>${beat} из ${PLAY.length}</b> решений.</div>
+    <div class="hero-line">Ты сыграл лучше героя в <b>${beat} из ${qn}</b> решений.</div>
     <button class="next" id="again" style="max-width:220px;margin-top:20px">Пройти заново</button>`;
   $('end').classList.add('up');$('again').onclick=startTrainer;
 }
@@ -1382,8 +1388,8 @@ function activeCol(){if(curCol<0)curCol=0;if(curCol>=COLS.length)curCol=COLS.len
 function findCol(id){return COLS.find(c=>c.id===id);}
 // unified list for the home screen: demo packs (library) + user collections
 function allPacks(){return COLS.map(c=>({id:c.id,emoji:c.emoji||'✎',accent:c.accent||'#C9A227',tag:c.tag||'',host:c.host||'',hero:c.hero||'',format:c.format||'',gate:c.gate||'free',cover:c.cover||'',title:c.name||'Без названия',sub:c.sub||'Твоя подборка раздач.',intro:c.intro,hidden:!!c.hidden,isUser:true}));}
-function packHands(id){const c=findCol(id);return c?c.hands.filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill
-function packStats(id){const c=findCol(id),hs=c?c.hands.filter(h=>!h.hidden):[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}   // hidden hands drop out of BOTH counts (match the drill)
+function packHands(id){const c=findCol(id);return c?fullHands(c).filter(h=>!h.hidden).map(h=>migrateCards(JSON.parse(JSON.stringify(h)))):[];}   // hidden hands stay in the set but drop out of the drill; paid hands appear only once bought
+function packStats(id){const c=findCol(id),hs=c?fullHands(c).filter(h=>!h.hidden):[];let q=0;hs.forEach(h=>{try{q+=questionsOf(h).length;}catch(e){}});return {hands:hs.length,questions:q};}   // hidden hands drop out of BOTH counts (match the drill)
 // home-screen filter facets. Each facet reads a pack field; a facet only appears if ≥2 distinct
 // non-empty values exist among visible packs (no point filtering on something everything shares).
 const FORMAT_RU={online:'Онлайн',offline:'Оффлайн'};
@@ -1393,17 +1399,18 @@ const HOME_FACETS=[
   // future: {k:'hero', label:'Герой', val:p=>p.hero, ...} — enable once pack.hero holds clean hero names (сейчас там описания турниров)
 ];
 let HOME_FILTER={host:'',format:'',hero:''};
-function packCardHTML(p){const st=packStats(p.id),empty=st.questions===0;
+function packCardHTML(p){const st=packStats(p.id),lk0=lockedCount(p.id),empty=st.questions===0&&!lk0;   // a fully-paid pack has no free questions but is NOT empty — it must stay clickable so the player reaches the paywall
   const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
   const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
-  const gate=p.gate||'free';const badge=gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
+  const lk=lk0,pw=paywallOf(p.id);   // paid tail this account can't play yet
+  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(pw&&pw.priceRub)||0} ₽</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
   return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
     <div class="part ${p.cover?'has-cover':''}" style="${partStyle}">${badge}<div class="pemoji">${p.emoji}</div></div>
     <div class="pbody">
       <div class="ptitle">${p.title}</div>
       ${tags}
       <div class="psub">${String((p.intro&&p.intro.text&&p.intro.text.trim())?p.intro.text:(p.sub||'')).replace(/<[^>]+>/g,'')}</div>
-      <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.`}</div>
+      <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:(st.questions===0&&lk)?`<span class="plock">платная подборка — ${lk} разд.</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.${lk?` <span class="plock">+${lk} платн.</span>`:''}`}</div>
     </div>
   </button>`;}
 function renderHome(){
@@ -1457,7 +1464,25 @@ function showGate(kind){                                             // draw the
   const b=$('gateIn');if(b)b.onclick=authSignIn;}
 function refreshGate(){                                              // after a login, if the drill is sitting on a locked hand, reveal it
   if(PLAY.length&&$('drillWrap')&&$('drillWrap').style.display!=='none'&&$('trainApp')&&$('trainApp').style.display!=='none')renderHand();}
-function playPack(id){const hs=packHands(id);if(!hs.length){toast('В подборке пока нет вопросов',1);return;}
+/* the paid wall: shown INSTEAD of the question for the locked tail. Buying needs an account (entitlement is
+   keyed by auth.uid()), so an anonymous player is asked to sign in first — one step, not two walls. */
+function showPaywall(id,n){
+  clearReplay();stopVideos();
+  $('pips').innerHTML='';$('stepband').innerHTML='';const al=$('alog');if(al){al.style.display='none';al.innerHTML='';}
+  const m=paywallOf(id)||{},total=m.handsTotal|0,price=m.priceRub|0,free=Math.max(0,total-n);
+  const sub=CURUSER
+    ?`Сыграно ${free} из ${total} раздач. Оставшиеся ${n} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`
+    :`Сыграно ${free} из ${total} раздач. Оставшиеся ${n} — платная часть за ${price} ₽. Покупка привязывается к аккаунту, поэтому сначала вход.`;
+  $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">Дальше — платная часть</div><div class="gate-s">${sub}</div>`+
+    (CURUSER?`<button class="gate-btn" id="payBtn"><span>Разблокировать за ${price} ₽</span></button>`
+            :`<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`)+
+    `<button class="gate-btn ghost" id="paySkip" style="margin-top:8px"><span>Показать результат</span></button>`+
+    `<div class="gate-foot">Бесплатные раздачи остаются открытыми всегда.</div></div>`;
+  $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
+  const inb=$('gateIn');if(inb)inb.onclick=authSignIn;
+  const pb=$('payBtn');if(pb)pb.onclick=()=>toast('Оплата ещё не подключена — доступ пока выдаётся вручную',1);
+  const sk=$('paySkip');if(sk)sk.onclick=showEnd;}
+function playPack(id){const hs=packHands(id);if(!hs.length&&!lockedCount(id)){toast('В подборке пока нет вопросов',1);return;}   // no free hands but a paid tail: open anyway, the drill lands straight on the paywall
   const meta=allPacks().find(p=>p.id===id);HANDS=hs;CURPACK={id,title:meta?meta.title:id};   // remembered for «Сообщить об ошибке» reports
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
   $('drillTitle').innerHTML=meta?`${meta.emoji} ${meta.title}`:'';
@@ -2047,6 +2072,37 @@ const PACK_EP=SUPA_URL+'/rest/v1/pack';
 const CACHE_KEY='pk_packs_cache';                                    // last good cloud snapshot (this browser's)
 const PACKS_JSON='packs.json';                                       // same-origin snapshot auto-synced from the DB by a scheduled Action; READ-ONLY fallback for when REST is blocked (ad-blocker rubbing supabase.co) / offline / DB paused — github.io isn't blockable the way the Supabase host is
 function packHeaders(){return {apikey:SUPA_ANON,Authorization:'Bearer '+SUPA_ANON};}
+/* ===== paywall (P1a): free hands live in pack.data and are anon-readable; paid hands live in `pack_locked`,
+   which the anon key cannot read at all (RLS + no grant → HTTP 401). All three maps below are kept OUTSIDE
+   COLS on purpose: publishPacks() writes the whole col object into pack.data, so anything merged into COLS
+   would be written back into the anon-readable row — i.e. an admin publish would leak every paid hand. ===== */
+let PAYWALL={},          // slug -> {paid,freeHands,priceRub,handsTotal} — from the pack row's own columns
+    OWNED={},            // slug -> true, this account's entitlements
+    LOCKED={};           // slug -> [{idx,hand}] — paid hands this account is allowed to read
+function paywallOf(id){return PAYWALL[id]||null;}
+function ownsPack(id){return !!OWNED[id]||isAdmin();}          // admin reads every locked hand by policy
+// splice owned paid hands back to the exact slot they had before the split (idx is 1-based over the ORIGINAL
+// array, hidden hands included) — ascending order restores the original sequence
+function fullHands(c){const L=c&&LOCKED[c.id];if(!c)return [];if(!L||!L.length)return c.hands;
+  const a=c.hands.slice();L.slice().sort((x,y)=>x.idx-y.idx).forEach(x=>{const at=Math.max(0,Math.min(x.idx-1,a.length));a.splice(at,0,x.hand);});return a;}
+// how many hands of a pack this account cannot see. hands_total counts VISIBLE hands (free + paid), so the
+// difference against what we actually hold is exactly the locked tail.
+function lockedCount(id){const m=paywallOf(id);if(!m||!m.paid||ownsPack(id))return 0;
+  const c=findCol(id);if(!c)return 0;
+  return Math.max(0,(m.handsTotal|0)-fullHands(c).filter(h=>!h.hidden).length);}
+async function authToken(){try{await loadSupaSDK();const c=authClient();if(!c)return null;
+  const {data}=await c.auth.getSession();return (data&&data.session&&data.session.access_token)||null;}catch(e){return null;}}
+// Read the paid half with the USER's JWT (never the anon key): RLS returns only what this account owns.
+async function loadLocked(){
+  OWNED={};LOCKED={};
+  if(!CURUSER)return;
+  const tok=await authToken();if(!tok)return;
+  const h={apikey:SUPA_ANON,Authorization:'Bearer '+tok};
+  try{const r=await fetch(SUPA_URL+'/rest/v1/entitlement?select=pack_slug',{headers:h,cache:'no-store'});
+    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(e=>{if(e&&e.pack_slug)OWNED[e.pack_slug]=true;});}}catch(e){}
+  try{const r=await fetch(SUPA_URL+'/rest/v1/pack_locked?select=slug,idx,hand&order=slug.asc,idx.asc',{headers:h,cache:'no-store'});
+    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(x=>{if(x&&x.slug&&x.hand)(LOCKED[x.slug]=LOCKED[x.slug]||[]).push({idx:x.idx|0,hand:x.hand});});}}catch(e){}
+}
 function colsMap(cols){const m={};(cols||[]).forEach((c,i)=>{if(c&&c.id)m[c.id]=i+''+JSON.stringify(c);});return m;}   // slug -> position+content, for per-pack change detection
 let _syncedMap={},_syncedSig='';                                    // the cloud baseline this browser matches: per-pack map + a slug:version signature
 function setSyncBaseline(sig){_syncedStr=pubStr();_syncedMap=colsMap(pubCols());if(sig!=null)_syncedSig=sig;_dirty=false;}
@@ -2059,13 +2115,14 @@ function adoptFromCloud(serverCols){const mine=COLS.find(c=>c&&c.id==='mine');co
 // Read shared packs from the per-pack table via direct REST (no CDN dependency). Fallback = this browser's last good
 // snapshot in localStorage, NEVER a static file — so a stale fallback can't be adopted or republished over good data.
 async function loadPublished(){
-  try{const r=await fetch(PACK_EP+'?select=slug,position,data,version&order=position.asc',{headers:packHeaders(),cache:'no-store'});
+  try{const r=await fetch(PACK_EP+'?select=slug,position,data,version,paid,free_hands,price_rub,hands_total&order=position.asc',{headers:packHeaders(),cache:'no-store'});
     if(r.ok){const rows=await r.json();
       if(Array.isArray(rows)&&rows.length){
         const cols=rows.map(x=>x&&x.data).filter(Boolean);
         const sig=rows.map(x=>x.slug+':'+x.version).join('|');
-        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,ts:Date.now()}));}catch(e){}
-        return {cols,sig,source:'db'};
+        const meta=metaFromRows(rows);
+        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,meta,ts:Date.now()}));}catch(e){}
+        return {cols,sig,meta,source:'db'};
       }
     }
   }catch(e){}
@@ -2076,15 +2133,17 @@ async function loadPublished(){
     if(r.ok){const j=await r.json();const cols=(j&&(j.cols||j))||[];
       if(Array.isArray(cols)&&cols.length){
         const sig=(j&&j.sig)?j.sig:('pj:'+((j&&j.publishedAt)||''));
-        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,ts:Date.now()}));}catch(e){}
-        return {cols,sig,source:'static'};
+        const meta=(j&&j.meta)||{};                                  // paywall config rides along so the fallback still draws locks
+        try{localStorage.setItem(CACHE_KEY,JSON.stringify({cols,sig,meta,ts:Date.now()}));}catch(e){}
+        return {cols,sig,meta,source:'static'};
       }
     }
   }catch(e){}
   try{const cch=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
-    if(cch&&Array.isArray(cch.cols)&&cch.cols.length)return {cols:cch.cols,sig:cch.sig||'',source:'cache'};}catch(e){}
+    if(cch&&Array.isArray(cch.cols)&&cch.cols.length)return {cols:cch.cols,sig:cch.sig||'',meta:cch.meta||{},source:'cache'};}catch(e){}
   return null;
 }
+function metaFromRows(rows){const m={};(rows||[]).forEach(x=>{if(x&&x.slug)m[x.slug]={paid:!!x.paid,freeHands:x.free_hands|0,priceRub:x.price_rub|0,handsTotal:x.hands_total|0};});return m;}
 // Publish per-pack: only changed rows are written and removed packs deleted. RLS gates writes to the admin Google account.
 // The DB trigger versions every write (last 100 kept), so a bad write hits one pack and stays recoverable.
 async function publishPacks(auto){
@@ -2201,7 +2260,20 @@ async function initAuth(){
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
   _authReady=true;                                            // session resolved (or errored) → admin identity is now known
   renderAuth();if(CURUSER)flushAttempts();try{syncPacks();}catch(e){}   // re-sync: a non-admin's stale 'dirty' packs now get overwritten by the cloud instead of shadowing it
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();refreshGate();}try{syncPacks();}catch(e){}});}catch(e){}
+  refreshOwned();
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();}try{syncPacks();}catch(e){}refreshOwned();});}catch(e){}
+}
+// entitlements + the paid hands they unlock, re-read on every auth change (sign-out must re-lock immediately)
+async function refreshOwned(){
+  try{await loadLocked();}catch(e){OWNED={};LOCKED={};}
+  if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
+  // sitting on the paywall when access arrives: rebuild the drill in place. The paid hands were appended
+  // right after the free ones, so `i` already points at the first newly-unlocked question and `answered`
+  // stays aligned — progress survives.
+  if(CURPACK&&CURPACK.id&&PLAY.length&&PLAY[i]&&PLAY[i].locked&&!lockedCount(CURPACK.id)){
+    HANDS=packHands(CURPACK.id);buildPlay();renderHand();return;
+  }
+  refreshGate();
 }
 // --- Stage 3c: personal stats, read from attempts (RLS returns only this user's rows) ---
 async function openStats(){
@@ -2238,6 +2310,7 @@ async function syncPacks(){                                           // adopt f
   try{const pub=await loadPublished();
     buildStamp((pub&&pub.source)||'offline');                         // reflect the real sync source (or offline) on every sync
     if(!pub){if(_dirty)schedulePublish();return;}                     // DB unreachable and no cache yet: keep local, retry the push if we have unsynced edits
+    if(pub.meta)PAYWALL=pub.meta;                                     // paywall config is per-row columns, not part of `data` — refresh it even when cols don't change
     const changed=pub.sig!==_syncedSig;                              // any pack's version moved → cloud differs from our baseline
     if(!_dirty||(_authReady&&!isAdmin())){                            // cloud wins when clean, OR when this browser can't publish (non-admin, auth resolved): its unpublishable 'dirty' shared-pack edits must not shadow a fresher cloud. Personal 'Мой набор' is preserved by adoptFromCloud
       if(!changed){updSync('synced');return;}
