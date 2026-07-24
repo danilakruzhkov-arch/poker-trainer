@@ -1131,7 +1131,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.25';
+const APP_VER='2026-07-24.26';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1393,7 +1393,7 @@ function packCardHTML(p){const st=packStats(p.id),lk0=lockedCount(p.id),empty=st
   const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
   const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
   const lk=lk0,pw=paywallOf(p.id);   // paid tail this account can't play yet
-  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(pw&&pw.priceRub)||0} ₽</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
+  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(pw&&pw.priceRub)?pw.priceRub+' ₽':'демо'}</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
   return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
     <div class="part ${p.cover?'has-cover':''}" style="${partStyle}">${badge}<div class="pemoji">${p.emoji}</div></div>
     <div class="pbody">
@@ -1461,18 +1461,33 @@ function showPaywall(id,n){
   $('pips').innerHTML='';$('stepband').innerHTML='';const al=$('alog');if(al){al.style.display='none';al.innerHTML='';}
   const m=paywallOf(id)||{},total=m.handsTotal|0,price=m.priceRub|0,free=Math.max(0,total-n);
   const hw=k=>{const a=k%10,b=k%100;return (a===1&&b!==11)?'раздача':((a>=2&&a<=4)&&(b<10||b>=20))?'раздачи':'раздач';};
-  const sub=CURUSER
-    ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`
-    :`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть за ${price} ₽. Покупка привязывается к аккаунту, поэтому сначала вход.`;
+  const demo=price===0;                                        // price 0 = the server lets any signed-in user self-unlock
+  const sub=!CURUSER
+    ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть${demo?'':' за '+price+' ₽'}. Доступ привязывается к аккаунту, поэтому сначала вход.`
+    :demo
+      ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть. Сейчас она открывается бесплатно: мы обкатываем механику.`
+      :`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`;
   $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">Дальше — платная часть</div><div class="gate-s">${sub}</div>`+
-    (CURUSER?`<button class="gate-btn" id="payBtn"><span>Разблокировать за ${price} ₽</span></button>`
-            :`<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`)+
+    (!CURUSER?`<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`
+     :demo   ?`<button class="gate-btn" id="freeBtn"><span>Открыть бесплатно</span></button>`
+             :`<button class="gate-btn" id="payBtn"><span>Разблокировать за ${price} ₽</span></button>`)+
     `<button class="gate-btn" id="paySkip" style="margin-top:8px;background:transparent;border:1px solid rgba(201,162,39,.45);color:#c9a227;box-shadow:none"><span>Показать результат</span></button>`+
     `<div class="gate-foot">Бесплатные раздачи остаются открытыми всегда.</div></div>`;
   $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
   const inb=$('gateIn');if(inb)inb.onclick=authSignIn;
   const pb=$('payBtn');if(pb)pb.onclick=()=>toast('Оплата ещё не подключена — доступ пока выдаётся вручную',1);
+  const fb=$('freeBtn');if(fb)fb.onclick=()=>claimFreePack(id);
   const sk=$('paySkip');if(sk)sk.onclick=showEnd;}
+// demo unlock: the server hands out the entitlement only while the pack's price is exactly 0
+async function claimFreePack(id){
+  await loadSupaSDK();const c=authClient();
+  if(!c||!CURUSER){toast('Нужен вход',1);return;}
+  const b=$('freeBtn');if(b){b.disabled=true;b.innerHTML='<span>Открываю…</span>';}
+  try{const {error}=await c.rpc('claim_free_pack',{p_slug:id});if(error)throw error;
+    await refreshOwned();toast('Пак открыт');}
+  catch(e){const m=(e&&e.message)||'';toast(/not free/i.test(m)?'Пак уже платный — открыть бесплатно нельзя':'Не вышло: '+(m||'ошибка'),1);
+    if(b){b.disabled=false;b.innerHTML='<span>Открыть бесплатно</span>';}}
+}
 function playPack(id){const hs=packHands(id);if(!hs.length&&!lockedCount(id)){toast('В подборке пока нет вопросов',1);return;}   // no free hands but a paid tail: open anyway, the drill lands straight on the paywall
   const meta=allPacks().find(p=>p.id===id);HANDS=hs;CURPACK={id,title:meta?meta.title:id};   // remembered for «Сообщить об ошибке» reports
   $('homeScreen').style.display='none';$('drillWrap').style.display='block';
@@ -1525,7 +1540,16 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <div class="fld"><label>Тег: кто ведёт разбор</label><input id="col-host" value="${esc(c.host)}" placeholder="Разбор от Андрея Козленко"></div>
       <div class="fld"><label>Тег: кто герой</label><input id="col-hero" value="${esc(c.hero)}" placeholder="Негреану · про · $6M"></div>
       <div class="fld"><label>Формат турнира (фильтр на главной)</label><select id="col-format"><option value=""${!c.format?' selected':''}>— не указан —</option><option value="online"${c.format==='online'?' selected':''}>Онлайн</option><option value="offline"${c.format==='offline'?' selected':''}>Оффлайн</option></select></div>
-      <div class="fld"><label>Доступ (вход в аккаунт)</label><select id="col-gate"><option value="free"${(!c.gate||c.gate==='free')?' selected':''}>Первые ${FREE_HANDS} раздач — бесплатно</option><option value="login"${c.gate==='login'?' selected':''}>Только по входу</option><option value="pro"${c.gate==='pro'?' selected':''}>PRO — платно (скоро)</option></select></div>
+      <div class="fld"><label>Вход в аккаунт</label><select id="col-gate"><option value="free"${(c.gate!=='login')?' selected':''}>Первые ${FREE_HANDS} раздач без входа</option><option value="login"${c.gate==='login'?' selected':''}>Только по входу</option></select></div>
+      <div class="fld"><label>Цена пака, ₽ <small style="opacity:.6">0 — открывают бесплатно</small></label><input id="col-price" type="number" min="0" step="1" value="${colPrice(c.id)}"></div>
+      ${(()=>{const hs=(c.hands||[]).filter(h=>!h.hidden),pd=hs.filter(h=>h.paid).length;return `
+      <div class="fld full"><label>Платная часть — ${pd} из ${hs.length} раздач${pd?'':' (пак бесплатный)'}</label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input id="col-freen" type="number" min="0" max="${hs.length}" value="${hs.length-pd}" style="max-width:88px">
+          <button class="ghost" id="col-applyn" type="button">Первые N — бесплатно, остальные платные</button>
+        </div>
+        <div class="mini" style="margin-top:6px">Либо отмечай раздачи замком в списке ниже — платные могут стоять где угодно, не только хвостом. Разделение происходит на сервере при публикации.</div>
+      </div>`;})()}
     </div>
     <div class="col-intro"><div class="cih">Вступление перед первым вопросом</div>
       <div class="fld"><label>Заголовок</label><input id="ci-title" value="${esc(it.title)}" placeholder="Финалка Sunday Million"></div>
@@ -1539,6 +1563,8 @@ function readCol(){if(!$('col-name'))return;const c=activeCol();
   c.cover=$('col-cover').value.trim();c.host=$('col-host').value.trim();c.hero=$('col-hero').value.trim();
   if($('col-format'))c.format=$('col-format').value;
   if($('col-gate'))c.gate=$('col-gate').value;
+  if($('col-price')){const v=Math.max(0,parseInt($('col-price').value,10)||0),srv=((PAYWALL[c.id]||{}).priceRub)|0;
+    if(v!==srv)PRICE_LOCAL[c.id]=v;else delete PRICE_LOCAL[c.id];}   // only a real difference marks the pack for publish
   c.intro={title:$('ci-title').value.trim(),text:$('ci-text').value.trim(),video:{url:$('ci-vurl').value.trim()},vStart:mmss2sec($('ci-vstart').value),vEnd:mmss2sec($('ci-vend').value),channel:c.name};}
 const TL_CHOICES=[['fold','Фолд'],['check','Чек'],['call','Колл'],['raise','Рейз']];
 function blankHand(){return {players:8,heroPos:'BTN',heroCards:['',''],cards:{},stacks:{},profiles:{},board:['','','','',''],video:{url:''},channel:'PokerLab',actions:[],curQ:0,editIndex:null,unit:(F&&F.unit)||'bb',bbChips:(F&&F.bbChips)||''};}
@@ -1832,9 +1858,14 @@ function wireForm(){
   if($('syncStat'))$('syncStat').onclick=async()=>{if(!isAdmin())return;updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);}updSync(ok?'cloud':'error');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
   if($('col-hide'))$('col-hide').onclick=()=>{readForm();activeCol().hidden=!activeCol().hidden;buildForm();persist();toast(activeCol().hidden?'Набор скрыт из библиотеки':'Набор снова в библиотеке');};
+  // bulk helper for the common "first N free, rest paid" shape — it just stamps the per-hand flag
+  if($('col-applyn'))$('col-applyn').onclick=()=>{readForm();const c=activeCol(),n=Math.max(0,parseInt($('col-freen').value,10)||0);
+    let seen=0;(c.hands||[]).forEach(h=>{if(h.hidden)return;seen++;if(seen<=n)delete h.paid;else h.paid=true;});
+    buildForm();renderSet();persist();const pd=(c.hands||[]).filter(h=>h.paid&&!h.hidden).length;
+    toast(pd?('Платных раздач: '+pd+' — не забудь опубликовать'):'Все раздачи бесплатные');};
   if($('col-up'))$('col-up').onclick=()=>{if(curCol<=0)return;readForm();[COLS[curCol-1],COLS[curCol]]=[COLS[curCol],COLS[curCol-1]];useCol(curCol-1);buildForm();renderSet();persist();};
   if($('col-down'))$('col-down').onclick=()=>{if(curCol>=COLS.length-1)return;readForm();[COLS[curCol+1],COLS[curCol]]=[COLS[curCol],COLS[curCol+1]];useCol(curCol+1);buildForm();renderSet();persist();};
-  ['col-name','col-emoji','col-cover','col-host','col-hero','ci-title','ci-text','ci-vurl','ci-vstart','ci-vend'].forEach(id=>$(id)&&$(id).addEventListener('input',()=>{readForm();persistSoon();syncPreview();}));
+  ['col-name','col-emoji','col-cover','col-host','col-hero','col-price','ci-title','ci-text','ci-vurl','ci-vstart','ci-vend'].forEach(id=>$(id)&&$(id).addEventListener('input',()=>{readForm();persistSoon();syncPreview();}));
   $('f-players').onchange=e=>{readForm();F.players=+e.target.value;if(!POS[F.players].includes(F.heroPos))F.heroPos=POS[F.players].includes('BTN')?'BTN':POS[F.players][0];Object.keys(F.stacks).forEach(p=>{if(!POS[F.players].includes(p))delete F.stacks[p];});F.actions=F.actions.filter(a=>POS[F.players].includes(a.pos));buildForm();};
   if($('f-unit'))$('f-unit').querySelectorAll('button').forEach(b=>b.onclick=()=>{readForm();F.unit=b.dataset.u;buildForm();});
   if($('f-bbchips'))$('f-bbchips').addEventListener('change',()=>{readForm();buildForm();});   // re-render on blur so all fields switch to chips
@@ -2006,15 +2037,16 @@ function backupSnapshot(){try{const cur=localStorage.getItem(LS_KEY);if(!cur)ret
 // restore the most recent non-empty backup into the live store (used by the recovery button if a set goes missing)
 function restoreBackup(){try{for(const k of [LS_KEY+'_bak0',LS_KEY+'_bak1']){const b=localStorage.getItem(k);if(b){const j=JSON.parse(b);const n=(j.cols||[]).reduce((s,c)=>s+((c&&c.hands&&c.hands.length)||0),0);if(n>0){localStorage.setItem(LS_KEY,b);return n;}}}}catch(e){}return 0;}
 function renderSet(){
-  const vis=SET.filter(h=>!h.hidden).length,hid=SET.length-vis;
+  const vis=SET.filter(h=>!h.hidden).length,hid=SET.length-vis,pdn=SET.filter(h=>h.paid&&!h.hidden).length;
   const rows=SET.length?SET.map((h,k)=>{const nq=questionsOf(h).length,series=nq>1?` · ${nq} вопроса`:nq===1?' · 1 вопрос':'';
     const flag=nq===0?'<span class="setflag">нет вопросов</span>':'';
     const src=h.source==='import'?`<span class="setsrc">импорт${h.title?' · '+h.title:''}</span>`:'';
     return `<div class="setrow ${F&&F.editIndex===k?'editing':''} ${h.hidden?'hidden-h':''}"><span class="i">${k+1}</span><div><div>${h.heroPos} · ${handText(heroCardsOf(h))||'—'} ${flag}${h.hidden?'<span class="setflag hf">скрыта</span>':''}</div><div class="d">${h.players}‑max · ${STREET_RU[(questionsOf(h)[0]||{street:'preflop'}).street]}${series} ${src}</div></div>
-      <div class="acts2"><button class="ic hd" data-hide="${k}" title="${h.hidden?'Вернуть в набор':'Скрыть из набора'}">${h.hidden?'🙈':'👁'}</button><button class="ic ed" data-ed="${k}" title="Редактировать">✎</button><button class="ic cp" data-cp="${k}" title="Скопировать раздачу">⧉</button><button class="ic del" data-del="${k}" title="Удалить">🗑</button></div></div>`;}).join(''):'<div class="mini">Набор пуст — добавь раздачи кнопкой выше или импортируй историю раздач.</div>';
+      <div class="acts2"><button class="ic pd" data-paid="${k}" title="${h.paid?'Сделать бесплатной':'Сделать платной'}" style="${h.paid?'color:#c9a227':'opacity:.5'}">${h.paid?'🔒':'🔓'}</button><button class="ic hd" data-hide="${k}" title="${h.hidden?'Вернуть в набор':'Скрыть из набора'}">${h.hidden?'🙈':'👁'}</button><button class="ic ed" data-ed="${k}" title="Редактировать">✎</button><button class="ic cp" data-cp="${k}" title="Скопировать раздачу">⧉</button><button class="ic del" data-del="${k}" title="Удалить">🗑</button></div></div>`;}).join(''):'<div class="mini">Набор пуст — добавь раздачи кнопкой выше или импортируй историю раздач.</div>';
   $('setList').className='setlist'+secClass('set');
-  $('setList').innerHTML=`<div class="sethdr"><span>Набор раздач</span><small>${vis} в наборе${hid?(' · '+hid+' скрыто'):''}</small></div><div class="setrows">${rows}</div>`;
+  $('setList').innerHTML=`<div class="sethdr"><span>Набор раздач</span><small>${vis} в наборе${hid?(' · '+hid+' скрыто'):''}${pdn?(' · '+pdn+' платн.'):''}</small></div><div class="setrows">${rows}</div>`;
   $('setList').querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{const k=+b.dataset.hide;SET[k].hidden=!SET[k].hidden;renderSet();persist();});
+  $('setList').querySelectorAll('[data-paid]').forEach(b=>b.onclick=()=>{const k=+b.dataset.paid;if(SET[k].paid)delete SET[k].paid;else SET[k].paid=true;renderSet();persist();});   // the split itself happens server-side on publish
   $('setList').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{const k=+b.dataset.ed;if(F&&F.editIndex===k)return;guardUnsaved(()=>editHand(k));});
   $('setList').querySelectorAll('[data-cp]').forEach(b=>b.onclick=()=>{const k=+b.dataset.cp;guardUnsaved(()=>duplicateHand(k));});
   $('setList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const k=+b.dataset.del;SET.splice(k,1);if(F&&F.editIndex===k)F.editIndex=null;else if(F&&F.editIndex>k)F.editIndex--;renderSet();persist();});
@@ -2071,11 +2103,28 @@ let PAYWALL={},          // slug -> {paid,freeHands,priceRub,handsTotal} — fro
     OWNED={},            // slug -> true, this account's entitlements
     LOCKED={};           // slug -> [{idx,hand}] — paid hands this account is allowed to read
 function paywallOf(id){return PAYWALL[id]||null;}
+function colPrice(id){return (PRICE_LOCAL[id]!=null)?PRICE_LOCAL[id]:(((PAYWALL[id]||{}).priceRub)|0);}
 function ownsPack(id){return !!OWNED[id]||isAdmin();}          // admin reads every locked hand by policy
 // splice owned paid hands back to the exact slot they had before the split (idx is 1-based over the ORIGINAL
 // array, hidden hands included) — ascending order restores the original sequence
-function fullHands(c){const L=c&&LOCKED[c.id];if(!c)return [];if(!L||!L.length)return c.hands;
-  const a=c.hands.slice();L.slice().sort((x,y)=>x.idx-y.idx).forEach(x=>{const at=Math.max(0,Math.min(x.idx-1,a.length));a.splice(at,0,x.hand);});return a;}
+let _colsMerged=false;                                         // admin only: COLS already holds the paid hands, each marked {paid:true}
+let PRICE_LOCAL={};                                            // slug -> price edited in the editor, not yet published
+function spliceLocked(base,L){const a=base.slice();
+  L.slice().sort((x,y)=>x.idx-y.idx).forEach(x=>{const at=Math.max(0,Math.min(x.idx-1,a.length));a.splice(at,0,x.hand);});return a;}
+function fullHands(c){if(!c)return [];if(_colsMerged)return c.hands;   // merged already: splicing again would duplicate
+  const L=LOCKED[c.id];if(!L||!L.length)return c.hands;return spliceLocked(c.hands,L);}
+// Admin sees ONE complete set in the editor: paid hands are folded back into COLS carrying a {paid:true}
+// marker, and publishing splits them out again server-side. Idempotent — re-running drops the previous merge
+// first — so it can run after every cloud adoption.
+function mergeLockedIntoCols(){
+  const adm=isAdmin();
+  COLS.forEach(c=>{if(!c||!Array.isArray(c.hands))return;
+    // strip any previous fold-in FIRST — on sign-out this is what takes the paid hands back out of COLS
+    // (and out of localStorage on the next persist), instead of leaving them playable with no session
+    const base=c.hands.filter(h=>!(h&&h.paid)),L=adm?LOCKED[c.id]:null;
+    c.hands=(L&&L.length)?spliceLocked(base,L.map(x=>({idx:x.idx,hand:Object.assign({},x.hand,{paid:true})}))):base;});
+  _colsMerged=adm;
+}
 // how many hands of a pack this account cannot see. hands_total counts VISIBLE hands (free + paid), so the
 // difference against what we actually hold is exactly the locked tail.
 function lockedCount(id){const m=paywallOf(id);if(!m||!m.paid||ownsPack(id))return 0;
@@ -2145,13 +2194,28 @@ async function publishPacks(auto){
   const cols=pubCols();
   if(!cols.length){if(!auto)pubSay('Пусто — публиковать нечего',1);return false;}   // guard: never wipe the whole set
   const cur=colsMap(cols);
-  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id])changed.push({slug:p.id,position:i,data:p});});
+  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id]||PRICE_LOCAL[p.id]!=null)changed.push({slug:p.id,position:i,data:p});});
   const deleted=Object.keys(_syncedMap).filter(s=>!(s in cur));
   try{
-    if(changed.length){const {error}=await c.from('pack').upsert(changed,{onConflict:'slug'});if(error)throw error;}
+    // One RPC per changed pack: the server splits hands marked {paid:true} into pack_locked and keeps the
+    // rest in the anon-readable row, in a single transaction. p_paid null -> the server derives it from
+    // whether any hand is actually marked, so "is this pack paid" is never a separate setting to forget.
+    for(const ch of changed){
+      const price=(PRICE_LOCAL[ch.slug]!=null)?PRICE_LOCAL[ch.slug]:(((PAYWALL[ch.slug]||{}).priceRub)|0);
+      const args={p_slug:ch.slug,p_position:ch.position,p_data:ch.data,p_paid:null,p_price:price,p_force:false};
+      let {error}=await c.rpc('pack_apply_split',args);
+      if(error&&/refusing to drop all/i.test(error.message||'')){        // data-loss guard tripped: only a human may override
+        if(!auto&&confirm('Пак «'+ch.slug+'»: в нём не осталось ни одной платной раздачи, а в облаке они есть.\n\nСнять платность со всех и опубликовать?')){
+          ({error}=await c.rpc('pack_apply_split',Object.assign({},args,{p_force:true})));
+        }else{throw new Error('Публикация «'+ch.slug+'» отменена — платные раздачи не тронуты');}
+      }
+      if(error)throw error;
+      delete PRICE_LOCAL[ch.slug];
+    }
     for(const s of deleted){const {error}=await c.from('pack').delete().eq('slug',s);if(error)throw error;}
-    _syncedMap=cur;
-    const fresh=await loadPublished();if(fresh&&fresh.sig)_syncedSig=fresh.sig;   // rebase freshness on the trigger-bumped versions so our own write isn't re-adopted next sync
+    try{await loadLocked();mergeLockedIntoCols();}catch(e){}                 // the split moved hands between tables — resync what we hold
+    _syncedMap=colsMap(pubCols());
+    const fresh=await loadPublished();if(fresh){if(fresh.sig)_syncedSig=fresh.sig;if(fresh.meta)PAYWALL=fresh.meta;}   // rebase freshness on the trigger-bumped versions so our own write isn't re-adopted next sync
     if(!auto)pubSay('Опубликовано ✓ — зрители увидят при обновлении страницы');
     return true;
   }catch(e){const m=(e&&e.message)||'';pubSay(/row-level|policy|permission|denied|403/i.test(m)?'Нет прав на публикацию — этот Google‑аккаунт не админ':'Не вышло: '+(m||'ошибка'),1);return false;}
@@ -2257,6 +2321,8 @@ async function initAuth(){
 // entitlements + the paid hands they unlock, re-read on every auth change (sign-out must re-lock immediately)
 async function refreshOwned(){
   try{await loadLocked();}catch(e){OWNED={};LOCKED={};}
+  mergeLockedIntoCols();
+  if(!_dirty)setSyncBaseline(_syncedSig);                      // folding paid hands in is not a local edit — but never clobber real unpublished ones
   if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
   // sitting on the paywall when access arrives: rebuild the drill in place. The paid hands were appended
   // right after the free ones, so `i` already points at the first newly-unlocked question and `answered`
@@ -2310,7 +2376,7 @@ async function syncPacks(){                                           // adopt f
       // under an in-progress edit, so the next save overwrote the wrong pack. Defer: a later idle sync adopts.
       const editing=($('view-admin')&&$('view-admin').style.display!=='none')||isDirtyDraft();
       if(editing){updSync('synced');return;}
-      adoptFromCloud(pub.cols);setSyncBaseline(pub.sig);persist(true);
+      adoptFromCloud(pub.cols);mergeLockedIntoCols();setSyncBaseline(pub.sig);persist(true);   // merge BEFORE baselining, or the fold-in reads as an unpublished local edit
       if($('homeScreen')&&$('homeScreen').style.display!=='none')renderHome();
       if($('view-admin')&&$('view-admin').style.display!=='none'){buildForm();renderSet();}
       updSync('synced');

@@ -13,7 +13,7 @@ console.log('== static wiring ==');
   ok('handLocked gates free packs past FREE_HANDS', /return hi>=FREE_HANDS&&!CURUSER;/.test(html));
   ok('renderHand calls the gate before rendering', /if\(handLocked\(CURPACK\.id,p\.hi\)\)\{showGate\(packGateOf\(CURPACK\.id\)\);return;\}/.test(html));
   ok('allPacks exposes gate', /gate:c\.gate\|\|'free'/.test(html));
-  ok('editor has a gate <select>', /id="col-gate"/.test(html)&&/Только по входу/.test(html)&&/PRO — платно/.test(html));
+  ok('editor has a gate <select>', /id="col-gate"/.test(html)&&/Только по входу/.test(html));   // the 'pro' option is gone: paid is a real per-hand split now, not a placeholder
   ok('readCol persists gate', /if\(\$\('col-gate'\)\)c\.gate=\$\('col-gate'\)\.value;/.test(html));
   ok('sign-in re-reveals gated hand after login', /if\(CURUSER\)\{flushAttempts\(\);\}try\{syncPacks\(\);\}catch\(e\)\{\}refreshOwned\(\);/.test(html)&&/refreshGate\(\);\n\}/.test(html.replace(/\r/g,'')));   // refreshOwned() re-reads entitlements, then calls refreshGate()
   ok('pubCols keeps whole collection (gate round-trips)', /function pubCols\(\)\{return COLS\.filter\(c=>c&&c\.id!=='mine'\);\}/.test(html));

@@ -15,7 +15,7 @@ ok('read uses the anon apikey header',              /function packHeaders\(\)\{r
 ok('read fallback order: same-origin packs.json, then localStorage cache',/fetch\(PACKS_JSON\+'\?_='/.test(html)&&/localStorage\.getItem\(CACHE_KEY\)/.test(html)&&!/fetch\(GH_FILE/.test(html));
 ok('static fallback is same-origin + read-only (never republished)',/const PACKS_JSON='packs\.json'/.test(html)&&/return \{cols,sig,meta,source:'static'\}/.test(html));
 ok('read caches the last good snapshot',            /localStorage\.setItem\(CACHE_KEY,JSON\.stringify\(\{cols,sig,meta,ts:Date\.now\(\)\}\)\)/.test(html));
-ok('publish is a per-pack upsert by slug',          /c\.from\('pack'\)\.upsert\(changed,\{onConflict:'slug'\}\)/.test(html));
+ok('publish is a per-pack split RPC',               /c\.rpc\('pack_apply_split',args\)/.test(html));   // upsert replaced: the server splits free/paid in one transaction
 ok('publish deletes packs removed locally',         /c\.from\('pack'\)\.delete\(\)\.eq\('slug',s\)/.test(html));
 ok('publish guards against wiping the whole set',   /if\(!cols\.length\)\{if\(!auto\)pubSay\('Пусто/.test(html));
 ok('publish requires Google sign-in',               /if\(!CURUSER\)\{if\(!auto\)pubSay\('Войди через Google/.test(html));
@@ -74,14 +74,15 @@ console.log('== read: direct REST + cache fallback ==');
   }
 
   console.log('== publish: per-pack, admin-gated ==');
-  function mockSink(W){W.eval(`window.__ups=[];window.__dels=[];
+  function mockSink(W){W.eval(`window.__rpc=[];window.__dels=[];
     loadSupaSDK=async()=>({});
-    _sb={from:function(t){return {
-      upsert:async function(rows,opts){window.__ups.push(rows);return {error:null};},
+    _sb={rpc:async function(fn,args){window.__rpc.push({fn,args});return {error:null};},
+         from:function(t){return {
       delete:function(){return {eq:async function(col,val){window.__dels.push(val);return {error:null};}};}
     };}};
     authClient=function(){return _sb;};
-    loadPublished=async()=>({cols:[],sig:'refreshed'});`);}   // stub the post-publish sig refresh
+    loadLocked=async()=>{};
+    loadPublished=async()=>({cols:[],sig:'refreshed',meta:{}});`);}   // stub the post-publish sig refresh
 
   { const W=boot();const ev=c=>W.eval(c);mockSink(W);
     ev(`CURUSER={email:'danilakruzhkov@gmail.com'};
@@ -89,9 +90,11 @@ console.log('== read: direct REST + cache fallback ==');
         _syncedMap={};`);   // empty baseline → every shared pack counts as changed
     const okPub=await W.eval('publishPacks(false)');
     ok('publishPacks returns true when signed in', okPub===true);
-    ok('a single batched upsert call',             ev('window.__ups.length')===1);
-    ok('upsert carries pA + pB, excludes "mine"',  ev('JSON.stringify(window.__ups[0].map(r=>r.slug))')==='["pA","pB"]');
-    ok('rows carry slug + position + data',        ev("window.__ups[0][0].slug")==='pA'&&ev('window.__ups[0][0].position')===0&&ev('!!window.__ups[0][0].data')===true);
+    ok('one split RPC per changed pack',           ev('window.__rpc.length')===2);
+    ok('every call is pack_apply_split',           ev('window.__rpc.every(r=>r.fn==="pack_apply_split")')===true);
+    ok('covers pA + pB, excludes "mine"',          ev('JSON.stringify(window.__rpc.map(r=>r.args.p_slug))')==='["pA","pB"]');
+    ok('args carry slug + position + data',        ev('window.__rpc[0].args.p_slug')==='pA'&&ev('window.__rpc[0].args.p_position')===0&&ev('!!window.__rpc[0].args.p_data')===true);
+    ok('force is off unless a human says so',      ev('window.__rpc.every(r=>r.args.p_force===false)')===true);
     ok('freshness sig rebased after publish',      ev('_syncedSig')==='refreshed');
   }
 
@@ -100,8 +103,8 @@ console.log('== read: direct REST + cache fallback ==');
         COLS=[{id:'pA',name:'A2',hands:[]},{id:'pB',name:'B',hands:[]},{id:'mine',name:'m',hands:[]}];useCol(0);
         _syncedMap=colsMap([{id:'pA',name:'A-OLD',hands:[]},{id:'pB',name:'B',hands:[]},{id:'pGONE',name:'G',hands:[]}]);`);
     await W.eval('publishPacks(true)');
-    ok('only the changed pack (pA) is upserted',   ev('JSON.stringify(window.__ups[0].map(r=>r.slug))')==='["pA"]');
-    ok('the unchanged pack (pB) is NOT rewritten', ev('window.__ups[0].some(r=>r.slug==="pB")')===false);
+    ok('only the changed pack (pA) is published',  ev('JSON.stringify(window.__rpc.map(r=>r.args.p_slug))')==='["pA"]');
+    ok('the unchanged pack (pB) is NOT rewritten', ev('window.__rpc.some(r=>r.args.p_slug==="pB")')===false);
     ok('the removed pack (pGONE) is deleted',      ev('JSON.stringify(window.__dels)')==='["pGONE"]');
   }
 
@@ -109,15 +112,15 @@ console.log('== read: direct REST + cache fallback ==');
     ev(`CURUSER=null;COLS=[{id:'pA',name:'A',hands:[]}];useCol(0);_syncedMap={};`);
     const noPub=await W.eval('publishPacks(false)');
     ok('publishPacks returns false when signed out', noPub===false);
-    ok('no upsert attempted when signed out',        ev('window.__ups.length')===0);
+    ok('nothing published when signed out',              ev('window.__rpc.length')===0);
     W.eval('schedulePublish()');
-    ok('schedulePublish signed-out does not publish', ev('window.__ups.length')===0);
+    ok('schedulePublish signed-out does not publish', ev('window.__rpc.length')===0);
   }
 
   { const W=boot();const ev=c=>W.eval(c);mockSink(W);
     ev(`CURUSER={email:'danilakruzhkov@gmail.com'};COLS=[{id:'mine',name:'m',hands:[]}];useCol(0);_syncedMap={};`);   // only the personal pack → nothing shared
     const r=await W.eval('publishPacks(false)');
-    ok('publish refuses to wipe (empty shared set → false)', r===false&&ev('window.__ups.length')===0);
+    ok('publish refuses to wipe (empty shared set → false)', r===false&&ev('window.__rpc.length')===0);
   }
 
   console.log('== syncPacks: sig-gated adoption + guards ==');

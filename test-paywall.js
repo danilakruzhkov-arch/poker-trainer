@@ -120,5 +120,43 @@ console.log('== fully-paid pack stays reachable ==');
   ok('drill lands on the paywall', /Дальше — платная часть/.test(W.document.getElementById('trainTable').innerHTML));
 }
 
+console.log('== editor: per-hand paid flag, server-side split on publish ==');
+{
+  ok('set list has a per-hand lock toggle',   /data-paid="\$\{k\}"/.test(html)&&/SET\[k\]\.paid\)delete SET\[k\]\.paid;else SET\[k\]\.paid=true/.test(html));
+  ok('publish goes through the split RPC',    /c\.rpc\('pack_apply_split',args\)/.test(html));
+  ok('paid-ness is derived server-side',      /p_paid:null/.test(html));
+  ok('publish no longer upserts pack rows',   !/from\('pack'\)\.upsert/.test(html));
+  ok('the data-loss guard is surfaced, not swallowed', /refusing to drop all/i.test(html)&&/p_force:true/.test(html));
+  ok('price edits only count when they differ', /if\(v!==srv\)PRICE_LOCAL\[c\.id\]=v;else delete PRICE_LOCAL\[c\.id\];/.test(html));
+  ok('bulk "first N free" stamps the flag',   /col-applyn/.test(html)&&/if\(seen<=n\)delete h\.paid;else h\.paid=true;/.test(html));
+  ok('demo price 0 offers a free unlock',     /id="freeBtn"/.test(html)&&/c\.rpc\('claim_free_pack',\{p_slug:id\}\)/.test(html));
+  ok('merge happens before the sync baseline', html.indexOf('mergeLockedIntoCols();setSyncBaseline(pub.sig)')>0);
+}
+
+console.log('== mergeLockedIntoCols ==');
+{
+  const W=boot();const ev=c=>W.eval(c);
+  ev("COLS.push({id:'tst',name:'T',emoji:'x',accent:'#000',hands:[{title:'a'},{title:'b'}]});");
+  ev("LOCKED={tst:[{idx:2,hand:{title:'X'}}]};OWNED={};");
+  ev("CURUSER={id:'u1',email:'someone@else.com'};mergeLockedIntoCols();");
+  ok('a player never gets paid hands folded into COLS', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,b'&&ev("_colsMerged")===false);
+  ok('but still plays what they own', ev("packHands('tst').map(h=>h.title).join(',')")==='a,X,b');
+  ev("CURUSER={id:'u1',email:'daanilka@gmail.com'};mergeLockedIntoCols();");
+  ok('admin sees one complete set', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,X,b');
+  ok('folded hands carry the paid marker', ev("findCol('tst').hands.filter(h=>h.paid).map(h=>h.title).join(',')")==='X');
+  ok('fullHands does not splice twice', ev("fullHands(findCol('tst')).map(h=>h.title).join(',')")==='a,X,b');
+  ev("mergeLockedIntoCols();mergeLockedIntoCols();");
+  ok('merging repeatedly does not duplicate', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,X,b');
+  ev("LOCKED={};mergeLockedIntoCols();");
+  ok('losing access drops the folded hands', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,b');
+  // regression: signing out used to leave the folded hands in COLS (and in localStorage), so the admin
+  // still played the whole paid pack with no session — exactly what you'd sign out to check
+  ev("LOCKED={tst:[{idx:2,hand:{title:'X'}}]};CURUSER={id:'u1',email:'daanilka@gmail.com'};mergeLockedIntoCols();");
+  ok('admin merged again', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,X,b');
+  ev("CURUSER=null;LOCKED={};OWNED={};mergeLockedIntoCols();");
+  ok('sign-out takes paid hands back out of COLS', ev("findCol('tst').hands.map(h=>h.title).join(',')")==='a,b');
+  ok('and they stop being playable', ev("packHands('tst').map(h=>h.title).join(',')")==='a,b');
+}
+
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);
