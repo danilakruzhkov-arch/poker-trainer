@@ -14,11 +14,16 @@
 //  The exact same logic is unit-tested in test-telegram.js (Node Web Crypto).
 // ============================================================================
 
+// copy a view's exact bytes into a fresh, plain ArrayBuffer (satisfies Web Crypto's
+// BufferSource typing under Deno's strict lib; runtime behaviour is unchanged)
+function ab(u: Uint8Array): ArrayBuffer {
+  return u.buffer.slice(u.byteOffset, u.byteOffset + u.byteLength) as ArrayBuffer;
+}
 async function hmacSha256(keyBytes: Uint8Array, msg: string): Promise<Uint8Array> {
   const key = await crypto.subtle.importKey(
-    "raw", keyBytes, { name: "HMAC", hash: "SHA-256" }, false, ["sign"],
+    "raw", ab(keyBytes), { name: "HMAC", hash: "SHA-256" }, false, ["sign"],
   );
-  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg));
+  const sig = await crypto.subtle.sign("HMAC", key, ab(new TextEncoder().encode(msg)));
   return new Uint8Array(sig);
 }
 function toHex(b: Uint8Array): string {

@@ -87,12 +87,12 @@ curl "https://api.telegram.org/bot<ТОКЕН>/setWebhook" \
 
 ---
 
-## Одна строка под проверку на первом тесте
+## Обмен OTP на сессию — версионно-устойчив
 
-Обмен OTP на сессию (клиент, `tgSignIn`): сейчас
-`verifyOtp({email, token: d.otp, type:'email'})`. Если конкретная версия supabase-js это отклонит —
-переключи на `verifyOtp({token_hash: d.token_hash, type:'magiclink'})` (сервер уже отдаёт оба поля).
-Это единственное место, зависящее от версии SDK.
+`tgSignIn` перебирает все формы `verifyOtp`, что использовал supabase-js в разных версиях
+(email-OTP → token_hash/email → token_hash/magiclink), первый успешный побеждает. Сервер отдаёт и
+`email_otp`, и `hashed_token`. Ничего руками подбирать не нужно — если вход не проходит, смотри
+Network-вкладку: ответ `tg-auth` (есть ли `otp`/`token_hash`) и ошибку `verifyOtp`.
 
 ## Безопасность (заложено, для контроля)
 
