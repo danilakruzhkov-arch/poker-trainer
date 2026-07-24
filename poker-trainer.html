@@ -10,7 +10,11 @@
     --bg:#0a0e0d; --text:#EAF2ED; --muted:#93a49b; --chip:#1b2320; --field:#11201b;
     --field-lite:#1c2f27; --stroke:rgba(255,255,255,.10); --shadow:0 24px 60px rgba(0,0,0,.55);
   }
-  @media (prefers-color-scheme:light){:root{--bg:#e7e1d3;--text:#1c2420;--muted:#5e6b62;--chip:#efeadd;--field:#eef7f1;--field-lite:#fff;--stroke:rgba(0,0,0,.12);--shadow:0 24px 60px rgba(40,50,40,.28);--spade:#1b1b1b;--spade-sel:#1b1b1b;}}
+  /* One look in every OS theme: the app is a dark felt table by design (the .app/.table backgrounds are baked dark
+     regardless of theme), so a light system theme only ever broke contrast — e.g. dark var(--text) on the dark felt
+     made the paywall copy unreadable. We pin the dark palette and tell the UA the page is dark so native controls
+     (inputs, scrollbars) match. The [data-theme] hooks below stay for a future in-app toggle. */
+  :root{color-scheme:dark}
   :root[data-theme="dark"]{--bg:#0a0e0d;--text:#EAF2ED;--muted:#93a49b;--chip:#1b2320;--field:#11201b;--field-lite:#1c2f27;--stroke:rgba(255,255,255,.10);--shadow:0 24px 60px rgba(0,0,0,.55);--spade-sel:#e3e9e5;}
   :root[data-theme="light"]{--bg:#e7e1d3;--text:#1c2420;--muted:#5e6b62;--chip:#efeadd;--field:#eef7f1;--field-lite:#fff;--stroke:rgba(0,0,0,.12);--shadow:0 24px 60px rgba(40,50,40,.28);--spade:#1b1b1b;--spade-sel:#1b1b1b;}
   html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
@@ -522,16 +526,19 @@
   .stbar span{display:block;height:100%;background:var(--brass)}
   .stnum{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;min-width:58px;text-align:right}
   /* content gate (E): login wall past the free hands, or for «по входу» packs */
-  .gate{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:230px;padding:26px 20px;gap:11px}
+  .gate{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:230px;padding:26px 22px;gap:11px}
   .gate-ic{font-size:34px;line-height:1;opacity:.92}
-  .gate-t{font-size:19px;font-weight:800;color:var(--text)}
-  .gate-s{font-size:13.5px;color:var(--muted);max-width:330px;line-height:1.5}
+  /* the felt is dark in every theme, so these are pinned light (var(--text) would go dark in a light theme and vanish).
+     clamp + balance keep a long title inside the oval table instead of spilling past its edges. */
+  .gate-t{font-size:clamp(16px,4.7vw,19px);font-weight:800;color:#EDF3EE;max-width:100%;overflow-wrap:break-word;text-wrap:balance}
+  .gate-s{font-size:13.5px;color:#adbab1;max-width:300px;line-height:1.5;overflow-wrap:break-word}
   .gate-btn{display:inline-flex;align-items:center;gap:9px;margin-top:6px;background:var(--brass);color:#20160a;border:0;border-radius:999px;padding:11px 20px;font-size:14px;font-weight:800;cursor:pointer}
   .gate-btn:hover{filter:brightness(1.06)}
   .gate-btn .gic{width:17px;height:17px;flex:none}
-  .gate-foot{font-size:11px;color:var(--muted);max-width:290px;line-height:1.45;margin-top:2px}
+  .gate-foot{font-size:11px;color:#93a49b;max-width:290px;line-height:1.45;margin-top:2px}
   .pbadge{position:absolute;top:9px;left:9px;z-index:2;background:rgba(12,12,12,.72);color:#f2e6c9;border:1px solid var(--brass);border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
   .pbadge.pro{background:var(--brass);color:#20160a}
+  .pbadge.free{background:rgba(70,177,123,.16);color:#8fe0b3;border-color:rgba(70,177,123,.5)}
 </style>
 
 <div class="wrap" id="wrap">
@@ -1131,7 +1138,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.27';
+const APP_VER='2026-07-24.28';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1393,10 +1400,14 @@ function packCardHTML(p){const st=packStats(p.id),lk0=lockedCount(p.id),empty=st
   const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
   const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
   const lk=lk0,pw=paywallOf(p.id);   // paid tail this account can't play yet
-  // the badge stays stable while a pack has any free part — a price tag only makes sense when NOTHING is playable
-  // without buying. Everything else reads «демо» while we run the free trial.
-  const whollyPaid=!!(pw&&pw.paid&&!(pw.freeHands|0));
-  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(whollyPaid&&(pw.priceRub|0))?pw.priceRub+' ₽':'демо'}</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
+  // Every pack carries a badge so the card never looks unlabelled: «вход»/PRO for gated packs, a price (or «демо»
+  // while the trial runs at price 0) for anything with paid hands, and «Free» for a genuinely free pack. A price
+  // tag shows only when NOTHING is playable without buying — otherwise it would misread as "the whole set costs".
+  const gate=p.gate||'free',paidPack=!!(pw&&pw.paid),whollyPaid=paidPack&&!(pw.freeHands|0);
+  const badge=gate==='login'?'<span class="pbadge">вход</span>'
+             :gate==='pro'?'<span class="pbadge pro">PRO</span>'
+             :paidPack?`<span class="pbadge pro">${(whollyPaid&&(pw.priceRub|0))?pw.priceRub+' ₽':'демо'}</span>`
+             :(p.id==='mine'?'':'<span class="pbadge free">Free</span>');   // «Мой набор» is personal scratch space, not a library pack
   return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
     <div class="part ${p.cover?'has-cover':''}" style="${partStyle}">${badge}<div class="pemoji">${p.emoji}</div></div>
     <div class="pbody">
@@ -1454,7 +1465,27 @@ function showGate(kind){                                             // draw the
     `<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`+
     `<div class="gate-foot">Вход нужен только чтобы хранить твой прогресс. Мы ничего не публикуем от твоего имени.</div></div>`;
   $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
-  const b=$('gateIn');if(b)b.onclick=authSignIn;}
+  const b=$('gateIn');if(b)b.onclick=()=>{armResume(CURPACK&&CURPACK.id);authSignIn();};}
+// Google OAuth reloads the whole page (redirectTo), so the drill position is lost — the player lands back on the
+// pack list and has to replay the free hands to reach the wall again. armResume() stashes which pack the wall was
+// on; consumeResume() (run once after auth resolves) reopens it straight on the wall step, now signed in.
+function armResume(packId){if(!packId)return;try{localStorage.setItem('pk_resume',JSON.stringify({pack:packId,ts:Date.now()}));}catch(e){}}
+function consumeResume(){
+  let r=null;try{r=JSON.parse(localStorage.getItem('pk_resume')||'null');}catch(e){}
+  if(!r||!r.pack)return;
+  try{localStorage.removeItem('pk_resume');}catch(e){}                 // one shot, even though onAuthStateChange fires more than once
+  if(!CURUSER||Date.now()-(r.ts||0)>600000)return;                    // stale (>10 min) or not actually signed in
+  const meta=allPacks().find(p=>p.id===r.pack);if(!meta)return;
+  const hs=packHands(r.pack);if(!hs.length&&!lockedCount(r.pack))return;
+  HANDS=hs;CURPACK={id:r.pack,title:meta.title};
+  $('homeScreen').style.display='none';$('drillWrap').style.display='block';
+  $('drillTitle').innerHTML=`${meta.emoji} ${meta.title}`;
+  $('introScreen').style.display='none';$('trainApp').style.display='';
+  stopVideos();buildPlay();score=0;streak=0;answered=[];picks=[];
+  $('score').textContent=0;$('streak').textContent=0;$('end').classList.remove('up');$('sheet').classList.remove('up');
+  const li=PLAY.findIndex(s=>s&&s.locked);i=li>=0?li:0;                // jump to the wall step (now it offers «Открыть бесплатно»); if the pack is already owned, just play on
+  renderHand();
+}
 function refreshGate(){                                              // after a login, if the drill is sitting on a locked hand, reveal it
   if(PLAY.length&&$('drillWrap')&&$('drillWrap').style.display!=='none'&&$('trainApp')&&$('trainApp').style.display!=='none')renderHand();}
 /* the paid wall: shown INSTEAD of the question for the locked tail. Buying needs an account (entitlement is
@@ -1482,7 +1513,7 @@ function showPaywall(id,n){
     `<button class="gate-btn" id="paySkip" style="margin-top:8px;background:transparent;border:1px solid rgba(201,162,39,.45);color:#c9a227;box-shadow:none"><span>Показать результат</span></button>`+
     `<div class="gate-foot">Бесплатные раздачи остаются открытыми всегда.</div></div>`;
   $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
-  const inb=$('gateIn');if(inb)inb.onclick=authSignIn;
+  const inb=$('gateIn');if(inb)inb.onclick=()=>{armResume(id);authSignIn();};   // come back to this wall after the OAuth reload, not to the pack list
   const pb=$('payBtn');if(pb)pb.onclick=()=>toast('Оплата ещё не подключена — доступ пока выдаётся вручную',1);
   const fb=$('freeBtn');if(fb)fb.onclick=()=>claimFreePack(id);
   const sk=$('paySkip');if(sk)sk.onclick=showEnd;}
@@ -1538,11 +1569,10 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <button class="ghost newbtn" id="col-up" title="Переместить выше" ${curCol<=0?'disabled':''}>↑ выше</button>
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
-    <div class="pubbar" id="cloudBar" style="padding:9px 11px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span class="syncstat ${_dirty?'':'ok'}" id="syncStat" style="display:inline-block">${_dirty?'✎ Есть неопубликованные правки':'☁ Всё записано в БД'}</span>
-      <span style="flex:1"></span>
-      <button class="ghost newbtn" id="pubRevert" title="Скачать пакеты из базы и отменить всё, что не опубликовано">↺ вернуть из БД</button>
-      <button class="ghost newbtn" id="pubNow" title="Записать текущие подборки в базу">☁ опубликовать</button>
+    <div class="pubbar" id="cloudBar" style="padding:9px 11px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px">
+      <span class="syncstat ${_dirty?'warn':'ok'}" id="syncStat" style="flex:1 1 140px;min-width:0">${_dirty?'✎ Есть неопубликованные правки':'☁ Всё записано в БД'}</span>
+      <button class="ghost newbtn" id="pubRevert" style="flex:0 0 auto" title="Загрузить подборки из базы и отменить всё неопубликованное">↺ Вернуть</button>
+      <button class="ghost newbtn" id="pubNow" style="flex:0 0 auto" title="Записать текущие подборки в базу">☁ Опубликовать</button>
     </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
@@ -1574,7 +1604,8 @@ function readCol(){if(!$('col-name'))return;const c=activeCol();
   c.cover=$('col-cover').value.trim();c.host=$('col-host').value.trim();c.hero=$('col-hero').value.trim();
   if($('col-format'))c.format=$('col-format').value;
   if($('col-gate'))c.gate=$('col-gate').value;
-  if($('col-price'))c.price=Math.max(0,parseInt($('col-price').value,10)||0);   // lives on the collection so it is saved, dirty-tracked and published like any other field
+  if($('col-price')){const v=Math.max(0,parseInt($('col-price').value,10)||0),srv=((PAYWALL[c.id]||{}).priceRub)|0;
+    if(v!==srv)PRICE_LOCAL[c.id]=v;else delete PRICE_LOCAL[c.id];}   // only a real difference from the DB is an unpublished edit — equal value leaves no phantom dirty
   c.intro={title:$('ci-title').value.trim(),text:$('ci-text').value.trim(),video:{url:$('ci-vurl').value.trim()},vStart:mmss2sec($('ci-vstart').value),vEnd:mmss2sec($('ci-vend').value),channel:c.name};}
 const TL_CHOICES=[['fold','Фолд'],['check','Чек'],['call','Колл'],['raise','Рейз']];
 function blankHand(){return {players:8,heroPos:'BTN',heroCards:['',''],cards:{},stacks:{},profiles:{},board:['','','','',''],video:{url:''},channel:'PokerLab',actions:[],curQ:0,editIndex:null,unit:(F&&F.unit)||'bb',bbChips:(F&&F.bbChips)||''};}
@@ -1869,12 +1900,20 @@ function wireForm(){
     readForm();if(!_dirty&&pubStr()===_syncedStr){toast('Нечего публиковать — всё уже в БД');return;}
     updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);toast('Опубликовано ✓');}
     updSync(ok?'cloud':'error');buildForm();};
-  // escape hatch: throw away whatever is unpublished in this browser and take the DB as it stands
+  // escape hatch: throw away whatever is unpublished in this browser and take the DB as it stands.
+  // Can't go through syncPacks() — it refuses to rebuild COLS while the editor is open (so an idle sync never
+  // clobbers an in-progress edit). Revert is the one moment that clobber is the whole point, so adopt directly.
   if($('pubRevert'))$('pubRevert').onclick=async()=>{
     if(!confirm('Отменить все неопубликованные правки и загрузить подборки из базы?\n\nТо, что уже опубликовано, не пострадает.'))return;
-    _dirty=false;_syncedStr='';_syncedSig='';_syncedMap={};                 // drop the local baseline so syncPacks takes the cloud unconditionally
-    try{await syncPacks();await refreshOwned();}catch(e){}
-    F=blankHand();buildForm();renderSet();toast('Загружено из базы');};
+    updSync('saving');
+    try{const pub=await loadPublished();
+      if(!pub||!pub.cols||!pub.cols.length){toast('База недоступна — правки не тронуты',1);updSync('error');return;}
+      if(pub.meta)PAYWALL=pub.meta;
+      adoptFromCloud(pub.cols);                    // COLS := cloud (keeps personal «Мой набор»)
+      await refreshOwned();                        // re-read entitlements + fold the paid half back in
+      setSyncBaseline(pub.sig);persist(true);      // clean baseline: nothing is unpublished anymore
+      F=blankHand();buildForm();renderSet();updSync('cloud');toast('Загружено из базы');
+    }catch(e){toast('Не вышло загрузить из базы',1);updSync('error');}};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
   if($('col-hide'))$('col-hide').onclick=()=>{readForm();activeCol().hidden=!activeCol().hidden;buildForm();persist();toast(activeCol().hidden?'Набор скрыт из библиотеки':'Набор снова в библиотеке');};
   // bulk helper for the common "first N free, rest paid" shape — it just stamps the per-hand flag
@@ -2086,13 +2125,15 @@ let _persistT;
 let _dirty=false,_syncedStr='';
 function pubCols(){return COLS.filter(c=>c&&c.id!=='mine');}   // packs that belong in the cloud
 function pubStr(){try{return JSON.stringify(pubCols());}catch(e){return '';}}
+function priceDirty(){return Object.keys(PRICE_LOCAL).length>0;}   // a price edit is dirty even when nothing in COLS changed
 function persist(clean){
   const ps=pubStr();
-  if(clean===true){_dirty=false;_syncedStr=ps;}else _dirty=(ps!==_syncedStr);
+  if(clean===true){_dirty=false;_syncedStr=ps;}else _dirty=(ps!==_syncedStr)||priceDirty();
   // COLS goes to disk as-is, paid marks included: an unpublished «сделать платной» must survive a reload.
   // Sign-out still clears them — refreshOwned() re-runs mergeLockedIntoCols(), which drops the fold-in, and the
   // next persist() writes the stripped set. v:LS_V lets restore() spot and heal saves from before the incident.
-  try{localStorage.setItem(LS_KEY,JSON.stringify({v:LS_V,cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty,sig:_syncedSig}));}catch(e){}
+  // PRICE_LOCAL rides along too — a price set but not published must survive a reload (it used to reset to 0).
+  try{localStorage.setItem(LS_KEY,JSON.stringify({v:LS_V,cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty,sig:_syncedSig,price:PRICE_LOCAL}));}catch(e){}
   if(clean!==true&&_dirty)schedulePublish();
 }
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(()=>persist(),400);}
@@ -2122,12 +2163,13 @@ let PAYWALL={},          // slug -> {paid,freeHands,priceRub,handsTotal} — fro
     OWNED={},            // slug -> true, this account's entitlements
     LOCKED={};           // slug -> [{idx,hand}] — paid hands this account is allowed to read
 function paywallOf(id){return PAYWALL[id]||null;}
-// the editor's own value wins while it is unpublished; otherwise the pack row's column is the truth
-function colPrice(id){const c=findCol(id);return (c&&c.price!=null)?(c.price|0):(((PAYWALL[id]||{}).priceRub)|0);}
+// an unpublished edit wins; otherwise the pack row's price_rub column is the truth
+function colPrice(id){return (PRICE_LOCAL[id]!=null)?(PRICE_LOCAL[id]|0):(((PAYWALL[id]||{}).priceRub)|0);}
 function ownsPack(id){return !!OWNED[id]||isAdmin();}          // admin reads every locked hand by policy
 // splice owned paid hands back to the exact slot they had before the split (idx is 1-based over the ORIGINAL
 // array, hidden hands included) — ascending order restores the original sequence
 let _colsMerged=false;                                         // admin only: COLS already holds the paid hands, each marked {paid:true}
+let PRICE_LOCAL={};                                            // slug -> price edited in the editor but NOT yet published (kept out of COLS so opening the editor never fakes a dirty state)
 function spliceLocked(base,L){const a=base.slice();
   L.slice().sort((x,y)=>x.idx-y.idx).forEach(x=>{const at=Math.max(0,Math.min(x.idx-1,a.length));a.splice(at,0,x.hand);});return a;}
 function fullHands(c){if(!c)return [];if(_colsMerged)return c.hands;   // merged already: splicing again would duplicate
@@ -2178,7 +2220,7 @@ async function loadLocked(){
 }
 function colsMap(cols){const m={};(cols||[]).forEach((c,i)=>{if(c&&c.id)m[c.id]=i+''+JSON.stringify(c);});return m;}   // slug -> position+content, for per-pack change detection
 let _syncedMap={},_syncedSig='';                                    // the cloud baseline this browser matches: per-pack map + a slug:version signature
-function setSyncBaseline(sig){_syncedStr=pubStr();_syncedMap=colsMap(pubCols());if(sig!=null)_syncedSig=sig;_dirty=false;}
+function setSyncBaseline(sig){_syncedStr=pubStr();_syncedMap=colsMap(pubCols());if(sig!=null)_syncedSig=sig;PRICE_LOCAL={};_dirty=false;}   // baseline == cloud, so no price edit is pending anymore
 // status that survives a buildForm() re-render (toasts vanish in 2s; the panel keeps the last result)
 function pubSay(msg,err){lastPub=msg;lastPubOk=!err;toast(msg,err?1:0);const m=document.getElementById('pubMsg');if(m){m.style.display='block';m.textContent=msg;m.className='pubmsg '+(err?'bad':'ok');}}
 // take a plain cols array (from the cloud) and make it a live, migrated COLS
@@ -2227,7 +2269,7 @@ async function publishPacks(auto){
   const cols=pubCols();
   if(!cols.length){if(!auto)pubSay('Пусто — публиковать нечего',1);return false;}   // guard: never wipe the whole set
   const cur=colsMap(cols);
-  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id])changed.push({slug:p.id,position:i,data:p});});   // price lives on the collection, so colsMap() already sees a price-only edit
+  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id]||PRICE_LOCAL[p.id]!=null)changed.push({slug:p.id,position:i,data:p});});   // price is tracked apart from colsMap, so a price-only edit must be caught here too
   const deleted=Object.keys(_syncedMap).filter(s=>!(s in cur));
   try{
     // One RPC per changed pack: the server splits hands marked {paid:true} into pack_locked and keeps the
@@ -2242,6 +2284,7 @@ async function publishPacks(auto){
         }else{throw new Error('Публикация «'+ch.slug+'» отменена — платные раздачи не тронуты');}
       }
       if(error)throw error;
+      delete PRICE_LOCAL[ch.slug];                 // published → the DB column is now the truth again
     }
     for(const s of deleted){const {error}=await c.from('pack').delete().eq('slug',s);if(error)throw error;}
     try{await loadLocked();mergeLockedIntoCols();}catch(e){}                 // the split moved hands between tables — resync what we hold
@@ -2259,7 +2302,8 @@ function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');
   // One-shot heal for saves written before LS_V (the pack_locked duplication incident, 2026-07-24): drop every
   // folded-in paid hand and force this browser to take the cloud, so a stale local copy can't be republished.
   const staleLS=(s.v|0)<LS_V;
-  if(staleLS){COLS.forEach(c=>{if(c&&Array.isArray(c.hands))c.hands=c.hands.filter(h=>!(h&&h.paid));});s.dirty=false;}
+  if(staleLS){COLS.forEach(c=>{if(c&&Array.isArray(c.hands))c.hands=c.hands.filter(h=>!(h&&h.paid));});s.dirty=false;s.price={};}
+  PRICE_LOCAL=(s.price&&typeof s.price==='object')?s.price:{};   // unpublished price edits, restored so they don't reset to 0 on reload
   COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';if(c.id==='mine'&&c.hidden===undefined)c.hidden=true;c.hands.forEach(migrateCards);});   // migrate old saves: default 'Мой набор' to hidden (undefined only — respect an explicit unhide)
   curCol=(typeof s.curCol==='number'&&s.curCol>=0&&s.curCol<COLS.length)?s.curCol:COLS.length-1;useCol(curCol);
   if(s.draft&&Array.isArray(s.draft.actions)){F=s.draft;migrateCards(F);}
@@ -2352,7 +2396,7 @@ async function initAuth(){
   _authReady=true;                                            // session resolved (or errored) → admin identity is now known
   renderAuth();if(CURUSER)flushAttempts();try{syncPacks();}catch(e){}   // re-sync: a non-admin's stale 'dirty' packs now get overwritten by the cloud instead of shadowing it
   refreshOwned();
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();}try{syncPacks();}catch(e){}refreshOwned();});}catch(e){}
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();}try{syncPacks();}catch(e){}refreshOwned().then(()=>{try{consumeResume();}catch(e){}});});}catch(e){}
 }
 // entitlements + the paid hands they unlock, re-read on every auth change (sign-out must re-lock immediately)
 async function refreshOwned(){

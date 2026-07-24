@@ -106,7 +106,9 @@ console.log('== pack card ==');
   ok('card counts the locked tail', /\+1 огранич\./.test(card));
   ev("PAYWALL={};");
   const plain=ev(`packCardHTML({id:${J},emoji:'A',title:'T',accent:'#000',gate:'free'})`);
-  ok('free pack card stays clean', !/pbadge/.test(plain)&&!/платн\./.test(plain));
+  ok('free pack card gets a «Free» badge', /pbadge free/.test(plain)&&/Free/.test(plain)&&!/платн\./.test(plain));
+  const mineCard=ev("packCardHTML({id:'mine',emoji:'A',title:'Мой',accent:'#000',gate:'free',isUser:true})");
+  ok('«Мой набор» is never badged Free', !/pbadge/.test(mineCard));
 }
 
 console.log('== fully-paid pack stays reachable ==');
@@ -138,7 +140,11 @@ console.log('== editor: per-hand paid flag, server-side split on publish ==');
   ok('the data-loss guard is surfaced, not swallowed', /refusing to drop all/i.test(html)&&/p_force:true/.test(html));
   // price used to live in a side map that persist() never saved and _dirty never noticed, so it silently
   // reverted on reload and a price-only edit was never published
-  ok('price is stored on the collection',      /if\(\$\('col-price'\)\)c\.price=Math\.max\(0,parseInt/.test(html)&&!/PRICE_LOCAL/.test(html));
+  // price lives in PRICE_LOCAL (out of COLS, so opening the editor never fakes dirty), but — unlike the first
+  // attempt — it is now persisted to localStorage and counted in _dirty, so it survives reload and publishes
+  ok('a price edit is tracked apart from COLS', /PRICE_LOCAL\[c\.id\]=v;else delete PRICE_LOCAL\[c\.id\]/.test(html));
+  ok('unpublished price is persisted',         /price:PRICE_LOCAL/.test(html)&&/PRICE_LOCAL=\(s\.price/.test(html));
+  ok('a price-only edit counts as dirty',      /priceDirty\(\)/.test(html));
   ok('publish sends the edited price',         /p_price:colPrice\(ch\.slug\)/.test(html));
   ok('publishing is explicit, not debounced',  /function schedulePublish\(\)\{updSync\(CURUSER\?'pending':'unpushed'\);\}/.test(html)&&/id="pubNow"/.test(html)&&/id="pubRevert"/.test(html));
   ok('the felt decoration cannot eat gate clicks', /\.table::after\{[^}]*pointer-events:none/.test(html));

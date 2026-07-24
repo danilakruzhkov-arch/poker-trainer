@@ -15,7 +15,7 @@ console.log('== static wiring ==');
   ok('allPacks exposes gate', /gate:c\.gate\|\|'free'/.test(html));
   ok('editor has a gate <select>', /id="col-gate"/.test(html)&&/Только по входу/.test(html));   // the 'pro' option is gone: paid is a real per-hand split now, not a placeholder
   ok('readCol persists gate', /if\(\$\('col-gate'\)\)c\.gate=\$\('col-gate'\)\.value;/.test(html));
-  ok('sign-in re-reveals gated hand after login', /if\(CURUSER\)\{flushAttempts\(\);\}try\{syncPacks\(\);\}catch\(e\)\{\}refreshOwned\(\);/.test(html)&&/refreshGate\(\);\n\}/.test(html.replace(/\r/g,'')));   // refreshOwned() re-reads entitlements, then calls refreshGate()
+  ok('sign-in re-reveals gated hand after login', /if\(CURUSER\)\{flushAttempts\(\);\}try\{syncPacks\(\);\}catch\(e\)\{\}refreshOwned\(\)\.then\(\(\)=>\{try\{consumeResume\(\);\}catch\(e\)\{\}\}\);/.test(html)&&/refreshGate\(\);\n\}/.test(html.replace(/\r/g,'')));   // refreshOwned() re-reads entitlements + resumes the wall, then refreshGate()
   ok('pubCols keeps whole collection (gate round-trips)', /function pubCols\(\)\{return COLS\.filter\(c=>c&&c\.id!=='mine'\);\}/.test(html));
 }
 
@@ -65,7 +65,7 @@ console.log('== pack-card badges ==');
   const card=g=>ev(`packCardHTML({id:'zzz',gate:${JSON.stringify(g)},emoji:'A',title:'T',accent:'#000'})`);
   ok('login pack card shows «вход» badge', /pbadge/.test(card('login'))&&/вход/.test(card('login')));
   ok('pro pack card shows «PRO» badge', /pbadge pro/.test(card('pro'))&&/PRO/.test(card('pro')));
-  ok('free pack card has no badge', !/pbadge/.test(card('free')));
+  ok('free pack card shows «Free» badge', /pbadge free/.test(card('free'))&&/Free/.test(card('free')));
 }
 
 console.log('\n'+pass+' passed, '+fail+' failed');
