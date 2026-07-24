@@ -12,7 +12,9 @@ ok('no admin123 literal anywhere',     !/admin123/.test(html));
 ok('authGate modal removed',           !/id="authGate"/.test(html));
 ok('editor tab hidden by default',     /id="tab-admin" style="display:none"/.test(html));
 ok('tab bar hidden by default',        /<div class="tabs" id="tabsBar" style="display:none">/.test(html));
-ok('openEditor guards on isAdmin',     /function openEditor\(\)\{if\(!isAdmin\(\)\)/.test(html));
+ok('openEditor guards on canEdit',     /function openEditor\(\)\{if\(!canEdit\(\)\)/.test(html));   // canEdit = admin OR editor role (P1б)
+ok('editor role gated on the DB, with fallback', /let MYROLE='player',_rolesReady=false;/.test(html)&&/function canEdit\(\)\{return isAdmin\(\)\|\|\(_rolesReady&&MYROLE==='editor'\)/.test(html));
+ok('moderation tab + gate present',    /id="tab-mod"/.test(html)&&/function canModerate\(\)\{return _rolesReady&&\(isAdmin\(\)\|\|MYROLE==='editor'\)/.test(html));
 ok('renderAuth reconciles admin tab',  /function renderAuth\(\)\{\s*renderAdminAccess\(\)/.test(html));
 ok('no gh-token UI/handlers remain',   !/id="gh-token"|\$\('gh-save'\)|\$\('gh-clear'\)/.test(html));
 

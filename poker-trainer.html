@@ -475,6 +475,25 @@
   .syncstat.dim{color:var(--muted);background:rgba(127,127,127,.08);border:1px solid var(--stroke)}
   .syncstat.warn{color:#e8c37a;background:rgba(220,170,70,.12);border:1px solid rgba(220,170,70,.38)}
   .syncstat.bad{color:#f0a6a4;background:rgba(226,80,78,.12);border:1px solid rgba(226,80,78,.4)}
+  /* moderation screen */
+  .modwrap{background:var(--chip);border:1px solid var(--stroke);border-radius:16px;padding:14px 14px 16px}
+  .modhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .modttl{font-size:16px;font-weight:800;color:var(--text)}
+  .modtools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .modchk{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+  .modchk input{accent-color:var(--brass);width:15px;height:15px;cursor:pointer}
+  #modList{display:flex;flex-direction:column;gap:9px}
+  .modcard{border:1px solid var(--stroke);border-radius:12px;padding:10px 12px;background:var(--field)}
+  .modcard.done{opacity:.55}
+  .modtop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+  .modcat{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#e8c37a;background:rgba(220,170,70,.12);border:1px solid rgba(220,170,70,.34);border-radius:999px;padding:2px 8px}
+  .modwhen{font-size:11px;color:var(--muted);margin-left:auto}
+  .modloc{font-size:13px;font-weight:700;color:var(--text);line-height:1.35}
+  .modpick{margin-top:2px}
+  .modcmt{margin-top:6px;font-size:13px;color:var(--text);line-height:1.45;white-space:pre-wrap}
+  .modact{margin-top:9px}
+  .modresolve{font-size:12px;padding:6px 12px}
+  .moddone{font-size:12px;font-weight:700;color:#8fe0b3}
   .col-disp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
   .col-disp .fld.full{grid-column:1/-1}
   .col-intro{margin-top:10px;border-top:1px dashed var(--stroke);padding-top:10px}
@@ -546,6 +565,7 @@
   <div class="tabs" id="tabsBar" style="display:none">
     <button class="tab on" id="tab-train"><span class="em">🎮</span> Тренажёр</button>
     <button class="tab" id="tab-admin" style="display:none"><span class="em">⚙️</span> Редактор раздач</button>
+    <button class="tab" id="tab-mod" style="display:none"><span class="em">🛡</span> Модерация</button>
   </div>
   <div id="view-train">
     <div id="homeScreen"></div>
@@ -588,6 +608,18 @@
         <div class="pv-note" style="text-align:left">Название, теги, заставка и вступление подборки настраиваются в блоке 0 слева. Раздачи и черновик автосохраняются в этом браузере (localStorage). «Скопировать JSON» — бэкап и перенос: делай периодически, localStorage слетит при чистке кэша или смене браузера.</div>
         <div id="importBox" style="display:none"><div class="mini" style="margin-bottom:6px">Вставь <b>историю раздач</b> (PokerStars / GGPoker / ПокерОК — текстовый экспорт) или <b>JSON</b> набора. История добавится к набору со стеками и полным порядком ходов — потом открываешь раздачу и отмечаешь шаги‑вопросы.</div><textarea id="importArea" placeholder="PokerStars Hand #… (или GGPoker) — можно несколько раздач подряд. Либо JSON набора."></textarea><button class="ghost" id="importBtn" style="width:100%;margin-top:6px">Импортировать</button></div>
       </div></div>
+    </div>
+  </div>
+  <div id="view-mod" style="display:none">
+    <div class="modwrap">
+      <div class="modhead">
+        <div><div class="modttl">Модерация отзывов</div><div class="mini" id="modSub">Жалобы и оценки игроков из тренажёра</div></div>
+        <div class="modtools">
+          <label class="modchk"><input type="checkbox" id="modUnresolved" checked> только необработанные</label>
+          <button class="ghost" id="modRefresh">Обновить</button>
+        </div>
+      </div>
+      <div id="modList"><div class="mini">Загрузка…</div></div>
     </div>
   </div>
 </div>
@@ -1138,7 +1170,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.28';
+const APP_VER='2026-07-24.29';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1896,7 +1928,7 @@ function wireForm(){
     const txt=JSON.stringify(q,null,2);try{await navigator.clipboard.writeText(txt);toast('Скопировано: '+q.length+' отз.');}catch(e){toast('Не удалось скопировать',1);}};
   if($('fb-flush'))$('fb-flush').onclick=async()=>{if(!supaEnabled()){toast('Сначала подключи базу',1);return;}const ok=await flushFbQueue();toast(ok?'Отправлено в базу ✓':'Не удалось отправить',ok?0:1);buildForm();};
   if($('fb-clearq'))$('fb-clearq').onclick=()=>{if(confirm('Удалить локальную очередь отзывов? Это не затронет уже отправленные в базу.')){fbQueueSet([]);toast('Очередь очищена');buildForm();}};
-  if($('pubNow'))$('pubNow').onclick=async()=>{if(!isAdmin()){toast('Публиковать может только админ',1);return;}
+  if($('pubNow'))$('pubNow').onclick=async()=>{if(!canEdit()){toast('Публиковать могут админ и редакторы',1);return;}
     readForm();if(!_dirty&&pubStr()===_syncedStr){toast('Нечего публиковать — всё уже в БД');return;}
     updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);toast('Опубликовано ✓');}
     updSync(ok?'cloud':'error');buildForm();};
@@ -2335,22 +2367,50 @@ function initAdmin(){
       _ui.collapsed[key]=!_ui.collapsed[key];sec.classList.toggle('collapsed',!!_ui.collapsed[key]);saveUI();});}
   document.querySelectorAll('#view-admin [data-sec]').forEach(sec=>sec.classList.toggle('collapsed',!!_ui.collapsed[sec.getAttribute('data-sec')]));
 }
-function switchView(v){const train=v==='train';stopVideos();$('view-train').style.display=train?'block':'none';$('view-admin').style.display=train?'none':'block';$('tab-train').classList.toggle('on',train);$('tab-admin').classList.toggle('on',!train);$('wrap').classList.toggle('wide',!train);}
+function switchView(v){stopVideos();
+  const show={train:v==='train',admin:v==='admin',mod:v==='mod'};
+  $('view-train').style.display=show.train?'block':'none';
+  $('view-admin').style.display=show.admin?'block':'none';
+  if($('view-mod'))$('view-mod').style.display=show.mod?'block':'none';
+  $('tab-train').classList.toggle('on',show.train);$('tab-admin').classList.toggle('on',show.admin);
+  if($('tab-mod'))$('tab-mod').classList.toggle('on',show.mod);
+  $('wrap').classList.toggle('wide',!show.train);
+  if(show.mod)renderModeration();}
 // editor is admin-only: the «Редактор раздач» tab shows only when an admin email is signed in (Supabase RLS is the real lock on writes). No password.
-function openEditor(){if(!isAdmin()){toast('Редактор — только для админа. Войди через Google (вверху справа).',1);return;}switchView('admin');}
+function openEditor(){if(!canEdit()){toast('Редактор — для админа и редакторов. Войди через Google (вверху справа).',1);return;}switchView('admin');}
 if($('statClose'))$('statClose').onclick=()=>$('statsGate').classList.remove('show');
 if($('statsGate'))$('statsGate').onclick=e=>{if(e.target.id==='statsGate')$('statsGate').classList.remove('show');};
 $('tab-train').onclick=()=>{if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('train'));else switchView('train');};$('tab-admin').onclick=openEditor;
+if($('tab-mod'))$('tab-mod').onclick=()=>{if(!canModerate()){toast('Модерация — для админа и редакторов',1);return;}
+  if($('view-admin').style.display!=='none')guardUnsaved(()=>switchView('mod'));else switchView('mod');};
+if($('modRefresh'))$('modRefresh').onclick=renderModeration;
+if($('modUnresolved'))$('modUnresolved').onchange=renderModeration;
 $('toHome').onclick=showHome;   // «Автовидео» is no longer in the back row — it lives under the video on the review sheet + intro, wired on render
 // ---- auth: Google sign-in via Supabase (SDK loaded on demand, so the base app stays dependency-free) ----
 let CURUSER=null,_sb=null,_authReady=false;   // _authReady: true once auth has settled (session known, or SDK/login unavailable) → sync may then let the cloud win for non-admins
 // editor access = admin identity. Keep this list in sync with the packs RLS policy in Supabase (same emails).
 const ADMIN_EMAILS=['danilakruzhkov@gmail.com','daanilka@gmail.com'];
 function isAdmin(){return !!(CURUSER&&CURUSER.email&&ADMIN_EMAILS.indexOf(String(CURUSER.email).toLowerCase())>=0);}
-function renderAdminAccess(){const admin=isAdmin();
-  const t=$('tab-admin');if(t)t.style.display=admin?'':'none';
-  const tb=$('tabsBar');if(tb)tb.style.display=admin?'':'none';   // hide the whole tab bar for viewers (a lone «Тренажёр» tab is pointless); show it only when there's an editor tab to switch to
-  if(!admin&&$('view-admin')&&$('view-admin').style.display!=='none')switchView('train');   // session dropped while in editor → back to trainer
+// Roles (P1б): 'admin' (2 Данила-почты, hardcoded) | 'editor' (public.app_editor, DB) | 'player'. The editor role
+// and the moderation screen only light up once the DB migration (supabase-roles-moderation.sql) is applied and
+// my_role() answers — until then _rolesReady stays false and the app behaves exactly like the admin-only build.
+let MYROLE='player',_rolesReady=false;
+async function fetchRole(){
+  _rolesReady=false;MYROLE=isAdmin()?'admin':'player';                 // safe fallback while the RPC is missing
+  if(!CURUSER)return;
+  try{await loadSupaSDK();const c=authClient();if(!c)return;
+    const {data,error}=await c.rpc('my_role');
+    if(!error&&typeof data==='string'){MYROLE=data;_rolesReady=true;}   // migration live: trust the server's answer
+  }catch(e){}
+}
+function canEdit(){return isAdmin()||(_rolesReady&&MYROLE==='editor');}          // may create/edit/publish packs
+function canModerate(){return _rolesReady&&(isAdmin()||MYROLE==='editor');}      // may read/resolve feedback (needs the migration's RLS)
+function renderAdminAccess(){const ed=canEdit();
+  const t=$('tab-admin');if(t)t.style.display=ed?'':'none';
+  const tm=$('tab-mod');if(tm)tm.style.display=canModerate()?'':'none';
+  const tb=$('tabsBar');if(tb)tb.style.display=ed?'':'none';   // hide the whole tab bar for viewers (a lone «Тренажёр» tab is pointless); show it only when there's an editor tab to switch to
+  if(!ed&&$('view-admin')&&$('view-admin').style.display!=='none')switchView('train');   // session dropped while in editor → back to trainer
+  if(!canModerate()&&$('view-mod')&&$('view-mod').style.display!=='none')switchView('train');
 }
 function loadSupaSDK(){return new Promise(res=>{
   if(window.supabase)return res(window.supabase);
@@ -2386,7 +2446,54 @@ async function authSignIn(){
 }
 async function authSignOut(){
   const c=authClient();if(c){try{await c.auth.signOut();}catch(e){}}
-  CURUSER=null;renderAuth();toast('Вы вышли');
+  CURUSER=null;MYROLE='player';_rolesReady=false;renderAuth();toast('Вы вышли');
+}
+// ---- moderation screen (P1б): read + resolve feedback with the moderator's JWT (RLS gates to editors) ----
+const GRADE_RU={best:'верно',ok:'погранично',mistake:'ошибка'};
+async function renderModeration(){
+  const box=$('modList');if(!box)return;
+  if(!canModerate()){box.innerHTML='<div class="mini">Модерация доступна админу и редакторам. Если ты редактор, но пусто — вероятно, ещё не применена миграция ролей в базе.</div>';return;}
+  box.innerHTML='<div class="mini">Загрузка…</div>';
+  const tok=await authToken();if(!tok){box.innerHTML='<div class="mini">Нет сессии — войди заново.</div>';return;}
+  const onlyUnres=$('modUnresolved')&&$('modUnresolved').checked;
+  const q='/rest/v1/feedback?select=*&order=created_at.desc&limit=300'+(onlyUnres?'&resolved=is.false':'');
+  let rows;
+  try{const r=await fetch(SUPA_URL+q,{headers:{apikey:SUPA_ANON,Authorization:'Bearer '+tok},cache:'no-store'});
+    if(r.status===401||r.status===403){box.innerHTML='<div class="mini">Нет доступа к отзывам. Похоже, миграция ролей ещё не применена в базе (supabase-roles-moderation.sql).</div>';return;}
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    rows=await r.json();
+  }catch(e){box.innerHTML='<div class="mini">Не удалось загрузить отзывы: '+esc((e&&e.message)||'ошибка')+'</div>';return;}
+  if(!Array.isArray(rows)||!rows.length){box.innerHTML='<div class="mini">'+(onlyUnres?'Необработанных отзывов нет.':'Отзывов пока нет.')+'</div>';return;}
+  if($('modSub'))$('modSub').textContent=rows.length+(onlyUnres?' необработанных':' всего')+' · жалобы и оценки из тренажёра';
+  box.innerHTML=rows.map(f=>{
+    const when=f.created_at?new Date(f.created_at).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+    const loc=[f.pack_title||f.pack,f.hand,f.street].filter(Boolean).map(esc).join(' · ');
+    const qn=(f.q_index!=null&&f.q_total!=null)?`вопрос ${(f.q_index|0)+1}/${f.q_total}`:'';
+    const pick=f.pick_label?`выбор: <b>${esc(f.pick_label)}</b>${f.pick_grade?` (${GRADE_RU[f.pick_grade]||esc(f.pick_grade)})`:''}`:'';
+    const cat=f.category?`<span class="modcat">${esc(f.category)}</span>`:'';
+    const cmt=f.comment?`<div class="modcmt">${esc(f.comment)}</div>`:'<div class="modcmt mini">без комментария</div>';
+    return `<div class="modcard ${f.resolved?'done':''}">
+      <div class="modtop">${cat}<span class="modwhen">${when}${f.app_ver?' · v'+esc(f.app_ver):''}</span></div>
+      <div class="modloc">${loc||'—'}${qn?` · ${qn}`:''}</div>
+      ${pick?`<div class="modpick mini">${pick}</div>`:''}
+      ${cmt}
+      <div class="modact">${f.resolved
+        ? `<span class="moddone">✓ обработано${f.resolved_by?' · '+esc(f.resolved_by):''}</span>`
+        : `<button class="ghost modresolve" data-fid="${esc(f.id)}">Пометить обработанным</button>`}</div>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('.modresolve').forEach(b=>b.onclick=()=>resolveFeedback(b.getAttribute('data-fid'),b));
+}
+async function resolveFeedback(id,btn){
+  if(!id||!canModerate())return;
+  if(btn){btn.disabled=true;btn.textContent='…';}
+  const tok=await authToken();if(!tok){toast('Нет сессии',1);if(btn){btn.disabled=false;btn.textContent='Пометить обработанным';}return;}
+  try{const r=await fetch(SUPA_URL+'/rest/v1/feedback?id=eq.'+encodeURIComponent(id),{
+      method:'PATCH',headers:{apikey:SUPA_ANON,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'return=minimal'},
+      body:JSON.stringify({resolved:true,resolved_by:(CURUSER&&CURUSER.email)||MYROLE,resolved_at:new Date().toISOString()})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    toast('Отмечено обработанным');renderModeration();
+  }catch(e){toast('Не вышло: '+((e&&e.message)||'ошибка'),1);if(btn){btn.disabled=false;btn.textContent='Пометить обработанным';}}
 }
 async function initAuth(){
   await loadSupaSDK();
@@ -2395,8 +2502,8 @@ async function initAuth(){
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
   _authReady=true;                                            // session resolved (or errored) → admin identity is now known
   renderAuth();if(CURUSER)flushAttempts();try{syncPacks();}catch(e){}   // re-sync: a non-admin's stale 'dirty' packs now get overwritten by the cloud instead of shadowing it
-  refreshOwned();
-  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();}try{syncPacks();}catch(e){}refreshOwned().then(()=>{try{consumeResume();}catch(e){}});});}catch(e){}
+  refreshOwned();fetchRole().then(renderAdminAccess);        // resolve editor/moderator role, then re-show the tabs it unlocks
+  try{c.auth.onAuthStateChange((_ev,session)=>{CURUSER=(session&&session.user)||null;_authReady=true;renderAuth();if(CURUSER){flushAttempts();}try{syncPacks();}catch(e){}refreshOwned().then(()=>{try{consumeResume();}catch(e){}});fetchRole().then(renderAdminAccess);});}catch(e){}
 }
 // entitlements + the paid hands they unlock, re-read on every auth change (sign-out must re-lock immediately)
 async function refreshOwned(){
