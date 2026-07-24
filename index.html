@@ -1470,13 +1470,14 @@ function showPaywall(id,n){
   clearReplay();stopVideos();
   $('pips').innerHTML='';$('stepband').innerHTML='';const al=$('alog');if(al){al.style.display='none';al.innerHTML='';}
   const m=paywallOf(id)||{},total=m.handsTotal|0,price=m.priceRub|0,free=Math.max(0,total-n);
+  const hw=k=>{const a=k%10,b=k%100;return (a===1&&b!==11)?'раздача':((a>=2&&a<=4)&&(b<10||b>=20))?'раздачи':'раздач';};
   const sub=CURUSER
-    ?`Сыграно ${free} из ${total} раздач. Оставшиеся ${n} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`
-    :`Сыграно ${free} из ${total} раздач. Оставшиеся ${n} — платная часть за ${price} ₽. Покупка привязывается к аккаунту, поэтому сначала вход.`;
+    ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`
+    :`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть за ${price} ₽. Покупка привязывается к аккаунту, поэтому сначала вход.`;
   $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">Дальше — платная часть</div><div class="gate-s">${sub}</div>`+
     (CURUSER?`<button class="gate-btn" id="payBtn"><span>Разблокировать за ${price} ₽</span></button>`
             :`<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`)+
-    `<button class="gate-btn ghost" id="paySkip" style="margin-top:8px"><span>Показать результат</span></button>`+
+    `<button class="gate-btn" id="paySkip" style="margin-top:8px;background:transparent;border:1px solid rgba(201,162,39,.45);color:#c9a227;box-shadow:none"><span>Показать результат</span></button>`+
     `<div class="gate-foot">Бесплатные раздачи остаются открытыми всегда.</div></div>`;
   $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
   const inb=$('gateIn');if(inb)inb.onclick=authSignIn;
