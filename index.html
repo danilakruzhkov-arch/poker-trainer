@@ -1180,7 +1180,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.29';
+const APP_VER='2026-07-24.30';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1195,6 +1195,7 @@ const SUPA_URL='https://mydnywznytluikbwbhsk.supabase.co';
 const SUPA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZG55d3pueXRsdWlrYndiaHNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2NzYyMjUsImV4cCI6MjEwMDI1MjIyNX0.jMzRxcToJg-j6nS_HO01C70zC_8UpM-tjOlYPPd3BuA';
 function supaCfg(){return (SUPA_URL&&SUPA_ANON)?{url:SUPA_URL,key:SUPA_ANON}:null;}
 function supaEnabled(){return !!(SUPA_URL&&SUPA_ANON);}
+const EDGE_BASE=SUPA_URL+'/functions/v1';   // Supabase Edge Functions (Telegram Mini App: tg-auth/tg-invoice/tg-webhook)
 async function supaInsert(table,rows){const c=supaCfg();if(!c||!c.url||!c.key)return {ok:false,status:0};
   try{const r=await fetch(c.url+'/rest/v1/'+table,{method:'POST',headers:{'Content-Type':'application/json','apikey':c.key,'Authorization':'Bearer '+c.key,'Prefer':'return=minimal'},body:JSON.stringify(rows)});
     return {ok:r.ok,status:r.status};}catch(e){return {ok:false,status:0,err:String(e)};}}
@@ -1556,7 +1557,7 @@ function showPaywall(id,n){
     `<div class="gate-foot">Бесплатные раздачи остаются открытыми всегда.</div></div>`;
   $('who').textContent='';$('ctx').textContent='';$('acts').innerHTML='';
   const inb=$('gateIn');if(inb)inb.onclick=()=>{armResume(id);authSignIn();};   // come back to this wall after the OAuth reload, not to the pack list
-  const pb=$('payBtn');if(pb)pb.onclick=()=>toast('Оплата ещё не подключена — доступ пока выдаётся вручную',1);
+  const pb=$('payBtn');if(pb)pb.onclick=()=>{if(inTelegramShell())tgBuy(id);else toast('Оплата пока во встроенном Telegram — открой ссылку в чате. В вебе скоро.',1);};
   const fb=$('freeBtn');if(fb)fb.onclick=()=>claimFreePack(id);
   const sk=$('paySkip');if(sk)sk.onclick=showEnd;}
 // demo unlock: the server hands out the entitlement only while the pack's price is exactly 0
@@ -2505,11 +2506,57 @@ async function resolveFeedback(id,btn){
     toast('Отмечено обработанным');renderModeration();
   }catch(e){toast('Не вышло: '+((e&&e.message)||'ошибка'),1);if(btn){btn.disabled=false;btn.textContent='Пометить обработанным';}}
 }
+/* ===== Telegram Mini App (P2.1): one-tap login via initData + Stars payments.
+   Self-activating & graceful — touches nothing outside Telegram's webview, and if the Edge
+   Functions aren't deployed yet it silently falls back to the normal Google login / manual unlock.
+   The Telegram SDK is lazy-loaded ONLY inside a Telegram shell, so web users never fetch it.
+   Server halves: deploy/edge/tg-auth|tg-invoice|tg-webhook + deploy/supabase-telegram.sql. ===== */
+function inTelegramShell(){try{return typeof window.TelegramWebviewProxy!=='undefined'||/tgWebApp/i.test(location.hash||'')||!!(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData);}catch(e){return false;}}
+let _tgSDK=null;
+function loadTgSDK(){if(_tgSDK)return _tgSDK;_tgSDK=new Promise(res=>{
+  if(window.Telegram&&window.Telegram.WebApp)return res(window.Telegram.WebApp);
+  const s=document.createElement('script');s.src='https://telegram.org/js/telegram-web-app.js';
+  s.onload=()=>res((window.Telegram&&window.Telegram.WebApp)||null);s.onerror=()=>res(null);
+  document.head.appendChild(s);});return _tgSDK;}
+async function tgWA(){if(!inTelegramShell())return null;const wa=await loadTgSDK();return (wa&&wa.initData)?wa:null;}
+function isTelegram(){const w=window.Telegram&&window.Telegram.WebApp;return !!(w&&w.initData);}
+function edgeHeaders(){return {'Content-Type':'application/json','apikey':SUPA_ANON,'Authorization':'Bearer '+SUPA_ANON};}
+// one-tap login: exchange Telegram-signed initData for a real Supabase session (tg-auth → OTP → verifyOtp)
+async function tgSignIn(){
+  const wa=await tgWA();if(!wa)return false;
+  try{wa.ready&&wa.ready();}catch(e){}try{wa.expand&&wa.expand();}catch(e){}
+  try{
+    const r=await fetch(EDGE_BASE+'/tg-auth',{method:'POST',headers:edgeHeaders(),body:JSON.stringify({initData:wa.initData})});
+    if(!r.ok)return false;const d=await r.json().catch(()=>null);
+    if(!d||(!d.otp&&!d.token_hash))return false;
+    await loadSupaSDK();const c=authClient();if(!c)return false;
+    const res=d.otp?await c.auth.verifyOtp({email:d.email,token:d.otp,type:'email'})
+                   :await c.auth.verifyOtp({token_hash:d.token_hash,type:'magiclink'});
+    if(res.error)return false;
+    CURUSER=(res.data&&res.data.user)||CURUSER;return !!CURUSER;
+  }catch(e){return false;}
+}
+// buy a pack with Stars: ask tg-invoice for an invoice link, open Telegram's native payment sheet
+async function tgBuy(id){
+  const wa=await tgWA();if(!wa){toast('Оплата — во встроенном Telegram',1);return;}
+  try{
+    const r=await fetch(EDGE_BASE+'/tg-invoice',{method:'POST',headers:edgeHeaders(),body:JSON.stringify({initData:wa.initData,pack_slug:id})});
+    const d=await r.json().catch(()=>({}));
+    if(d&&d.free){claimFreePack(id);return;}                         // price 0 → self-unlock, no Stars
+    if(d&&d.owned){await refreshOwned();toast('Пак уже открыт');refreshGate();return;}
+    if(!r.ok||!d||!d.invoice_link){toast('Не вышло создать счёт: '+((d&&d.error)||r.status),1);return;}
+    wa.openInvoice(d.invoice_link,(status)=>{                        // 'paid'|'failed'|'cancelled'|'pending'
+      if(status==='paid'){toast('Оплата прошла — открываю…');setTimeout(()=>{refreshOwned().then(()=>refreshGate());},1400);}   // webhook writes entitlement server-side; refetch after a beat
+      else if(status==='failed')toast('Оплата не прошла',1);
+    });
+  }catch(e){toast('Оплата недоступна: '+((e&&e.message)||''),1);}
+}
 async function initAuth(){
   await loadSupaSDK();
   const c=authClient();
   if(!c){const s=$('authSlot');if(s)s.innerHTML='';_authReady=true;try{syncPacks();}catch(e){}return;}   // SDK unavailable (offline / artifact mode): hide the control, but let sync adopt the cloud — a browser with no SDK can never be admin
   try{const {data}=await c.auth.getSession();CURUSER=(data&&data.session&&data.session.user)||null;}catch(e){}
+  if(!CURUSER&&inTelegramShell()){try{await tgSignIn();}catch(e){}}   // one-tap Telegram login; if the Edge Functions aren't up yet this no-ops and Google login still shows
   _authReady=true;                                            // session resolved (or errored) → admin identity is now known
   renderAuth();if(CURUSER)flushAttempts();try{syncPacks();}catch(e){}   // re-sync: a non-admin's stale 'dirty' packs now get overwritten by the cloud instead of shadowing it
   refreshOwned();fetchRole().then(renderAdminAccess);        // resolve editor/moderator role, then re-show the tabs it unlocks
