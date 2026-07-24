@@ -1170,7 +1170,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.30';
+const APP_VER='2026-07-24.31';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -2520,10 +2520,12 @@ async function tgSignIn(){
     if(!r.ok)return false;const d=await r.json().catch(()=>null);
     if(!d||(!d.otp&&!d.token_hash))return false;
     await loadSupaSDK();const c=authClient();if(!c)return false;
-    const res=d.otp?await c.auth.verifyOtp({email:d.email,token:d.otp,type:'email'})
-                   :await c.auth.verifyOtp({token_hash:d.token_hash,type:'magiclink'});
-    if(res.error)return false;
-    CURUSER=(res.data&&res.data.user)||CURUSER;return !!CURUSER;
+    // try each OTP shape supabase-js has used across versions; first success wins (no version pinning)
+    const cands=[];
+    if(d.otp)cands.push({email:d.email,token:d.otp,type:'email'});
+    if(d.token_hash){cands.push({token_hash:d.token_hash,type:'email'});cands.push({token_hash:d.token_hash,type:'magiclink'});}
+    for(const a of cands){try{const res=await c.auth.verifyOtp(a);if(res&&!res.error&&res.data&&res.data.user){CURUSER=res.data.user;return true;}}catch(e){}}
+    return false;
   }catch(e){return false;}
 }
 // buy a pack with Stars: ask tg-invoice for an invoice link, open Telegram's native payment sheet
