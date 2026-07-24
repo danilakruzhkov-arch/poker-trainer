@@ -10,11 +10,11 @@ function ok(n,c){if(c){pass++;console.log('  ok  '+n);}else{fail++;console.log('
 function boot(){const dom=new JSDOM(html,{runScripts:'dangerously',url:'https://danilakruzhkov-arch.github.io/poker-trainer/',pretendToBeVisual:true});return dom.window;}
 
 console.log('== static wiring ==');
-ok('reads the per-pack table via direct REST',      /PACK_EP=SUPA_URL\+'\/rest\/v1\/pack'/.test(html)&&/fetch\(PACK_EP\+'\?select=slug,position,data,version&order=position\.asc'/.test(html));
+ok('reads the per-pack table via direct REST',      /PACK_EP=SUPA_URL\+'\/rest\/v1\/pack'/.test(html)&&/fetch\(PACK_EP\+'\?select=slug,position,data,version,paid,free_hands,price_rub,hands_total&order=position\.asc'/.test(html));
 ok('read uses the anon apikey header',              /function packHeaders\(\)\{return \{apikey:SUPA_ANON,Authorization:'Bearer '\+SUPA_ANON\}/.test(html));
 ok('read fallback order: same-origin packs.json, then localStorage cache',/fetch\(PACKS_JSON\+'\?_='/.test(html)&&/localStorage\.getItem\(CACHE_KEY\)/.test(html)&&!/fetch\(GH_FILE/.test(html));
-ok('static fallback is same-origin + read-only (never republished)',/const PACKS_JSON='packs\.json'/.test(html)&&/return \{cols,sig,source:'static'\}/.test(html));
-ok('read caches the last good snapshot',            /localStorage\.setItem\(CACHE_KEY,JSON\.stringify\(\{cols,sig,ts:Date\.now\(\)\}\)\)/.test(html));
+ok('static fallback is same-origin + read-only (never republished)',/const PACKS_JSON='packs\.json'/.test(html)&&/return \{cols,sig,meta,source:'static'\}/.test(html));
+ok('read caches the last good snapshot',            /localStorage\.setItem\(CACHE_KEY,JSON\.stringify\(\{cols,sig,meta,ts:Date\.now\(\)\}\)\)/.test(html));
 ok('publish is a per-pack upsert by slug',          /c\.from\('pack'\)\.upsert\(changed,\{onConflict:'slug'\}\)/.test(html));
 ok('publish deletes packs removed locally',         /c\.from\('pack'\)\.delete\(\)\.eq\('slug',s\)/.test(html));
 ok('publish guards against wiping the whole set',   /if\(!cols\.length\)\{if\(!auto\)pubSay\('Пусто/.test(html));
@@ -36,7 +36,7 @@ console.log('== read: direct REST + cache fallback ==');
     await W.eval('(async()=>{window.__pub=await loadPublished();})()');
     ok('returns cloud cols, in position order', ev('window.__pub.cols.length')===2&&ev("window.__pub.cols[0].id")==='pA'&&ev("window.__pub.cols[1].id")==='pB');
     ok('source is the db',                      ev('window.__pub.source')==='db');
-    ok('hits the /rest/v1/pack endpoint',       /\/rest\/v1\/pack\?select=slug,position,data,version&order=position\.asc/.test(ev('window.__fetched.u')));
+    ok('hits the /rest/v1/pack endpoint',       /\/rest\/v1\/pack\?select=slug,position,data,version,paid,free_hands,price_rub,hands_total&order=position\.asc/.test(ev('window.__fetched.u')));
     ok('sends the anon apikey header',          ev('window.__fetched.headers.apikey')===ev('SUPA_ANON'));
     ok('sig is a slug:version list',            ev('window.__pub.sig')==='pA:3|pB:7');
     ok('caches the snapshot to CACHE_KEY',      ev('JSON.parse(localStorage.getItem(CACHE_KEY)).cols.length')===2&&ev('JSON.parse(localStorage.getItem(CACHE_KEY)).sig')==='pA:3|pB:7');

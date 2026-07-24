@@ -9,7 +9,7 @@ const HAND=(lbl,hidden)=>({players:6,heroPos:'BB',heroCards:['Ah','Kh'],cards:{B
   actions:[{street:'preflop',pos:'BTN',action:'raise',size:'2.5'},{street:'preflop',pos:'BB',action:'raise',size:'11',q:Q(lbl)}]});
 
 console.log('== static wiring ==');
-ok('packStats excludes hidden hands', /function packStats/.test(html) && /c\.hands\.filter\(h=>!h\.hidden\)/.test(html));
+ok('packStats excludes hidden hands', /function packStats/.test(html) && /fullHands\(c\)\.filter\(h=>!h\.hidden\)/.test(html));   // fullHands = free hands + any paid hands this account owns
 ok('card description = intro.text (fallback sub)', /p\.intro&&p\.intro\.text&&p\.intro\.text\.trim\(\)\)\?p\.intro\.text:\(p\.sub/.test(html));
 ok('.psub is line-clamped', /-webkit-line-clamp/.test(html));
 
