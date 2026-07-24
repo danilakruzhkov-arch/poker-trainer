@@ -55,9 +55,13 @@ function boot(){
 // ---- 4. restore() reads the dirty flag out of localStorage ----
 {
   const W=boot();const ev=c=>W.eval(c);
-  ev("localStorage.setItem('pokerTrainerV4', JSON.stringify({cols:COLS.map(c=>({id:c.id,name:c.name,hands:c.hands||[]})),curCol:0,dirty:true}))");
+  // the save must carry the current schema stamp: an older one is treated as pre-incident and force-cleaned
+  ev("localStorage.setItem('pokerTrainerV4', JSON.stringify({v:LS_V,cols:COLS.map(c=>({id:c.id,name:c.name,hands:c.hands||[]})),curCol:0,dirty:true}))");
   ev("restore()");
   ok('restore() rehydrates dirty=true', ev('_dirty')===true);
+  ev("localStorage.setItem('pokerTrainerV4', JSON.stringify({cols:COLS.map(c=>({id:c.id,name:c.name,hands:c.hands||[]})),curCol:0,dirty:true}))");
+  ev("restore()");
+  ok('a save from before the schema stamp is force-cleaned', ev('_dirty')===false);   // so it cannot republish a corrupted local copy
   ev("localStorage.setItem('pokerTrainerV4', JSON.stringify({cols:COLS.map(c=>({id:c.id,name:c.name,hands:c.hands||[]})),curCol:0,dirty:false}))");
   ev("restore()");
   ok('restore() rehydrates dirty=false', ev('_dirty')===false);

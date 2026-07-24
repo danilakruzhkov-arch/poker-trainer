@@ -39,7 +39,7 @@
   .stepband .series{margin-left:auto;color:var(--brass);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:9.5px}
   .stage{position:relative;width:100%;aspect-ratio:5/6}
   .table{position:absolute;inset:10px 14px;border-radius:46%/40%;background:radial-gradient(60% 55% at 50% 40%, var(--felt-hi) 0%, #163127 42%, var(--felt-lo) 100%);border:9px solid var(--rail);box-shadow:inset 0 0 0 2px rgba(0,0,0,.5), inset 0 8px 40px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.4)}
-  .table::after{content:"";position:absolute;inset:15px;border-radius:44%/38%;border:1.5px solid var(--line);opacity:.6}
+  .table::after{content:"";position:absolute;inset:15px;border-radius:44%/38%;border:1.5px solid var(--line);opacity:.6;pointer-events:none}   /* decorative oval: positioned, so it paints OVER the in-flow children and used to swallow every click inside the felt — only the gate/paywall put buttons there, the answer buttons live outside .table */
   .felt-mark{position:absolute;top:31%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(198,161,91,.18);pointer-events:none}
   .felt-mark .s{font-size:28px;letter-spacing:5px}.felt-mark .t{font-size:8px;letter-spacing:.34em;margin-top:2px;text-transform:uppercase}
   .center{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;width:74%}
@@ -1131,7 +1131,7 @@ function next(){stopVideos();$('sheet').classList.remove('up');if(i<PLAY.length-
    When a Supabase project is wired up (URL + anon key, saved in the editor «База отзывов» block), reports
    POST straight into a `feedback` table via PostgREST; the local queue then flushes on load / on save.
    Nothing here touches any other project — it only talks to the URL the user pastes. */
-const APP_VER='2026-07-24.26';
+const APP_VER='2026-07-24.27';
 const FB_CATS=[
   {k:'answer', t:'Неверный ответ / оценка'},   // the correct option or its grade is wrong
   {k:'hand',   t:'Ошибка в раздаче'},           // cards, sizes, positions, board don't match
@@ -1393,14 +1393,17 @@ function packCardHTML(p){const st=packStats(p.id),lk0=lockedCount(p.id),empty=st
   const partStyle=p.cover?`background-image:url('${String(p.cover).replace(/'/g,'%27')}')`:'';   // user cover overrides the generated felt‑art panel
   const tags=(p.host||p.hero)?`<div class="ptags">${p.host?`<span class="ptag host"><span class="pti">🎙</span>${p.host}</span>`:''}${p.hero?`<span class="ptag hero"><span class="pti">♟</span>${p.hero}</span>`:''}</div>`:'';
   const lk=lk0,pw=paywallOf(p.id);   // paid tail this account can't play yet
-  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(pw&&pw.priceRub)?pw.priceRub+' ₽':'демо'}</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
+  // the badge stays stable while a pack has any free part — a price tag only makes sense when NOTHING is playable
+  // without buying. Everything else reads «демо» while we run the free trial.
+  const whollyPaid=!!(pw&&pw.paid&&!(pw.freeHands|0));
+  const gate=p.gate||'free';const badge=lk?`<span class="pbadge pro">${(whollyPaid&&(pw.priceRub|0))?pw.priceRub+' ₽':'демо'}</span>`:gate==='pro'?'<span class="pbadge pro">PRO</span>':gate==='login'?'<span class="pbadge">вход</span>':'';   // E: signal login/paid packs on the card
   return `<button class="pack ${empty?'locked':''}" data-pack="${p.id}" ${empty?'disabled':''} style="--pa:${p.accent}">
     <div class="part ${p.cover?'has-cover':''}" style="${partStyle}">${badge}<div class="pemoji">${p.emoji}</div></div>
     <div class="pbody">
       <div class="ptitle">${p.title}</div>
       ${tags}
       <div class="psub">${String((p.intro&&p.intro.text&&p.intro.text.trim())?p.intro.text:(p.sub||'')).replace(/<[^>]+>/g,'')}</div>
-      <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:(st.questions===0&&lk)?`<span class="plock">платная подборка — ${lk} разд.</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.${lk?` <span class="plock">+${lk} платн.</span>`:''}`}</div>
+      <div class="pmeta">${empty?`<span class="plock">${p.isUser?'создай раздачу в редакторе':'скоро'}</span>`:(st.questions===0&&lk)?`<span class="plock">${lk} разд. — по входу</span>`:`<span class="cnt">${st.questions}</span> вопрос${plural(st.questions)} · ${st.hands} разд.${lk?` <span class="plock">+${lk} огранич.</span>`:''}`}</div>
     </div>
   </button>`;}
 function renderHome(){
@@ -1462,12 +1465,17 @@ function showPaywall(id,n){
   const m=paywallOf(id)||{},total=m.handsTotal|0,price=m.priceRub|0,free=Math.max(0,total-n);
   const hw=k=>{const a=k%10,b=k%100;return (a===1&&b!==11)?'раздача':((a>=2&&a<=4)&&(b<10||b>=20))?'раздачи':'раздач';};
   const demo=price===0;                                        // price 0 = the server lets any signed-in user self-unlock
+  // prototype copy: while everything is still free we say «ограничены», not «платные» — nobody is being asked
+  // for money yet, and the wall exists to make people sign in
+  const title=!CURUSER?'Залогинься, чтобы открыть бесплатно'
+             :demo   ?'Открой оставшиеся раздачи бесплатно'
+                     :'Дальше — ограниченная часть';
   const sub=!CURUSER
-    ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть${demo?'':' за '+price+' ₽'}. Доступ привязывается к аккаунту, поэтому сначала вход.`
+    ?`Сыграно ${free} из ${total} раздач. Осталось ${n} ${hw(n)}: доступ пока ограничен${demo?'':' — '+price+' ₽'}. Он привязан к аккаунту, поэтому сначала вход.`
     :demo
-      ?`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть. Сейчас она открывается бесплатно: мы обкатываем механику.`
-      :`Сыграно ${free} из ${total} раздач. Ещё ${n} ${hw(n)} — платная часть: ${price} ₽ разово, доступ остаётся навсегда.`;
-  $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">Дальше — платная часть</div><div class="gate-s">${sub}</div>`+
+      ?`Сыграно ${free} из ${total} раздач. Осталось ${n} ${hw(n)}: доступ ограничен, но сейчас открывается бесплатно — мы обкатываем механику.`
+      :`Сыграно ${free} из ${total} раздач. Осталось ${n} ${hw(n)}: доступ ограничен — ${price} ₽ разово, остаётся навсегда.`;
+  $('trainTable').innerHTML=`<div class="gate"><div class="gate-ic">🔒</div><div class="gate-t">${title}</div><div class="gate-s">${sub}</div>`+
     (!CURUSER?`<button class="gate-btn" id="gateIn">${GOOGLE_SVG}<span>Войти через Google</span></button>`
      :demo   ?`<button class="gate-btn" id="freeBtn"><span>Открыть бесплатно</span></button>`
              :`<button class="gate-btn" id="payBtn"><span>Разблокировать за ${price} ₽</span></button>`)+
@@ -1530,8 +1538,11 @@ function collectionBlockHTML(){const c=activeCol(),it=c.intro||blankIntro(c.name
       <button class="ghost newbtn" id="col-up" title="Переместить выше" ${curCol<=0?'disabled':''}>↑ выше</button>
       <button class="ghost newbtn" id="col-down" title="Переместить ниже" ${curCol>=COLS.length-1?'disabled':''}>↓ ниже</button>
       <button class="ghost newbtn" id="col-new">＋ новая</button>${COLS.length>1?`<button class="ghost newbtn" id="col-del" title="Удалить подборку">🗑</button>`:''}</div>
-    <div class="pubbar" id="cloudBar" style="padding:9px 11px">
-      <span class="syncstat ${_dirty?'':'ok'}" id="syncStat" title="Синхронизация с базой — нажми, чтобы записать сейчас" style="display:inline-block;cursor:pointer">${_dirty?'⟳ Сохраняю в БД…':'☁ Всё записано в БД'}</span>
+    <div class="pubbar" id="cloudBar" style="padding:9px 11px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="syncstat ${_dirty?'':'ok'}" id="syncStat" style="display:inline-block">${_dirty?'✎ Есть неопубликованные правки':'☁ Всё записано в БД'}</span>
+      <span style="flex:1"></span>
+      <button class="ghost newbtn" id="pubRevert" title="Скачать пакеты из базы и отменить всё, что не опубликовано">↺ вернуть из БД</button>
+      <button class="ghost newbtn" id="pubNow" title="Записать текущие подборки в базу">☁ опубликовать</button>
     </div>
     <div class="col-disp">
       <div class="fld full"><label>Название подборки</label><input id="col-name" value="${esc(c.name)}" placeholder="Мой набор"></div>
@@ -1563,8 +1574,7 @@ function readCol(){if(!$('col-name'))return;const c=activeCol();
   c.cover=$('col-cover').value.trim();c.host=$('col-host').value.trim();c.hero=$('col-hero').value.trim();
   if($('col-format'))c.format=$('col-format').value;
   if($('col-gate'))c.gate=$('col-gate').value;
-  if($('col-price')){const v=Math.max(0,parseInt($('col-price').value,10)||0),srv=((PAYWALL[c.id]||{}).priceRub)|0;
-    if(v!==srv)PRICE_LOCAL[c.id]=v;else delete PRICE_LOCAL[c.id];}   // only a real difference marks the pack for publish
+  if($('col-price'))c.price=Math.max(0,parseInt($('col-price').value,10)||0);   // lives on the collection so it is saved, dirty-tracked and published like any other field
   c.intro={title:$('ci-title').value.trim(),text:$('ci-text').value.trim(),video:{url:$('ci-vurl').value.trim()},vStart:mmss2sec($('ci-vstart').value),vEnd:mmss2sec($('ci-vend').value),channel:c.name};}
 const TL_CHOICES=[['fold','Фолд'],['check','Чек'],['call','Колл'],['raise','Рейз']];
 function blankHand(){return {players:8,heroPos:'BTN',heroCards:['',''],cards:{},stacks:{},profiles:{},board:['','','','',''],video:{url:''},channel:'PokerLab',actions:[],curQ:0,editIndex:null,unit:(F&&F.unit)||'bb',bbChips:(F&&F.bbChips)||''};}
@@ -1855,7 +1865,16 @@ function wireForm(){
     const txt=JSON.stringify(q,null,2);try{await navigator.clipboard.writeText(txt);toast('Скопировано: '+q.length+' отз.');}catch(e){toast('Не удалось скопировать',1);}};
   if($('fb-flush'))$('fb-flush').onclick=async()=>{if(!supaEnabled()){toast('Сначала подключи базу',1);return;}const ok=await flushFbQueue();toast(ok?'Отправлено в базу ✓':'Не удалось отправить',ok?0:1);buildForm();};
   if($('fb-clearq'))$('fb-clearq').onclick=()=>{if(confirm('Удалить локальную очередь отзывов? Это не затронет уже отправленные в базу.')){fbQueueSet([]);toast('Очередь очищена');buildForm();}};
-  if($('syncStat'))$('syncStat').onclick=async()=>{if(!isAdmin())return;updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);}updSync(ok?'cloud':'error');};
+  if($('pubNow'))$('pubNow').onclick=async()=>{if(!isAdmin()){toast('Публиковать может только админ',1);return;}
+    readForm();if(!_dirty&&pubStr()===_syncedStr){toast('Нечего публиковать — всё уже в БД');return;}
+    updSync('saving');const ok=await publishPacks(false);if(ok){_syncedStr=pubStr();persist(true);toast('Опубликовано ✓');}
+    updSync(ok?'cloud':'error');buildForm();};
+  // escape hatch: throw away whatever is unpublished in this browser and take the DB as it stands
+  if($('pubRevert'))$('pubRevert').onclick=async()=>{
+    if(!confirm('Отменить все неопубликованные правки и загрузить подборки из базы?\n\nТо, что уже опубликовано, не пострадает.'))return;
+    _dirty=false;_syncedStr='';_syncedSig='';_syncedMap={};                 // drop the local baseline so syncPacks takes the cloud unconditionally
+    try{await syncPacks();await refreshOwned();}catch(e){}
+    F=blankHand();buildForm();renderSet();toast('Загружено из базы');};
   if($('col-del'))$('col-del').onclick=()=>{if(COLS.length<=1)return;if(!confirm('Удалить подборку «'+activeCol().name+'» со всеми раздачами?'))return;COLS.splice(curCol,1);useCol(Math.min(curCol,COLS.length-1));F=blankHand();buildForm();renderSet();persist();toast('Подборка удалена');};
   if($('col-hide'))$('col-hide').onclick=()=>{readForm();activeCol().hidden=!activeCol().hidden;buildForm();persist();toast(activeCol().hidden?'Набор скрыт из библиотеки':'Набор снова в библиотеке');};
   // bulk helper for the common "first N free, rest paid" shape — it just stamps the per-hand flag
@@ -2037,6 +2056,7 @@ function backupSnapshot(){try{const cur=localStorage.getItem(LS_KEY);if(!cur)ret
 // restore the most recent non-empty backup into the live store (used by the recovery button if a set goes missing)
 function restoreBackup(){try{for(const k of [LS_KEY+'_bak0',LS_KEY+'_bak1']){const b=localStorage.getItem(k);if(b){const j=JSON.parse(b);const n=(j.cols||[]).reduce((s,c)=>s+((c&&c.hands&&c.hands.length)||0),0);if(n>0){localStorage.setItem(LS_KEY,b);return n;}}}}catch(e){}return 0;}
 function renderSet(){
+  if(activeCol())SET=activeCol().hands;   // anything that REPLACES c.hands (cloud adoption, the paid fold-in) leaves SET on the old array — re-point before drawing, or the list shows a pre-merge snapshot and the lock icons never move
   const vis=SET.filter(h=>!h.hidden).length,hid=SET.length-vis,pdn=SET.filter(h=>h.paid&&!h.hidden).length;
   const rows=SET.length?SET.map((h,k)=>{const nq=questionsOf(h).length,series=nq>1?` · ${nq} вопроса`:nq===1?' · 1 вопрос':'';
     const flag=nq===0?'<span class="setflag">нет вопросов</span>':'';
@@ -2060,30 +2080,29 @@ function copyText(text){
   toast(ok?'JSON скопирован (и показан в поле ниже)':'Скопируй из поля ниже вручную',!ok);
 }
 const LS_KEY='pokerTrainerV4';
+const LS_V=2;   // bump to force every browser to drop its local pack copy and re-take the cloud on next boot (see restore())
 let _persistT;
 // cloud-sync state. The Supabase `pack` table is the source of truth for the shared packs; 'Мой набор' stays personal to this browser and never leaves it.
-let _dirty=false,_syncedStr='',_pubT=null;
+let _dirty=false,_syncedStr='';
 function pubCols(){return COLS.filter(c=>c&&c.id!=='mine');}   // packs that belong in the cloud
 function pubStr(){try{return JSON.stringify(pubCols());}catch(e){return '';}}
 function persist(clean){
   const ps=pubStr();
   if(clean===true){_dirty=false;_syncedStr=ps;}else _dirty=(ps!==_syncedStr);
-  try{localStorage.setItem(LS_KEY,JSON.stringify({cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty,sig:_syncedSig}));}catch(e){}
+  // COLS goes to disk as-is, paid marks included: an unpublished «сделать платной» must survive a reload.
+  // Sign-out still clears them — refreshOwned() re-runs mergeLockedIntoCols(), which drops the fold-in, and the
+  // next persist() writes the stripped set. v:LS_V lets restore() spot and heal saves from before the incident.
+  try{localStorage.setItem(LS_KEY,JSON.stringify({v:LS_V,cols:COLS,curCol,draft:F,demosInit:true,dirty:_dirty,sig:_syncedSig}));}catch(e){}
   if(clean!==true&&_dirty)schedulePublish();
 }
 function persistSoon(){clearTimeout(_persistT);_persistT=setTimeout(()=>persist(),400);}
-// debounced auto-push to the DB. Fires ~2.5s after the last edit; skips a no-op if nothing that goes to the cloud actually changed.
-function schedulePublish(){
-  if(!CURUSER){updSync('unpushed');return;}   // not signed in → can't publish; edits stay local until Google login
-  clearTimeout(_pubT);_pubT=setTimeout(async()=>{
-    if(pubStr()===_syncedStr){_dirty=false;persist(true);return;}
-    updSync('saving');
-    const ok=await publishPacks(true);
-    if(ok){_syncedStr=pubStr();persist(true);updSync('cloud');}else updSync('error');
-  },2500);
-}
+// NO auto-publish. Editing used to push to the DB ~2.5s after every change, so one bad merge was written back
+// on every keystroke and compounded (incident 2026-07-24). Publishing is an explicit act now — the «опубликовать»
+// button in the editor. Only admins could ever write to `pack`, so nothing changes for players.
+function schedulePublish(){updSync(CURUSER?'pending':'unpushed');}
 function updSync(state){const el=document.getElementById('syncStat');if(!el)return;
   const M={cloud:['☁ Всё записано в БД','ok'],saving:['⟳ Сохраняю в БД…','dim'],synced:['☁ Всё записано в БД','ok'],
+    pending:['✎ Есть неопубликованные правки','warn'],
     unpushed:['⚠ Не записано — войди через Google','warn'],
     error:['⚠ Не ушло в БД — нажми, чтобы повторить','bad']};
   const m=M[state]||M.synced;el.textContent=m[0];el.className='syncstat '+m[1];el.style.display='inline-block';}
@@ -2103,12 +2122,12 @@ let PAYWALL={},          // slug -> {paid,freeHands,priceRub,handsTotal} — fro
     OWNED={},            // slug -> true, this account's entitlements
     LOCKED={};           // slug -> [{idx,hand}] — paid hands this account is allowed to read
 function paywallOf(id){return PAYWALL[id]||null;}
-function colPrice(id){return (PRICE_LOCAL[id]!=null)?PRICE_LOCAL[id]:(((PAYWALL[id]||{}).priceRub)|0);}
+// the editor's own value wins while it is unpublished; otherwise the pack row's column is the truth
+function colPrice(id){const c=findCol(id);return (c&&c.price!=null)?(c.price|0):(((PAYWALL[id]||{}).priceRub)|0);}
 function ownsPack(id){return !!OWNED[id]||isAdmin();}          // admin reads every locked hand by policy
 // splice owned paid hands back to the exact slot they had before the split (idx is 1-based over the ORIGINAL
 // array, hidden hands included) — ascending order restores the original sequence
 let _colsMerged=false;                                         // admin only: COLS already holds the paid hands, each marked {paid:true}
-let PRICE_LOCAL={};                                            // slug -> price edited in the editor, not yet published
 function spliceLocked(base,L){const a=base.slice();
   L.slice().sort((x,y)=>x.idx-y.idx).forEach(x=>{const at=Math.max(0,Math.min(x.idx-1,a.length));a.splice(at,0,x.hand);});return a;}
 function fullHands(c){if(!c)return [];if(_colsMerged)return c.hands;   // merged already: splicing again would duplicate
@@ -2121,10 +2140,15 @@ function mergeLockedIntoCols(){
   COLS.forEach(c=>{if(!c||!Array.isArray(c.hands))return;
     // strip any previous fold-in FIRST — on sign-out this is what takes the paid hands back out of COLS
     // (and out of localStorage on the next persist), instead of leaving them playable with no session
-    const base=c.hands.filter(h=>!(h&&h.paid)),L=adm?LOCKED[c.id]:null;
+    const base=c.hands.filter(h=>!(h&&h.paid)),L=adm?dedupLocked(LOCKED[c.id]):null;
     c.hands=(L&&L.length)?spliceLocked(base,L.map(x=>({idx:x.idx,hand:Object.assign({},x.hand,{paid:true})}))):base;});
   _colsMerged=adm;
+  if(activeCol())SET=activeCol().hands;   // the arrays above were REPLACED; without this SET keeps pointing at the pre-merge one and the editor renders a stale list
 }
+// idx is unique per pack in the DB, so a repeat means the same row was read twice. Belt-and-braces after the
+// duplication incident: even if something re-introduces a double read, the editor can no longer multiply hands.
+function dedupLocked(L){if(!L||L.length<2)return L;
+  const seen={},out=[];L.forEach(x=>{if(!x||seen[x.idx])return;seen[x.idx]=1;out.push(x);});return out;}
 // how many hands of a pack this account cannot see. hands_total counts VISIBLE hands (free + paid), so the
 // difference against what we actually hold is exactly the locked tail.
 function lockedCount(id){const m=paywallOf(id);if(!m||!m.paid||ownsPack(id))return 0;
@@ -2133,15 +2157,24 @@ function lockedCount(id){const m=paywallOf(id);if(!m||!m.paid||ownsPack(id))retu
 async function authToken(){try{await loadSupaSDK();const c=authClient();if(!c)return null;
   const {data}=await c.auth.getSession();return (data&&data.session&&data.session.access_token)||null;}catch(e){return null;}}
 // Read the paid half with the USER's JWT (never the anon key): RLS returns only what this account owns.
+// Builds into LOCAL maps and swaps them in at the end, guarded by a generation counter. Never touch the
+// globals mid-flight: refreshOwned() runs both on boot and from onAuthStateChange, so two calls overlap on
+// every page load. The old code reset LOCKED={} synchronously and pushed after the await, so both responses
+// landed in the same object and every paid hand was counted twice — the merge then spliced the duplicates
+// into COLS and auto-publish wrote them to the DB, compounding on each load (incident 2026-07-24).
+let _lockGen=0;
 async function loadLocked(){
-  OWNED={};LOCKED={};
-  if(!CURUSER)return;
-  const tok=await authToken();if(!tok)return;
+  const gen=++_lockGen;
+  const owned={},locked={};
+  const done=()=>{if(gen!==_lockGen)return false;OWNED=owned;LOCKED=locked;return true;};   // a newer call already won: drop this response
+  if(!CURUSER)return done();
+  const tok=await authToken();if(!tok)return done();
   const h={apikey:SUPA_ANON,Authorization:'Bearer '+tok};
   try{const r=await fetch(SUPA_URL+'/rest/v1/entitlement?select=pack_slug',{headers:h,cache:'no-store'});
-    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(e=>{if(e&&e.pack_slug)OWNED[e.pack_slug]=true;});}}catch(e){}
+    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(e=>{if(e&&e.pack_slug)owned[e.pack_slug]=true;});}}catch(e){}
   try{const r=await fetch(SUPA_URL+'/rest/v1/pack_locked?select=slug,idx,hand&order=slug.asc,idx.asc',{headers:h,cache:'no-store'});
-    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(x=>{if(x&&x.slug&&x.hand)(LOCKED[x.slug]=LOCKED[x.slug]||[]).push({idx:x.idx|0,hand:x.hand});});}}catch(e){}
+    if(r.ok){const rows=await r.json();if(Array.isArray(rows))rows.forEach(x=>{if(x&&x.slug&&x.hand)(locked[x.slug]=locked[x.slug]||[]).push({idx:x.idx|0,hand:x.hand});});}}catch(e){}
+  return done();
 }
 function colsMap(cols){const m={};(cols||[]).forEach((c,i)=>{if(c&&c.id)m[c.id]=i+''+JSON.stringify(c);});return m;}   // slug -> position+content, for per-pack change detection
 let _syncedMap={},_syncedSig='';                                    // the cloud baseline this browser matches: per-pack map + a slug:version signature
@@ -2194,15 +2227,14 @@ async function publishPacks(auto){
   const cols=pubCols();
   if(!cols.length){if(!auto)pubSay('Пусто — публиковать нечего',1);return false;}   // guard: never wipe the whole set
   const cur=colsMap(cols);
-  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id]||PRICE_LOCAL[p.id]!=null)changed.push({slug:p.id,position:i,data:p});});
+  const changed=[];cols.forEach((p,i)=>{if(cur[p.id]!==_syncedMap[p.id])changed.push({slug:p.id,position:i,data:p});});   // price lives on the collection, so colsMap() already sees a price-only edit
   const deleted=Object.keys(_syncedMap).filter(s=>!(s in cur));
   try{
     // One RPC per changed pack: the server splits hands marked {paid:true} into pack_locked and keeps the
     // rest in the anon-readable row, in a single transaction. p_paid null -> the server derives it from
     // whether any hand is actually marked, so "is this pack paid" is never a separate setting to forget.
     for(const ch of changed){
-      const price=(PRICE_LOCAL[ch.slug]!=null)?PRICE_LOCAL[ch.slug]:(((PAYWALL[ch.slug]||{}).priceRub)|0);
-      const args={p_slug:ch.slug,p_position:ch.position,p_data:ch.data,p_paid:null,p_price:price,p_force:false};
+      const args={p_slug:ch.slug,p_position:ch.position,p_data:ch.data,p_paid:null,p_price:colPrice(ch.slug),p_force:false};
       let {error}=await c.rpc('pack_apply_split',args);
       if(error&&/refusing to drop all/i.test(error.message||'')){        // data-loss guard tripped: only a human may override
         if(!auto&&confirm('Пак «'+ch.slug+'»: в нём не осталось ни одной платной раздачи, а в облаке они есть.\n\nСнять платность со всех и опубликовать?')){
@@ -2210,7 +2242,6 @@ async function publishPacks(auto){
         }else{throw new Error('Публикация «'+ch.slug+'» отменена — платные раздачи не тронуты');}
       }
       if(error)throw error;
-      delete PRICE_LOCAL[ch.slug];
     }
     for(const s of deleted){const {error}=await c.from('pack').delete().eq('slug',s);if(error)throw error;}
     try{await loadLocked();mergeLockedIntoCols();}catch(e){}                 // the split moved hands between tables — resync what we hold
@@ -2225,6 +2256,10 @@ function restore(){try{const s=JSON.parse(localStorage.getItem(LS_KEY)||'null');
     :[{id:'mine',name:'Мой набор',emoji:'✎',accent:'#C9A227',host:'',hero:'',cover:'',sub:'Раздачи, которые ты создал в редакторе или импортировал из истории.',intro:(s.mine&&s.mine.intro)||blankIntro('Мой набор'),hands:Array.isArray(s.set)?s.set:[],hidden:true}];   // migrate old {set,mine} shape
   // no more seed re-sync here — packs.json is the source of truth. Whatever is in localStorage is this browser's current state; the boot fetch below reconciles it with the cloud.
   COLS=cols;
+  // One-shot heal for saves written before LS_V (the pack_locked duplication incident, 2026-07-24): drop every
+  // folded-in paid hand and force this browser to take the cloud, so a stale local copy can't be republished.
+  const staleLS=(s.v|0)<LS_V;
+  if(staleLS){COLS.forEach(c=>{if(c&&Array.isArray(c.hands))c.hands=c.hands.filter(h=>!(h&&h.paid));});s.dirty=false;}
   COLS.forEach((c,ci)=>{if(!c.hands)c.hands=[];if(!c.intro)c.intro=blankIntro(c.name);if(!c.id)c.id='col'+ci;if(!c.emoji)c.emoji='✎';if(!c.accent)c.accent='#C9A227';if(c.id==='mine'&&c.hidden===undefined)c.hidden=true;c.hands.forEach(migrateCards);});   // migrate old saves: default 'Мой набор' to hidden (undefined only — respect an explicit unhide)
   curCol=(typeof s.curCol==='number'&&s.curCol>=0&&s.curCol<COLS.length)?s.curCol:COLS.length-1;useCol(curCol);
   if(s.draft&&Array.isArray(s.draft.actions)){F=s.draft;migrateCards(F);}
@@ -2301,7 +2336,8 @@ function renderAuth(){
   }
 }
 async function authSignIn(){
-  const c=authClient();if(!c){toast('Вход недоступен',1);return;}
+  try{await loadSupaSDK();}catch(e){}      // the wall's login button can be clicked before the CDN script has landed — without this it silently no-ops
+  const c=authClient();if(!c){toast('Вход недоступен — не загрузился клиент базы',1);return;}
   try{await c.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});}catch(e){toast('Не удалось начать вход',1);}
 }
 async function authSignOut(){

@@ -19,7 +19,7 @@ ok('publish is a per-pack split RPC',               /c\.rpc\('pack_apply_split',
 ok('publish deletes packs removed locally',         /c\.from\('pack'\)\.delete\(\)\.eq\('slug',s\)/.test(html));
 ok('publish guards against wiping the whole set',   /if\(!cols\.length\)\{if\(!auto\)pubSay\('Пусто/.test(html));
 ok('publish requires Google sign-in',               /if\(!CURUSER\)\{if\(!auto\)pubSay\('Войди через Google/.test(html));
-ok('schedulePublish gates on CURUSER',              /if\(!CURUSER\)\{updSync\('unpushed'\);return;\}/.test(html));
+ok('schedulePublish only flags state, never pushes', /function schedulePublish\(\)\{updSync\(CURUSER\?'pending':'unpushed'\);\}/.test(html));   // auto-publish removed after the 2026-07-24 duplication incident
 ok('syncPacks adopts on a version-signature change',/const changed=pub\.sig!==_syncedSig;/.test(html));
 ok('syncPacks downgrade guard: empty cloud ignored',/if\(!pub\.cols\|\|!pub\.cols\.length\)\{updSync\('synced'\);return;\}/.test(html));
 ok('no id=1 blob write remains',                    !/from\('packs'\)/.test(html));
